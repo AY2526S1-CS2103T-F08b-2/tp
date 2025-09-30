@@ -19,7 +19,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 * Role: Project Advisor
 
-### Jane Doe
+### Kwong Wai Kin
 
 <img src="images/makis4n.png" width="200px">
 
