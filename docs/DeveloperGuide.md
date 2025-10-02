@@ -275,14 +275,15 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​                                    | I want to …​                     | So that I can…​                                                        |
-| -------- | ------------------------------------------ | ------------------------------ | ---------------------------------------------------------------------- |
-| `* * *`  | new user                                   | see usage instructions         | refer to instructions when I forget how to use the App                 |
-| `* * *`  | user                                       | add a new person               |                                                                        |
-| `* * *`  | user                                       | delete a person                | remove entries that I no longer need                                   |
-| `* * *`  | user                                       | find a person by name          | locate details of persons without having to go through the entire list |
-| `* *`    | user                                       | hide private contact details   | minimize chance of someone else seeing them by accident                |
-| `*`      | user with many persons in the address book | sort persons by name           | locate a person easily                                                 |
+| Priority | As a …​ | I want to …​                                                         | So that I can…​                                          |
+| -------- |---------|----------------------------------------------------------------------|----------------------------------------------------------|
+| `* * *`  | student | search for peers by programming language                             | quickly find potential teammates with matching skills.   |
+| `* * *`  | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
+| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them. 
+|
+| `* * *`  | student | search for multiple skills at once                                   | find students with overlapping technical expertise       |
+| `* *`    | student | search for people by email                                         | directly connect with someone I already know             |
+| `*`      | student | add my own skills to my profile                                                  | let others discover me for team formation                |
 
 *{More to be added}*
 
