@@ -422,12 +422,12 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
-* **Mainstream OS**: Windows, Linux, Unix, MacOS
-* **Private contact detail**: A contact detail that is not meant to be shared with others
 * **CSV (Comma-Separated Values)**: A plain-text file format used to import or export multiple contacts at once.
-* **JSON (JavaScript Object Notation)**: A lightweight text-based format used by the system to store the dataset in a human-editable file.
-* **Offline-first**: A design principle where the system does not require an internet connection for normal usage; all features work locally.
 * **JAR (Java ARchive)**: A package file format used to distribute Java applications as a single executable file.
+* **JSON (JavaScript Object Notation)**: A lightweight text-based format used by the system to store the dataset in a human-editable file.
+* **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Offline-first**: A design principle where the system does not require an internet connection for normal usage; all features work locally.
+* **Private contact detail**: A contact detail that is not meant to be shared with others
 
 --------------------------------------------------------------------------------------------------------------------
 
