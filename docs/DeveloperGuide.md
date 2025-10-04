@@ -287,16 +287,16 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Use cases
 
-(For all use cases below, the **System** is the `AddressBook` and the **Actor** is the `user`, unless specified otherwise)
+(For all use cases below, the **System** is `Mate` and the **Actor** is the `user`, unless specified otherwise)
 
 **Use case: Delete a person**
 
 **MSS**
 
 1.  User requests to list persons
-2.  AddressBook shows a list of persons
+2.  Mate shows a list of persons
 3.  User requests to delete a specific person in the list
-4.  AddressBook deletes the person
+4.  Mate deletes the person
 
     Use case ends.
 
@@ -308,23 +308,121 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 * 3a. The given index is invalid.
 
-    * 3a1. AddressBook shows an error message.
+    * 3a1. Mate shows an error message.
 
       Use case resumes at step 2.
 
-*{More to be added}*
+**Use case: Clear All Persons**
+
+**MSS**
+
+1.  User requests to clear all entries.
+2.  Mate removes all persons from storage.
+3.  Mate shows confirmation.
+
+    Use case ends.
+
+**Extensions**
+
+* 1a. User cancels the operation.
+    * 1a1. Mate aborts clearing.
+
+      Use case ends.
+
+**Use case: Create a Team from Selected Contacts**
+
+**MSS**
+
+1.  Student requests to create a new team. 
+2.  Mate requests for members to be added. 
+3.  Student searches and selects multiple classmates by name or skill.
+4.  Mate confirms the selected members.
+5.  Student confirms creation of the team.
+6.  Mate creates the team and stores it.
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. No classmates match the search.
+    * 3a1. Mate prompts to refine search or import new contacts.
+    * 3a2. Student retries.
+
+      Use case resumes at step 5.
+
+* a. At any time, Student cancels the operation.
+    * a1. Mate requests cancellation confirmation.
+    * a2. Student confirms cancellation.
+
+      Use case ends.
+
+**Use case: Import Contacts from CSV**
+
+**MSS**
+
+1.  Student requests to import contacts.
+2.  Mate requests the file path.
+3.  Student enters the file path.
+4.  Mate validates the CSV format and parses entries.
+5.  Mate imports and displays the number of successful entries.
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. File not found or inaccessible.
+    * 3a1. Mate highlights the error and requests a valid file path.
+    * 3a2. Student re-enters the file path.
+
+      Use case resumes at step 3.
+
+* 4b. CSV contains invalid or missing fields.
+    * 4b1. Mate highlights errors and requests a corrected file.
+    * 4b2. Student fixes and re-uploads.
+
+      Use case resumes at step 4.
+
+* 5a. Duplicate contacts detected.
+    * 5a1. Mate asks whether to merge or skip duplicates.
+    * 5a2. Student chooses.
+
+      Use case ends.
+
+**Use case: Export a Team to CSV**
+
+**MSS**
+
+1.  Student requests to export a team.
+2.  Mate generates and saves the CSV file.
+3.  Mate confirms successful export.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. No existing team matches the input.
+    * 2a1. Mate prompts retry.
+    * 2a2. Student retries.
+
+      Use case resumes at step 2.
 
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
 2.  Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage.
 3.  A user with above average typing speed for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
-
-*{More to be added}*
+4.  Data should be stored locally in a human-editable file (JSON) so that advanced users can directly edit or back up the data.
+5.  Data file must not exceed 10 MB in size under normal use (≈ 1000 contacts with details).
+6.  Should provide useful error messages when invalid commands are entered, without crashing the system.
+7.  Should start up within 3 seconds on a standard laptop. 
+8.  Should not require an internet connection for normal usage (offline-first). 
+9.  The system should be portable (able to run as a standalone JAR without additional dependencies beyond Java). 
+10. Source code should be maintainable by future developers with minimal onboarding, following clean code conventions and including developer documentation.
 
 ### Glossary
 
 * **Mainstream OS**: Windows, Linux, Unix, MacOS
+* **Offline-first**: A design principle where the system does not require an internet connection for normal usage; all features work locally.
 * **Private contact detail**: A contact detail that is not meant to be shared with others
 
 --------------------------------------------------------------------------------------------------------------------
