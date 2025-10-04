@@ -262,13 +262,11 @@ _{Explain here how the data archiving feature will be implemented}_
 
 **Target user profile**:
 
-* has a need to manage a significant number of contacts
-* prefer desktop apps over other types
-* can type fast
-* prefers typing to mouse interactions
-* is reasonably comfortable using CLI apps
+* tech-savvy undergraduate computer science students who actively participate in university hackathons
+* comfortable with GitHub and command-line tools
+* prefer typing over graphical interfaces
 
-**Value proposition**: manage contacts faster than a typical mouse/GUI driven app
+**Value proposition**: Mate helps students quickly find the right hackathon teammates by surfacing peers based on skills and proficiency. With a simple CLI-first interface and color-coded skill tags, students can instantly discover, connect, and form balanced teams without wasting time on endless networking
 
 
 ### User stories
@@ -276,14 +274,14 @@ _{Explain here how the data archiving feature will be implemented}_
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 | Priority | As a …​ | I want to …​                                                         | So that I can…​                                          |
-| -------- |---------|----------------------------------------------------------------------|----------------------------------------------------------|
+|----------|---------|----------------------------------------------------------------------|----------------------------------------------------------|
 | `* * *`  | student | search for peers by programming language                             | quickly find potential teammates with matching skills.   |
 | `* * *`  | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
 | `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them. 
 |
 | `* * *`  | student | search for multiple skills at once                                   | find students with overlapping technical expertise       |
-| `* *`    | student | search for people by email                                         | directly connect with someone I already know             |
-| `*`      | student | add my own skills to my profile                                                  | let others discover me for team formation                |
+| `* * *`  | student | search for people by email                                         | directly connect with someone I already know             |
+| `* * *`  | student | add my own skills to my profile                                                  | let others discover me for team formation                |
 
 *{More to be added}*
 
