@@ -157,6 +157,36 @@ public class AddCommandTest {
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean hasTeam(seedu.address.model.team.Team team) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteTeam(seedu.address.model.team.Team target) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void addTeam(seedu.address.model.team.Team team) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setTeam(seedu.address.model.team.Team target, seedu.address.model.team.Team editedTeam) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public javafx.collections.ObservableList<seedu.address.model.team.Team> getFilteredTeamList() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateFilteredTeamList(java.util.function.Predicate<seedu.address.model.team.Team> predicate) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
