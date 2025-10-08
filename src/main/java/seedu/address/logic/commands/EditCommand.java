@@ -99,7 +99,10 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+
+        // Merge existing tags with new tags
+        Set<Tag> updatedTags = new HashSet<>(personToEdit.getTags()); // Start with existing tags
+        editPersonDescriptor.getTags().ifPresent(tags -> updatedTags.addAll(tags)); // Add new tags if present
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
     }
