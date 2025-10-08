@@ -48,4 +48,13 @@ public class Messages {
         return builder.toString();
     }
 
+    /**
+     * Formats the {@code team} for display to the user.
+     */
+    public static String format(Team team) {
+        final StringBuilder builder = new StringBuilder();
+        builder.append(team.getName());
+        return builder.toString();
+    }
+
 }
