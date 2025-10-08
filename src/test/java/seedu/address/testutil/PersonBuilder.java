@@ -8,6 +8,8 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Telegram;
+import seedu.address.model.person.GitHub;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
 
@@ -20,11 +22,15 @@ public class PersonBuilder {
     public static final String DEFAULT_PHONE = "85355255";
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
+    public static final String DEFAULT_TELEGRAM = "amybee_tg";
+    public static final String DEFAULT_GITHUB = "amybee-github";
 
     private Name name;
     private Phone phone;
     private Email email;
     private Address address;
+    private Telegram telegram;
+    private GitHub github;
     private Set<Tag> tags;
 
     /**
@@ -35,6 +41,8 @@ public class PersonBuilder {
         phone = new Phone(DEFAULT_PHONE);
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
+        telegram = new Telegram(DEFAULT_TELEGRAM);
+        github = new GitHub(DEFAULT_GITHUB);
         tags = new HashSet<>();
     }
 
@@ -46,6 +54,8 @@ public class PersonBuilder {
         phone = personToCopy.getPhone();
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
+        telegram = personToCopy.getTelegram();
+        github = personToCopy.getGitHub();
         tags = new HashSet<>(personToCopy.getTags());
     }
 
@@ -89,8 +99,18 @@ public class PersonBuilder {
         return this;
     }
 
+    public PersonBuilder withTelegram(String telegram) {
+        this.telegram = new Telegram(telegram);
+        return this;
+    }
+
+    public PersonBuilder withGitHub(String github) {
+        this.github = new GitHub(github);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, tags);
+        return new Person(name, phone, email, address, telegram, github, tags);
     }
 
 }
