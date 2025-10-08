@@ -153,6 +153,4 @@ public class ParserUtil {
         }
         return new GitHub(trimmedGitHub);
     }
-
-
 }
