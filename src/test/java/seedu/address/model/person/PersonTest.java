@@ -1,5 +1,8 @@
 package seedu.address.model.person;
 
+import org.junit.jupiter.api.Test;
+import seedu.address.testutil.PersonBuilder;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,12 +14,6 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BOB;
-import static seedu.address.testutil.PersonBuilder.DEFAULT_GITHUB;
-import static seedu.address.testutil.PersonBuilder.DEFAULT_TELEGRAM;
-
-import org.junit.jupiter.api.Test;
-
-import seedu.address.testutil.PersonBuilder;
 
 public class PersonTest {
 
@@ -103,8 +100,8 @@ public class PersonTest {
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() 
-                + ", telegram=" + ALICE.getTelegram() + ", github=" + ALICE.getGitHub() 
+                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress()
+                + ", telegram=" + ALICE.getTelegram() + ", github=" + ALICE.getGitHub()
                 + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
