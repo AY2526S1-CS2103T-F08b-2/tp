@@ -75,16 +75,21 @@ public class EditPersonDescriptorBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Telegram} of the {@code EditPersonDescriptor} that we are building.
+     */
     public EditPersonDescriptorBuilder withTelegram(String telegram) {
         descriptor.setTelegram(new Telegram(telegram));
         return this;
     }
 
+    /**
+     * Sets the {@code GitHub} of the {@code EditPersonDescriptor} that we are building.
+     */
     public EditPersonDescriptorBuilder withGitHub(String github) {
         descriptor.setGitHub(new GitHub(github));
         return this;
     }
-
 
     /**
      * Parses the {@code tags} into a {@code Set<Tag>} and set it to the {@code EditPersonDescriptor}
