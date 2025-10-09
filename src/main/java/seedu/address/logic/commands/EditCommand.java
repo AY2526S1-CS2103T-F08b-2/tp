@@ -1,7 +1,13 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.*;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
 import java.util.Collections;
@@ -103,7 +109,8 @@ public class EditCommand extends Command {
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
 
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTelegram, updatedGitHub, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTelegram,
+                updatedGitHub, updatedTags);
     }
 
     @Override
@@ -192,11 +199,11 @@ public class EditCommand extends Command {
 
         public void setTelegram(Telegram telegram) { this.telegram = telegram; }
 
-        public Optional<Telegram> getTelegram() { return Optional.ofNullable(telegram); } // 🟩 ADDED
+        public Optional<Telegram> getTelegram() { return Optional.ofNullable(telegram); }
 
         public void setGitHub(GitHub github) { this.github = github; }
 
-        public Optional<GitHub> getGitHub() { return Optional.ofNullable(github); }  // 🟩 ADDED
+        public Optional<GitHub> getGitHub() { return Optional.ofNullable(github); }
 
         public void setAddress(Address address) {
             this.address = address;
