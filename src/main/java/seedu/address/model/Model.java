@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
 
 /**
  * The API of the Model component.
@@ -13,6 +14,7 @@ import seedu.address.model.person.Person;
 public interface Model {
     /** {@code Predicate} that always evaluate to true */
     Predicate<Person> PREDICATE_SHOW_ALL_PERSONS = unused -> true;
+    Predicate<Team> PREDICATE_SHOW_ALL_TEAMS = unused -> true;
 
     /**
      * Replaces user prefs data with the data in {@code userPrefs}.
@@ -84,4 +86,38 @@ public interface Model {
      * @throws NullPointerException if {@code predicate} is null.
      */
     void updateFilteredPersonList(Predicate<Person> predicate);
+
+    /**
+     * Returns true if a team with the same identity as {@code team} exists in Mate
+     */
+    boolean hasTeam(Team team);
+
+    /**
+     * Deletes the given team.
+     * The team must exist in Mate.
+     */
+    void deleteTeam(Team target);
+
+    /**
+     * Adds the given team.
+     * {@code team} must not already exist in Mate.
+     */
+    void addTeam(Team team);
+
+    /**
+     * Replaces the given team {@code target} with {@code editedTeam}.
+     * {@code target} must exist in Mate.
+     * The team identity of {@code editedTeam} must not be the same as another existing team in Mate.
+     */
+    void setTeam(Team target, Team editedTeam);
+
+    /** Returns an unmodifiable view of the filtered team list */
+    ObservableList<Team> getFilteredTeamList();
+
+    /**
+     * Updates the filter of the filtered team list to filter by the given {@code predicate}.
+     * @throws NullPointerException if {@code predicate} is null.
+     */
+    void updateFilteredTeamList(Predicate<Team> predicate);
+
 }
