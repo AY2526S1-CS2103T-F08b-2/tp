@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.skill.Skill;
 
 /**
  * Represents a Person in the address book.
@@ -28,7 +28,7 @@ public class Person {
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills ) {
+    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills) {
         requireAllNonNull(name, email, telegram, github, skills);
 
         this.name = name;
