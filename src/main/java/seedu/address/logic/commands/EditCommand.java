@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -30,7 +30,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Telegram;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.skill.Skill;
 
 /**
  * Edits the details of an existing person in the address book.
@@ -49,7 +49,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_TAG + "TAG]...\n"
+            + "[" + PREFIX_SKILL + "SKILL]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
             + PREFIX_EMAIL + "johndoe@example.com";
@@ -105,12 +105,12 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram()); // 🟩 ADDED
+        Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
-        Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
+        Set<Skill> updatedSkills = editPersonDescriptor.getSkills().orElse(personToEdit.getSkills());
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTelegram,
-                updatedGitHub, updatedTags);
+                updatedGitHub, updatedSkills);
     }
 
     @Override
@@ -148,13 +148,13 @@ public class EditCommand extends Command {
         private Address address;
         private Telegram telegram;
         private GitHub github;
-        private Set<Tag> tags;
+        private Set<Skill> skills;
 
         public EditPersonDescriptor() {}
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code tags} is used internally.
+         * A defensive copy of {@code skills} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             setName(toCopy.name);
@@ -163,14 +163,14 @@ public class EditCommand extends Command {
             setAddress(toCopy.address);
             setTelegram(toCopy.telegram);
             setGitHub(toCopy.github);
-            setTags(toCopy.tags);
+            setSkills(toCopy.skills);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, telegram, github, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, telegram, github, skills);
         }
 
         public void setName(Name name) {
@@ -197,13 +197,21 @@ public class EditCommand extends Command {
             return Optional.ofNullable(email);
         }
 
-        public void setTelegram(Telegram telegram) { this.telegram = telegram; }
+        public void setTelegram(Telegram telegram) {
+            this.telegram = telegram;
+        }
 
-        public Optional<Telegram> getTelegram() { return Optional.ofNullable(telegram); }
+        public Optional<Telegram> getTelegram() {
+            return Optional.ofNullable(telegram);
+        }
 
-        public void setGitHub(GitHub github) { this.github = github; }
+        public void setGitHub(GitHub github) {
+            this.github = github;
+        }
 
-        public Optional<GitHub> getGitHub() { return Optional.ofNullable(github); }
+        public Optional<GitHub> getGitHub() {
+            return Optional.ofNullable(github);
+        }
 
         public void setAddress(Address address) {
             this.address = address;
@@ -214,20 +222,20 @@ public class EditCommand extends Command {
         }
 
         /**
-         * Sets {@code tags} to this object's {@code tags}.
-         * A defensive copy of {@code tags} is used internally.
+         * Sets {@code skills} to this object's {@code skills}.
+         * A defensive copy of {@code skills} is used internally.
          */
-        public void setTags(Set<Tag> tags) {
-            this.tags = (tags != null) ? new HashSet<>(tags) : null;
+        public void setSkills(Set<Skill> skills) {
+            this.skills = (skills != null) ? new HashSet<>(skills) : null;
         }
 
         /**
-         * Returns an unmodifiable tag set, which throws {@code UnsupportedOperationException}
+         * Returns an unmodifiable skill set, which throws {@code UnsupportedOperationException}
          * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code tags} is null.
+         * Returns {@code Optional#empty()} if {@code skills} is null.
          */
-        public Optional<Set<Tag>> getTags() {
-            return (tags != null) ? Optional.of(Collections.unmodifiableSet(tags)) : Optional.empty();
+        public Optional<Set<Skill>> getSkills() {
+            return (skills != null) ? Optional.of(Collections.unmodifiableSet(skills)) : Optional.empty();
         }
 
         @Override
@@ -248,7 +256,7 @@ public class EditCommand extends Command {
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(telegram, otherEditPersonDescriptor.telegram)
                     && Objects.equals(github, otherEditPersonDescriptor.github)
-                    && Objects.equals(tags, otherEditPersonDescriptor.tags);
+                    && Objects.equals(skills, otherEditPersonDescriptor.skills);
         }
 
         @Override
@@ -258,7 +266,7 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("address", address)
-                    .add("tags", tags)
+                    .add("skills", skills)
                     .toString();
         }
     }

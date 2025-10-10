@@ -17,7 +17,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Telegram;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.skill.Skill;
 
 /**
  * Jackson-friendly version of {@link Person}.
@@ -32,7 +32,7 @@ class JsonAdaptedPerson {
     private final String address;
     private final String telegram;
     private final String github;
-    private final List<JsonAdaptedTag> tags = new ArrayList<>();
+    private final List<JsonAdaptedSkill> skills = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -44,15 +44,15 @@ class JsonAdaptedPerson {
                              @JsonProperty("address") String address,
                              @JsonProperty("telegram") String telegram,
                              @JsonProperty("github") String github,
-                             @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+                             @JsonProperty("skills") List<JsonAdaptedSkill> skills) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.telegram = telegram;
         this.github = github;
-        if (tags != null) {
-            this.tags.addAll(tags);
+        if (skills != null) {
+            this.skills.addAll(skills);
         }
     }
 
@@ -66,8 +66,8 @@ class JsonAdaptedPerson {
         address = source.getAddress().value;
         telegram = source.getTelegram().toString();
         github = source.getGitHub().toString();
-        tags.addAll(source.getTags().stream()
-                .map(JsonAdaptedTag::new)
+        skills.addAll(source.getSkills().stream()
+                .map(JsonAdaptedSkill::new)
                 .collect(Collectors.toList()));
     }
 
@@ -77,9 +77,9 @@ class JsonAdaptedPerson {
      * @throws IllegalValueException if there were any data constraints violated in the adapted person.
      */
     public Person toModelType() throws IllegalValueException {
-        final List<Tag> personTags = new ArrayList<>();
-        for (JsonAdaptedTag tag : tags) {
-            personTags.add(tag.toModelType());
+        final List<Skill> personSkills = new ArrayList<>();
+        for (JsonAdaptedSkill skill : skills) {
+            personSkills.add(skill.toModelType());
         }
 
         if (name == null) {
@@ -131,8 +131,7 @@ class JsonAdaptedPerson {
         }
         final GitHub modelGitHub = new GitHub(github);
 
-        final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress,
-                modelTelegram, modelGitHub, modelTags);
+        final Set<Skill> modelSkills = new HashSet<>(personSkills);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTelegram, modelGitHub, modelSkills);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.model.tag.Tag;
+import seedu.address.model.skill.Skill;
 
 /**
  * Represents a Person in the address book.
@@ -25,21 +25,21 @@ public class Person {
     private final Address address;
     private final Telegram telegram;
     private final GitHub github;
-    private final Set<Tag> tags = new HashSet<>();
+    private final Set<Skill> skills = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address,
-                  Telegram telegram, GitHub github, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, telegram, github, tags);
+                  Telegram telegram, GitHub github, Set<Skill> skills) {
+        requireAllNonNull(name, phone, email, address, telegram, github, skills);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.telegram = telegram;
         this.github = github;
-        this.tags.addAll(tags);
+        this.skills.addAll(skills);
     }
 
     public Name getName() {
@@ -67,11 +67,11 @@ public class Person {
     }
 
     /**
-     * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
+     * Returns an immutable skill set, which throws {@code UnsupportedOperationException}
      * if modification is attempted.
      */
-    public Set<Tag> getTags() {
-        return Collections.unmodifiableSet(tags);
+    public Set<Skill> getSkills() {
+        return Collections.unmodifiableSet(skills);
     }
 
     /**
@@ -109,12 +109,13 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && telegram.equals(otherPerson.telegram)
                 && github.equals(otherPerson.github)
-                && tags.equals(otherPerson.tags);
+                && skills.equals(otherPerson.skills);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, phone, email, address, telegram, github, tags);
+        // use this method for custom fields hashing instead of implementing your own
+        return Objects.hash(name, phone, email, address, telegram, github, skills);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class Person {
                 .add("address", address)
                 .add("telegram", telegram)
                 .add("github", github)
-                .add("tags", tags)
+                .add("skills", skills)
                 .toString();
     }
 
