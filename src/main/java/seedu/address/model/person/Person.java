@@ -23,16 +23,20 @@ public class Person {
     private final GitHub github;
 
     // Data fields
+    private final Address address;
+    private final Phone phone;
     private final Set<Skill> skills = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills) {
-        requireAllNonNull(name, email, telegram, github, skills);
-
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Telegram telegram, GitHub github, Set<Skill> skills) {
+        requireAllNonNull(name, phone, email, address, telegram, github, skills);
         this.name = name;
+        this.phone = phone;
         this.email = email;
+        this.address = address;
         this.telegram = telegram;
         this.github = github;
         this.skills.addAll(skills);
@@ -40,6 +44,10 @@ public class Person {
 
     public Name getName() {
         return name;
+    }
+
+    public Phone getPhone() {
+        return phone;
     }
 
     public Email getEmail() {
@@ -96,26 +104,30 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return name.equals(otherPerson.name)
-                && github.equals(otherPerson.github)
                 && email.equals(otherPerson.email)
+                && address.equals(otherPerson.address)
+                && phone.equals(otherPerson.phone)
                 && telegram.equals(otherPerson.telegram)
+                && github.equals(otherPerson.github)
                 && skills.equals(otherPerson.skills);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, email, telegram, github, skills);
+        return Objects.hash(name, phone, email, address, telegram, github, skills);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("Name", name)
-                .add("Email", email)
-                .add("Telegram", telegram)
-                .add("GitHub", github)
-                .add("Skills", skills)
+                .add("name", name)
+                .add("phone", phone)
+                .add("email", email)
+                .add("address", address)
+                .add("telegram", telegram)
+                .add("github", github)
+                .add("skills", skills)
                 .toString();
     }
 
