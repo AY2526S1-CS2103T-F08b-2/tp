@@ -18,13 +18,13 @@ public class Person {
 
     // Identity fields
     private final Name name;
-    private final Phone phone;
     private final Email email;
+    private final Telegram telegram;
+    private final GitHub github;
 
     // Data fields
     private final Address address;
-    private final Telegram telegram;
-    private final GitHub github;
+    private final Phone phone;
     private final Set<Skill> skills = new HashSet<>();
 
     /**
@@ -71,7 +71,7 @@ public class Person {
      * if modification is attempted.
      */
     public Set<Skill> getSkills() {
-        return Collections.unmodifiableSet(skills);
+        return Collections.unmodifiableSet(this.skills);
     }
 
     /**
@@ -104,9 +104,9 @@ public class Person {
 
         Person otherPerson = (Person) other;
         return name.equals(otherPerson.name)
-                && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && phone.equals(otherPerson.phone)
                 && telegram.equals(otherPerson.telegram)
                 && github.equals(otherPerson.github)
                 && skills.equals(otherPerson.skills);
