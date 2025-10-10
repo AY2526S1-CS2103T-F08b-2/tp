@@ -29,21 +29,17 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_GITHUB_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_TELEGRAM_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_PYTHON;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_JAVA;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
+import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
-import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalPersons.AMY;
 import static seedu.address.testutil.TypicalPersons.BOB;
 
@@ -66,30 +62,17 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Person expectedPerson = new PersonBuilder().withName(VALID_NAME_AMY)
-                .withPhone(VALID_PHONE_AMY)
-                .withEmail(VALID_EMAIL_AMY)
-                .withAddress(VALID_ADDRESS_AMY)
-                .withTelegram(VALID_TELEGRAM_AMY)
-                .withGitHub(VALID_GITHUB_AMY)
-                .withSkills(VALID_SKILL_PYTHON).build();
+        // whitespace only preamble
+        assertParseSuccess(parser,
+                PREAMBLE_WHITESPACE + NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY
+                        + ADDRESS_DESC_AMY + TELEGRAM_DESC_AMY + GITHUB_DESC_AMY + SKILL_DESC_PYTHON,
+                new AddCommand(AMY));
 
         // multiple skills - all accepted
-        Person expectedPersonMultipleSkills = new PersonBuilder(BOB).withSkills(VALID_SKILL_PYTHON, VALID_SKILL_JAVA)
-                .build();
-
-        // whitespace only preamble
-        assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + SKILL_DESC_PYTHON, new AddCommand(expectedPerson));
-
         assertParseSuccess(parser,
-                NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                        + TELEGRAM_DESC_AMY + GITHUB_DESC_AMY + SKILL_DESC_PYTHON,
-                new AddCommand(expectedPerson));
-
-        assertParseSuccess(parser,
-                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + SKILL_DESC_JAVA + SKILL_DESC_PYTHON,
-                new AddCommand(expectedPersonMultipleSkills));
+                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + SKILL_DESC_JAVA + SKILL_DESC_PYTHON,
+                new AddCommand(BOB));
     }
 
     @Test
