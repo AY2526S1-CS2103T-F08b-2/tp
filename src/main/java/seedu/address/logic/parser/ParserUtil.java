@@ -11,9 +11,13 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Telegram;
 import seedu.address.model.skill.Skill;
+import seedu.address.model.team.TeamName;
+
 
 /**
  * Contains utility methods used for parsing strings in the various *Parser classes.
@@ -111,6 +115,21 @@ public class ParserUtil {
     }
 
     /**
+     * Parses a {@code String teamName} into a {@code TeamName}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code teamName} is invalid.
+     */
+    public static TeamName parseTeamName(String teamName) throws ParseException {
+        requireNonNull(teamName);
+        String trimmedTeamName = teamName.trim();
+        if (!TeamName.isValidTeamName(trimmedTeamName)) {
+            throw new ParseException(TeamName.MESSAGE_CONSTRAINTS);
+        }
+        return new TeamName(trimmedTeamName);
+    }
+
+    /**
      * Parses {@code Collection<String> skills} into a {@code Set<Skill>}.
      */
     public static Set<Skill> parseSkills(Collection<String> skills) throws ParseException {
@@ -120,5 +139,35 @@ public class ParserUtil {
             skillSet.add(parseSkill(skillName));
         }
         return skillSet;
+    }
+
+    /**
+     * Parses a {@code String telegram} into a {@code Telegram}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code telegram} is invalid.
+     */
+    public static Telegram parseTelegram(String telegram) throws ParseException {
+        requireNonNull(telegram);
+        String trimmedTelegram = telegram.trim();
+        if (!Telegram.isValidTelegram(trimmedTelegram)) {
+            throw new ParseException(Telegram.MESSAGE_CONSTRAINTS);
+        }
+        return new Telegram(trimmedTelegram);
+    }
+
+    /**
+     * Parses a {@code String github} into a {@code GitHub}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code github} is invalid.
+     */
+    public static GitHub parseGitHub(String github) throws ParseException {
+        requireNonNull(github);
+        String trimmedGitHub = github.trim();
+        if (!GitHub.isValidGitHub(trimmedGitHub)) {
+            throw new ParseException(GitHub.MESSAGE_CONSTRAINTS);
+        }
+        return new GitHub(trimmedGitHub);
     }
 }

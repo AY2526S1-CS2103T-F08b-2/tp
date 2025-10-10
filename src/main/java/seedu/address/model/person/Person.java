@@ -23,17 +23,22 @@ public class Person {
 
     // Data fields
     private final Address address;
+    private final Telegram telegram;
+    private final GitHub github;
     private final Set<Skill> skills = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Skill> skills) {
-        requireAllNonNull(name, phone, email, address, skills);
+    public Person(Name name, Phone phone, Email email, Address address,
+                  Telegram telegram, GitHub github, Set<Skill> skills) {
+        requireAllNonNull(name, phone, email, address, telegram, github, skills);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.telegram = telegram;
+        this.github = github;
         this.skills.addAll(skills);
     }
 
@@ -51,6 +56,14 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public Telegram getTelegram() {
+        return telegram;
+    }
+
+    public GitHub getGitHub() {
+        return github;
     }
 
     /**
@@ -94,13 +107,15 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && telegram.equals(otherPerson.telegram)
+                && github.equals(otherPerson.github)
                 && skills.equals(otherPerson.skills);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, skills);
+        return Objects.hash(name, phone, email, address, telegram, github, skills);
     }
 
     @Override
@@ -110,6 +125,8 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
+                .add("telegram", telegram)
+                .add("github", github)
                 .add("skills", skills)
                 .toString();
     }

@@ -12,9 +12,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.person.Telegram;
 import seedu.address.model.skill.Skill;
 
 /**
@@ -28,19 +30,27 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
+    private final String telegram;
+    private final String github;
     private final List<JsonAdaptedSkill> skills = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("skills") List<JsonAdaptedSkill> skills) {
+    public JsonAdaptedPerson(@JsonProperty("name") String name,
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email,
+                             @JsonProperty("address") String address,
+                             @JsonProperty("telegram") String telegram,
+                             @JsonProperty("github") String github,
+                             @JsonProperty("skills") List<JsonAdaptedSkill> skills) {
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.telegram = telegram;
+        this.github = github;
         if (skills != null) {
             this.skills.addAll(skills);
         }
@@ -54,6 +64,8 @@ class JsonAdaptedPerson {
         phone = source.getPhone().value;
         email = source.getEmail().value;
         address = source.getAddress().value;
+        telegram = source.getTelegram().toString();
+        github = source.getGitHub().toString();
         skills.addAll(source.getSkills().stream()
                 .map(JsonAdaptedSkill::new)
                 .collect(Collectors.toList()));
@@ -102,8 +114,24 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
-        final Set<Skill> modelSkills = new HashSet<>(personSkills);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelSkills);
-    }
+        if (telegram == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
+                    Telegram.class.getSimpleName()));
+        }
+        if (!Telegram.isValidTelegram(telegram)) {
+            throw new IllegalValueException(Telegram.MESSAGE_CONSTRAINTS);
+        }
+        final Telegram modelTelegram = new Telegram(telegram);
 
+        if (github == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, GitHub.class.getSimpleName()));
+        }
+        if (!GitHub.isValidGitHub(github)) {
+            throw new IllegalValueException(GitHub.MESSAGE_CONSTRAINTS);
+        }
+        final GitHub modelGitHub = new GitHub(github);
+
+        final Set<Skill> modelSkills = new HashSet<>(personSkills);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTelegram, modelGitHub, modelSkills);
+    }
 }
