@@ -43,7 +43,7 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label github;
     @FXML
-    private FlowPane tags;
+    private FlowPane skills;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -60,6 +60,6 @@ public class PersonCard extends UiPart<Region> {
         github.setText(person.getGitHub().value);
         person.getSkills().stream()
                 .sorted(Comparator.comparing(skill -> skill.skillName))
-                .forEach(skill -> tags.getChildren().add(new Label(skill.skillName)));
+                .forEach(skill -> skills.getChildren().add(new Label(skill.skillName)));
     }
 }

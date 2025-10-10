@@ -85,7 +85,7 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withAddress(VALID_ADDRESS_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
-        // different tags -> returns false
+        // different skills -> returns false
         editedAlice = new PersonBuilder(ALICE).withSkills(VALID_SKILL_PYTHON).build();
         assertFalse(ALICE.equals(editedAlice));
 
