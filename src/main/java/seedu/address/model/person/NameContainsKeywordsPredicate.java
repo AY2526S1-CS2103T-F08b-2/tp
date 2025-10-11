@@ -20,6 +20,8 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
     public boolean test(Person person) {
         return keywords.stream()
                 .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword)
+                        || StringUtil.containsWordIgnoreCase(person.getGitHub().value, keyword)
+                        || StringUtil.containsWordIgnoreCase(person.getTelegram().value, keyword)
                 || person.getSkills().stream()
                     .anyMatch(skill -> StringUtil.containsWordIgnoreCase(skill.skillName, keyword)));
     }
