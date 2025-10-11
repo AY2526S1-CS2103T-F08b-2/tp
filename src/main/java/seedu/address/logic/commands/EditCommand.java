@@ -107,7 +107,8 @@ public class EditCommand extends Command {
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
         Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
-        Set<Skill> updatedSkills = editPersonDescriptor.getSkills().orElse(personToEdit.getSkills());
+        Set<Skill> updatedSkills = new HashSet<>(personToEdit.getSkills());
+        editPersonDescriptor.getSkills().ifPresent(updatedSkills::addAll);
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTelegram,
                 updatedGitHub, updatedSkills);
