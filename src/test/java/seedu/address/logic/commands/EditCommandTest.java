@@ -37,14 +37,23 @@ public class EditCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
+        Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder().build();
+
+        // With the new appending behavior, skills from original person should be preserved
+        Person expectedPerson = new PersonBuilder(editedPerson)
+                .withSkills(originalPerson.getSkills().stream()
+                        .map(skill -> skill.skillName)
+                        .toArray(String[]::new))
+                .build();
+
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(editedPerson).build();
         EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(expectedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(model.getFilteredPersonList().get(0), editedPerson);
+        expectedModel.setPerson(originalPerson, expectedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -55,8 +64,16 @@ public class EditCommandTest {
         Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(lastPerson);
+        // With appending behavior, we need to include existing skills plus the new Java skill
+        String[] existingSkills = lastPerson.getSkills().stream()
+                .map(skill -> skill.skillName)
+                .toArray(String[]::new);
+        String[] allSkills = new String[existingSkills.length + 1];
+        System.arraycopy(existingSkills, 0, allSkills, 0, existingSkills.length);
+        allSkills[existingSkills.length] = VALID_SKILL_JAVA;
+
         Person editedPerson = personInList.withName(VALID_NAME_BOB).withPhone(VALID_PHONE_BOB)
-                .withSkills(VALID_SKILL_JAVA).build();
+                .withSkills(allSkills).build();
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withSkills(VALID_SKILL_JAVA).build();
