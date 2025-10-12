@@ -11,6 +11,8 @@ public class CliSyntax {
     public static final Prefix PREFIX_TELEGRAM = new Prefix("tg/");
     public static final Prefix PREFIX_GITHUB = new Prefix("gh/");
     public static final Prefix PREFIX_TEAM_NAME = new Prefix("tn/");
+    public static final Prefix PREFIX_HACKATHON_NAME = new Prefix("hn/");
+    public static final Prefix PREFIX_PERSON = new Prefix("p/");
     public static final Prefix PREFIX_SKILL = new Prefix("s/");
 
 }

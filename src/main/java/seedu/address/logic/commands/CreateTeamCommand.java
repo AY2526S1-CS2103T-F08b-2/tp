@@ -1,13 +1,22 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
+import java.util.List;
+import java.util.Set;
+
+import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.hackathon.HackathonName;
+import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 
 /**
  * Creates a team in the address book.
@@ -18,26 +27,57 @@ public class CreateTeamCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Creates a team in Mate. "
             + "Parameters: "
-            + PREFIX_TEAM_NAME + "TEAM_NAME\n"
+            + PREFIX_TEAM_NAME + "TEAM_NAME "
+            + PREFIX_HACKATHON_NAME + "HACKATHON_NAME "
+            + PREFIX_PERSON + "INDEX "
+            + "[" + PREFIX_PERSON + "INDEX]...\n"
             + "Example: " + COMMAND_WORD + " "
-            + PREFIX_TEAM_NAME + "Development Team";
+            + PREFIX_TEAM_NAME + "Development Team "
+            + PREFIX_HACKATHON_NAME + "Hackathon 2023 "
+            + PREFIX_PERSON + "1 "
+            + PREFIX_PERSON + "3";
 
     public static final String MESSAGE_SUCCESS = "New team created: %1$s";
     public static final String MESSAGE_DUPLICATE_TEAM = "This team already exists in the address book";
+    public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
 
-    private final Team toCreate;
+    private final TeamName teamName;
+    private final HackathonName hackathonName;
+    private final Set<Index> personIndices;
 
     /**
-     * Creates a CreateTeamCommand to create the specified {@code Team}
+     * Creates a CreateTeamCommand to create the specified team with hackathon and members
      */
-    public CreateTeamCommand(Team team) {
-        requireNonNull(team);
-        toCreate = team;
+    public CreateTeamCommand(TeamName teamName, HackathonName hackathonName, Set<Index> personIndices) {
+        requireNonNull(teamName);
+        requireNonNull(hackathonName);
+        requireNonNull(personIndices);
+        this.teamName = teamName;
+        this.hackathonName = hackathonName;
+        this.personIndices = personIndices;
     }
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
+
+        List<Person> lastShownList = model.getFilteredPersonList();
+
+        // Validate all person indices
+        for (Index index : personIndices) {
+            if (index.getZeroBased() >= lastShownList.size()) {
+                throw new CommandException(MESSAGE_INVALID_PERSON_INDEX);
+            }
+        }
+
+        // Get persons from indices
+        Set<Person> members = new java.util.HashSet<>();
+        for (Index index : personIndices) {
+            Person person = lastShownList.get(index.getZeroBased());
+            members.add(person);
+        }
+
+        Team toCreate = new Team(teamName, hackathonName, members);
 
         if (model.hasTeam(toCreate)) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
@@ -59,13 +99,17 @@ public class CreateTeamCommand extends Command {
         }
 
         CreateTeamCommand otherCreateTeamCommand = (CreateTeamCommand) other;
-        return toCreate.equals(otherCreateTeamCommand.toCreate);
+        return teamName.equals(otherCreateTeamCommand.teamName)
+                && hackathonName.equals(otherCreateTeamCommand.hackathonName)
+                && personIndices.equals(otherCreateTeamCommand.personIndices);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("toCreate", toCreate)
+                .add("teamName", teamName)
+                .add("hackathonName", hackathonName)
+                .add("personIndices", personIndices)
                 .toString();
     }
 }
