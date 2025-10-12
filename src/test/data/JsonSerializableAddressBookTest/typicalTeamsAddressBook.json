@@ -1,0 +1,46 @@
+{
+  "persons": [
+    {
+      "name": "Alice Pauline",
+      "email": "alice@example.com",
+      "telegram": "alice_tg",
+      "github": "alice-github",
+      "skills": [ "Java", "Python" ]
+    },
+    {
+      "name": "Benson Meier",
+      "email": "benson@example.com",
+      "telegram": "benson_tg",
+      "github": "benson-github",
+      "skills": [ "JavaScript", "React" ]
+    }
+  ],
+  "teams": [
+    {
+      "teamName": "Alpha Team",
+      "hackathonName": "Tech Innovation 2024",
+      "members": [
+        {
+          "name": "Alice Pauline",
+          "email": "alice@example.com",
+          "telegram": "alice_tg",
+          "github": "alice-github",
+          "skills": [ "Java", "Python" ]
+        },
+        {
+          "name": "Benson Meier",
+          "email": "benson@example.com",
+          "telegram": "benson_tg",
+          "github": "benson-github",
+          "skills": [ "JavaScript", "React" ]
+        }
+      ]
+    },
+    {
+      "teamName": "Beta Squad",
+      "hackathonName": null,
+      "members": []
+    }
+  ]
+}
+

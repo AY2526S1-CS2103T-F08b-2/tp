@@ -128,7 +128,6 @@ public class ParserUtil {
         return new GitHub(trimmedGitHub);
     }
 
-
     /**
      * Parses {@code Collection<String> skills} into a {@code Set<Skill>}.
      */
