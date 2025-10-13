@@ -1,6 +1,7 @@
 package seedu.address.testutil;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.person.Email;
@@ -9,6 +10,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
 import seedu.address.model.skill.Skill;
+import seedu.address.model.team.Team;
 import seedu.address.model.util.SampleDataUtil;
 
 /**
@@ -26,6 +28,7 @@ public class PersonBuilder {
     private Telegram telegram;
     private GitHub github;
     private Set<Skill> skills;
+    private Optional<Team> team;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -36,6 +39,7 @@ public class PersonBuilder {
         telegram = new Telegram(DEFAULT_TELEGRAM);
         github = new GitHub(DEFAULT_GITHUB);
         skills = new HashSet<>();
+        team = Optional.empty();
     }
 
     /**
@@ -47,6 +51,7 @@ public class PersonBuilder {
         telegram = personToCopy.getTelegram();
         github = personToCopy.getGitHub();
         skills = new HashSet<>(personToCopy.getSkills());
+        team = personToCopy.getTeam();
     }
 
     /**
@@ -89,8 +94,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code Team} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withTeam(Team team) {
+        this.team = Optional.of(team);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, email, telegram, github, skills);
+        return new Person(name, email, telegram, github, skills, team);
     }
 
 }

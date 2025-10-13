@@ -5,10 +5,12 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.skill.Skill;
+import seedu.address.model.team.Team;
 
 /**
  * Represents a Person in the address book.
@@ -24,17 +26,26 @@ public class Person {
 
     // Data fields
     private final Set<Skill> skills = new HashSet<>();
+    private final Optional<Team> team;
 
     /**
-     * Every field must be present and not null.
+     * Every field must be present and not null. Team is optional.
      */
     public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills) {
-        requireAllNonNull(name, email, telegram, github, skills);
+        this(name, email, telegram, github, skills, Optional.empty());
+    }
+
+    /**
+     * Every field must be present and not null. Team is optional.
+     */
+    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills, Optional<Team> team) {
+        requireAllNonNull(name, email, telegram, github, skills, team);
         this.name = name;
         this.email = email;
         this.telegram = telegram;
         this.github = github;
         this.skills.addAll(skills);
+        this.team = team;
     }
 
     public Name getName() {
@@ -59,6 +70,13 @@ public class Person {
      */
     public Set<Skill> getSkills() {
         return Collections.unmodifiableSet(this.skills);
+    }
+
+    /**
+     * Returns the team of this person, if any.
+     */
+    public Optional<Team> getTeam() {
+        return team;
     }
 
     /**
@@ -94,13 +112,14 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && telegram.equals(otherPerson.telegram)
                 && github.equals(otherPerson.github)
-                && skills.equals(otherPerson.skills);
+                && skills.equals(otherPerson.skills)
+                && team.equals(otherPerson.team);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, email, telegram, github, skills);
+        return Objects.hash(name, email, telegram, github, skills, team);
     }
 
     @Override
@@ -111,6 +130,7 @@ public class Person {
                 .add("telegram", telegram)
                 .add("github", github)
                 .add("skills", skills)
+                .add("team", team.map(Team::getTeamName).orElse(null))
                 .toString();
     }
 

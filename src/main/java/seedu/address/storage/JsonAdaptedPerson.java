@@ -3,6 +3,7 @@ package seedu.address.storage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,8 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
 import seedu.address.model.skill.Skill;
+import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 
 /**
  * Jackson-friendly version of {@link Person}.
@@ -29,6 +32,7 @@ class JsonAdaptedPerson {
     private final String telegram;
     private final String github;
     private final List<JsonAdaptedSkill> skills = new ArrayList<>();
+    private final String teamName;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -38,7 +42,8 @@ class JsonAdaptedPerson {
                              @JsonProperty("email") String email,
                              @JsonProperty("telegram") String telegram,
                              @JsonProperty("github") String github,
-                             @JsonProperty("skills") List<JsonAdaptedSkill> skills) {
+                             @JsonProperty("skills") List<JsonAdaptedSkill> skills,
+                             @JsonProperty("teamName") String teamName) {
         this.name = name;
         this.email = email;
         this.telegram = telegram;
@@ -46,6 +51,7 @@ class JsonAdaptedPerson {
         if (skills != null) {
             this.skills.addAll(skills);
         }
+        this.teamName = teamName;
     }
 
     /**
@@ -59,6 +65,7 @@ class JsonAdaptedPerson {
         skills.addAll(source.getSkills().stream()
                 .map(JsonAdaptedSkill::new)
                 .collect(Collectors.toList()));
+        teamName = source.getTeam().map(team -> team.getTeamName().toString()).orElse(null);
     }
 
     /**
@@ -106,6 +113,17 @@ class JsonAdaptedPerson {
         final GitHub modelGitHub = new GitHub(github);
 
         final Set<Skill> modelSkills = new HashSet<>(personSkills);
-        return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills);
+
+        final Optional<Team> modelTeam;
+        if (teamName != null && !teamName.isEmpty()) {
+            if (!TeamName.isValidTeamName(teamName)) {
+                throw new IllegalValueException(TeamName.MESSAGE_CONSTRAINTS);
+            }
+            modelTeam = Optional.of(new Team(new TeamName(teamName)));
+        } else {
+            modelTeam = Optional.empty();
+        }
+
+        return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills, modelTeam);
     }
 }
