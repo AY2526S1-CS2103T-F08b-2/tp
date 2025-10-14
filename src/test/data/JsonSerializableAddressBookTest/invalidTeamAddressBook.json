@@ -5,7 +5,7 @@
       "email": "alice@example.com",
       "telegram": "alice_tg",
       "github": "alice-github",
-t       "skills": [
+      "skills": [
         {
           "skillName": "java",
           "experienceLevel": "BEGINNER"
