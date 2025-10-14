@@ -32,6 +32,10 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
+   * `listTeam` : Lists all teams.
+
+   * `createTeam tn/Development Team hn/Hackathon 2024 p/1 p/2` : Creates a team with the first two contacts as members.
+
    * `clear` : Deletes all contacts.
 
    * `exit` : Exits the app.
@@ -142,6 +146,39 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
+### Creating a team : `createTeam`
+
+Creates a new team in the address book with specified team members.
+
+Format: `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​`
+
+* Creates a team with the specified `TEAM_NAME` and `HACKATHON_NAME`.
+* Team members are specified by their `INDEX` numbers from the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* You can add multiple team members by specifying multiple `p/INDEX` parameters.
+* Team names and hackathon names should only contain alphanumeric characters and spaces, and should not be blank.
+* Duplicate teams (same team name) are not allowed.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Make sure to use the `list` command first to see the current index numbers of persons before creating a team.
+</div>
+
+Examples:
+* `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` creates a team called "Development Team" for "Tech Innovation 2024" hackathon with the 1st and 3rd persons as members.
+* `createTeam tn/Alpha Squad hn/AI Challenge p/2 p/4 p/5` creates a team called "Alpha Squad" for "AI Challenge" hackathon with the 2nd, 4th, and 5th persons as members.
+
+### Listing all teams : `listTeam`
+
+Shows a list of all teams in the address book.
+
+Format: `listTeam`
+
+* Displays all teams with their team names, hackathon names, and member counts.
+* No parameters are required for this command.
+
+Examples:
+* `listTeam` shows all teams currently stored in the address book.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -193,8 +230,10 @@ Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
 **Clear** | `clear`
+**Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit** | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **List** | `list`
+**List Team** | `listTeam`
 **Help** | `help`

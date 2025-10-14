@@ -9,6 +9,7 @@ import java.util.Set;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
@@ -98,18 +99,6 @@ public class ParserUtil {
     }
 
     /**
-     * Parses {@code Collection<String> skills} into a {@code Set<Skill>}.
-     */
-    public static Set<Skill> parseSkills(Collection<String> skills) throws ParseException {
-        requireNonNull(skills);
-        final Set<Skill> skillSet = new HashSet<>();
-        for (String skillName : skills) {
-            skillSet.add(parseSkill(skillName));
-        }
-        return skillSet;
-    }
-
-    /**
      * Parses a {@code String telegram} into a {@code Telegram}.
      * Leading and trailing whitespaces will be trimmed.
      *
@@ -137,5 +126,44 @@ public class ParserUtil {
             throw new ParseException(GitHub.MESSAGE_CONSTRAINTS);
         }
         return new GitHub(trimmedGitHub);
+    }
+
+    /**
+     * Parses {@code Collection<String> skills} into a {@code Set<Skill>}.
+     */
+    public static Set<Skill> parseSkills(Collection<String> skills) throws ParseException {
+        requireNonNull(skills);
+        final Set<Skill> skillSet = new HashSet<>();
+        for (String skillName : skills) {
+            skillSet.add(parseSkill(skillName));
+        }
+        return skillSet;
+    }
+
+    /**
+     * Parses a {@code String hackathonName} into a {@code HackathonName}.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code hackathonName} is invalid.
+     */
+    public static HackathonName parseHackathonName(String hackathonName) throws ParseException {
+        requireNonNull(hackathonName);
+        String trimmedHackathonName = hackathonName.trim();
+        if (!HackathonName.isValidHackathonName(trimmedHackathonName)) {
+            throw new ParseException(HackathonName.MESSAGE_CONSTRAINTS);
+        }
+        return new HackathonName(trimmedHackathonName);
+    }
+
+    /**
+     * Parses {@code Collection<String> personIndices} into a {@code Set<Index>}.
+     */
+    public static Set<Index> parsePersonIndices(Collection<String> personIndices) throws ParseException {
+        requireNonNull(personIndices);
+        final Set<Index> indexSet = new HashSet<>();
+        for (String indexString : personIndices) {
+            indexSet.add(parseIndex(indexString));
+        }
+        return indexSet;
     }
 }

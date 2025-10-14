@@ -1,0 +1,18 @@
+{
+  "persons": [
+    {
+      "name": "Alice Pauline",
+      "email": "alice@example.com",
+      "telegram": "alice_tg",
+      "github": "alice-github",
+      "skills": [ "Java" ]
+    }
+  ],
+  "teams": [
+    {
+      "teamName": "@Invalid Team Name!",
+      "hackathonName": "Valid Hackathon",
+      "members": []
+    }
+  ]
+}
