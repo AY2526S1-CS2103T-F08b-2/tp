@@ -42,6 +42,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label github;
     @FXML
+    private ImageView emailIcon;
+    @FXML
     private ImageView telegramIcon;
     @FXML
     private ImageView githubIcon;
@@ -61,6 +63,9 @@ public class PersonCard extends UiPart<Region> {
         github.setText(person.getGitHub().value);
 
         // Load and set icons
+        Image emailImage = new Image(getClass().getResourceAsStream("/images/Email.png"));
+        emailIcon.setImage(emailImage);
+
         Image telegramImage = new Image(getClass().getResourceAsStream("/images/Telegram.png"));
         telegramIcon.setImage(telegramImage);
 
