@@ -13,6 +13,7 @@ import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Telegram;
+import seedu.address.model.skill.ExperienceLevel;
 import seedu.address.model.skill.Skill;
 import seedu.address.model.team.TeamName;
 
@@ -70,16 +71,34 @@ public class ParserUtil {
     /**
      * Parses a {@code String skill} into a {@code Skill}.
      * Leading and trailing whitespaces will be trimmed.
+     * Format: "SkillName" or "SkillName:ExperienceLevel"
+     * If no experience level is specified, defaults to BEGINNER.
      *
      * @throws ParseException if the given {@code skill} is invalid.
      */
     public static Skill parseSkill(String skill) throws ParseException {
         requireNonNull(skill);
         String trimmedSkill = skill.trim();
-        if (!Skill.isValidSkillName(trimmedSkill)) {
+
+        // Check if skill contains experience level (format: skillName:level)
+        String[] parts = trimmedSkill.split(":", 2);
+        String skillName = parts[0].trim();
+
+        if (!Skill.isValidSkillName(skillName)) {
             throw new ParseException(Skill.MESSAGE_CONSTRAINTS);
         }
-        return new Skill(trimmedSkill);
+
+        // Parse experience level if provided
+        if (parts.length == 2) {
+            String levelStr = parts[1].trim();
+            if (!ExperienceLevel.isValidExperienceLevel(levelStr)) {
+                throw new ParseException(ExperienceLevel.MESSAGE_CONSTRAINTS);
+            }
+            ExperienceLevel level = ExperienceLevel.fromString(levelStr);
+            return new Skill(skillName, level);
+        }
+
+        return new Skill(skillName);
     }
 
     /**

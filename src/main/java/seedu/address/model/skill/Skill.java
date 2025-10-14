@@ -14,16 +14,29 @@ public class Skill {
     public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum}+#]*";
 
     public final String skillName;
+    public final ExperienceLevel experienceLevel;
 
     /**
-     * Constructs a {@code Skill}.
+     * Constructs a {@code Skill} with default experience level (BEGINNER).
      *
      * @param skillName A valid skill name.
      */
     public Skill(String skillName) {
+        this(skillName, ExperienceLevel.BEGINNER);
+    }
+
+    /**
+     * Constructs a {@code Skill} with specified experience level.
+     *
+     * @param skillName A valid skill name.
+     * @param experienceLevel The experience level for this skill.
+     */
+    public Skill(String skillName, ExperienceLevel experienceLevel) {
         requireNonNull(skillName);
+        requireNonNull(experienceLevel);
         checkArgument(isValidSkillName(skillName), MESSAGE_CONSTRAINTS);
         this.skillName = skillName;
+        this.experienceLevel = experienceLevel;
     }
 
     /**
@@ -31,6 +44,13 @@ public class Skill {
      */
     public static boolean isValidSkillName(String test) {
         return test.matches(VALIDATION_REGEX);
+    }
+
+    /**
+     * Returns the experience level of this skill.
+     */
+    public ExperienceLevel getExperienceLevel() {
+        return experienceLevel;
     }
 
     @Override
@@ -45,11 +65,13 @@ public class Skill {
         }
 
         Skill otherSkill = (Skill) other;
+        // Only compare skill names - experience level can differ
         return skillName.equals(otherSkill.skillName);
     }
 
     @Override
     public int hashCode() {
+        // Only use skill name for hashing
         return skillName.hashCode();
     }
 
@@ -57,7 +79,7 @@ public class Skill {
      * Format state as text for viewing.
      */
     public String toString() {
-        return '[' + skillName + ']';
+        return '[' + skillName + " (" + experienceLevel + ')' + ']';
     }
 
 }

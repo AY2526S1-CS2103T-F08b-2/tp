@@ -4,7 +4,10 @@
     "email": "alice@example.com",
     "telegram": "amybee_tg",
     "github": "amybee-github",
-    "skills": [ "friends" ]
+    "skills": [ {
+      "skillName": "friends",
+      "experienceLevel": "BEGINNER"
+    } ]
   }, {
     "name": "Alice Pauline",
     "email": "pauline@example.com",

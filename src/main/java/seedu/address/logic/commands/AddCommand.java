@@ -26,14 +26,15 @@ public class AddCommand extends Command {
             + PREFIX_EMAIL + "EMAIL "
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_SKILL + "SKILL]...\n"
+            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]...\n"
+            + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_TELEGRAM + "johndoe "
             + PREFIX_GITHUB + "johndoe123 "
-            + PREFIX_SKILL + "Java "
-            + PREFIX_SKILL + "Python";
+            + PREFIX_SKILL + "Java:Advanced "
+            + PREFIX_SKILL + "Python:Intermediate";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
