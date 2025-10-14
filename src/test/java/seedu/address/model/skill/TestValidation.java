@@ -12,6 +12,14 @@ import org.junit.jupiter.api.Test;
  */
 public class TestValidation {
 
+    /**
+     * Tests that valid skill names return true when validated.
+     * This method tests various valid skill name formats including:
+     * - Standard lowercase skill names (java, python, javascript)
+     * - Skills containing numbers (c++, c#, html5, react16)
+     * - Skills with valid symbols + and # not at the start (node+express, spring#boot)
+     * - Minimum length skills with 2 characters (ab, a1, 1a, 12)
+     */
     @Test
     public void isValidSkillName_validSkillNames_returnsTrue() {
         // Valid lowercase skill names
@@ -37,6 +45,15 @@ public class TestValidation {
         assertTrue(Skill.isValidSkillName("12"));
     }
 
+    /**
+     * Tests that invalid skill names return false when validated.
+     * This method tests various invalid skill name formats including:
+     * - Single character skills that are too short (a, 1, s)
+     * - Skills containing uppercase letters (Java, PYTHON, JavaScript, C++, C#)
+     * - Skills starting with forbidden symbols (# or +)
+     * - Skills containing invalid special characters (., /, -, @)
+     * - Empty strings and whitespace-only strings
+     */
     @Test
     public void isValidSkillName_invalidSkillNames_returnsFalse() {
         // Too short (single character)
@@ -73,6 +90,15 @@ public class TestValidation {
         assertFalse(Skill.isValidSkillName("  "));
     }
 
+    /**
+     * Tests edge cases for skill name validation.
+     * This method tests complex scenarios including:
+     * - Skills with mixed valid symbols (framework+library#version)
+     * - Skills starting with numbers (3dmodeling, 2dgraphics)
+     * - Skills with multiple consecutive valid symbols (skill++, tool##)
+     * - Skills starting with multiple invalid symbols (++skill, ##tool, #+mixed)
+     * These edge cases ensure the validation regex handles complex combinations correctly.
+     */
     @Test
     public void isValidSkillName_edgeCases_correctValidation() {
         // Mixed valid symbols

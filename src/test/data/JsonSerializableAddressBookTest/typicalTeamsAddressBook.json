@@ -5,14 +5,32 @@
       "email": "alice@example.com",
       "telegram": "alice_tg",
       "github": "alice-github",
-      "skills": [ "Java", "Python" ]
+      "skills": [
+        {
+          "skillName": "java",
+          "experienceLevel": "BEGINNER"
+        },
+        {
+          "skillName": "python",
+          "experienceLevel": "BEGINNER"
+        }
+      ]
     },
     {
       "name": "Benson Meier",
       "email": "benson@example.com",
       "telegram": "benson_tg",
       "github": "benson-github",
-      "skills": [ "JavaScript", "React" ]
+      "skills": [
+        {
+          "skillName": "javascript",
+          "experienceLevel": "BEGINNER"
+        },
+        {
+          "skillName": "react",
+          "experienceLevel": "BEGINNER"
+        }
+      ]
     }
   ],
   "teams": [
@@ -25,14 +43,32 @@
           "email": "alice@example.com",
           "telegram": "alice_tg",
           "github": "alice-github",
-          "skills": [ "Java", "Python" ]
+          "skills": [
+            {
+              "skillName": "java",
+              "experienceLevel": "BEGINNER"
+            },
+            {
+              "skillName": "python",
+              "experienceLevel": "BEGINNER"
+            }
+          ]
         },
         {
           "name": "Benson Meier",
           "email": "benson@example.com",
           "telegram": "benson_tg",
           "github": "benson-github",
-          "skills": [ "JavaScript", "React" ]
+          "skills": [
+            {
+              "skillName": "javascript",
+              "experienceLevel": "BEGINNER"
+            },
+            {
+              "skillName": "react",
+              "experienceLevel": "BEGINNER"
+            }
+          ]
         }
       ]
     },
@@ -43,4 +79,3 @@
     }
   ]
 }
-
