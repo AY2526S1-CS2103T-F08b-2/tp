@@ -30,8 +30,8 @@ public class CommandTestUtil {
     public static final String VALID_NAME_BOB = "Bob Choo";
     public static final String VALID_EMAIL_AMY = "amy@example.com";
     public static final String VALID_EMAIL_BOB = "bob@example.com";
-    public static final String VALID_SKILL_JAVA = "Java";
-    public static final String VALID_SKILL_PYTHON = "Python";
+    public static final String VALID_SKILL_JAVA = "java";
+    public static final String VALID_SKILL_PYTHON = "python";
     public static final String VALID_TELEGRAM_AMY = "amybee_tg";
     public static final String VALID_TELEGRAM_BOB = "bobchoo_tg";
     public static final String VALID_GITHUB_AMY = "amybee-github";

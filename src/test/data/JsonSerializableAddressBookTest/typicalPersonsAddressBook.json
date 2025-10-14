@@ -6,7 +6,7 @@
     "telegram" : "alice_tg",
     "github" : "alice-github",
     "skills" : [ {
-      "skillName" : "Java",
+      "skillName" : "java",
       "experienceLevel" : "BEGINNER"
     } ]
   }, {
@@ -15,10 +15,10 @@
     "telegram" : "benson_tg",
     "github" : "benson-github",
     "skills" : [ {
-      "skillName" : "Python",
+      "skillName" : "python",
       "experienceLevel" : "BEGINNER"
     }, {
-      "skillName" : "JavaScript",
+      "skillName" : "javascript",
       "experienceLevel" : "BEGINNER"
     } ]
   }, {
@@ -33,7 +33,7 @@
     "telegram" : "daniel_tg",
     "github" : "daniel-github",
     "skills" : [ {
-      "skillName" : "React",
+      "skillName" : "react",
       "experienceLevel" : "BEGINNER"
     } ]
   }, {

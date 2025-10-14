@@ -26,17 +26,17 @@ public class TypicalPersons {
     public static final Person ALICE = new PersonBuilder().withName("Alice Pauline")
             .withEmail("alice@example.com")
             .withTelegram("alice_tg").withGitHub("alice-github")
-            .withSkills("Java").build();
+            .withSkills("java").build();
     public static final Person BENSON = new PersonBuilder().withName("Benson Meier")
             .withEmail("johnd@example.com")
             .withTelegram("benson_tg").withGitHub("benson-github")
-            .withSkills("Python", "JavaScript").build();
+            .withSkills("python", "javascript").build();
     public static final Person CARL = new PersonBuilder().withName("Carl Kurz")
             .withEmail("heinz@example.com")
             .withTelegram("carl_tg").withGitHub("carl-github").build();
     public static final Person DANIEL = new PersonBuilder().withName("Daniel Meier")
             .withEmail("cornelia@example.com")
-            .withTelegram("daniel_tg").withGitHub("daniel-github").withSkills("React").build();
+            .withTelegram("daniel_tg").withGitHub("daniel-github").withSkills("react").build();
     public static final Person ELLE = new PersonBuilder().withName("Elle Meyer")
             .withEmail("werner@example.com")
             .withTelegram("elle_tg").withGitHub("elle-github").build();
