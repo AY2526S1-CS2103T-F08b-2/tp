@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -39,6 +41,10 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label github;
     @FXML
+    private ImageView telegramIcon;
+    @FXML
+    private ImageView githubIcon;
+    @FXML
     private FlowPane skills;
 
     /**
@@ -52,6 +58,14 @@ public class PersonCard extends UiPart<Region> {
         email.setText(person.getEmail().value);
         telegram.setText(person.getTelegram().value);
         github.setText(person.getGitHub().value);
+
+        // Load and set icons
+        Image telegramImage = new Image(getClass().getResourceAsStream("/images/Telegram.png"));
+        telegramIcon.setImage(telegramImage);
+
+        Image githubImage = new Image(getClass().getResourceAsStream("/images/Github.png"));
+        githubIcon.setImage(githubImage);
+
         person.getSkills().stream()
                 .sorted(Comparator.comparing(skill -> skill.skillName))
                 .forEach(skill -> skills.getChildren().add(new Label(skill.skillName)));
