@@ -1,13 +1,17 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
+import java.util.Set;
 import java.util.stream.Stream;
 
+import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.team.Team;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.team.TeamName;
 
 /**
@@ -22,19 +26,20 @@ public class CreateTeamCommandParser implements Parser<CreateTeamCommand> {
      */
     public CreateTeamCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME);
+                ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME, PREFIX_HACKATHON_NAME, PREFIX_PERSON);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME)
+        if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME, PREFIX_HACKATHON_NAME, PREFIX_PERSON)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CreateTeamCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TEAM_NAME);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TEAM_NAME, PREFIX_HACKATHON_NAME);
+
         TeamName teamName = ParserUtil.parseTeamName(argMultimap.getValue(PREFIX_TEAM_NAME).get());
+        HackathonName hackathonName = ParserUtil.parseHackathonName(argMultimap.getValue(PREFIX_HACKATHON_NAME).get());
+        Set<Index> personIndices = ParserUtil.parsePersonIndices(argMultimap.getAllValues(PREFIX_PERSON));
 
-        Team team = new Team(teamName);
-
-        return new CreateTeamCommand(team);
+        return new CreateTeamCommand(teamName, hackathonName, personIndices);
     }
 
     /**

@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 
 /**
@@ -18,6 +19,7 @@ import seedu.address.model.person.Person;
 public class Team {
 
     private final TeamName teamName;
+    private final HackathonName hackathonName;
     private final Set<Person> members;
 
     /**
@@ -26,6 +28,7 @@ public class Team {
     public Team(TeamName teamName) {
         requireNonNull(teamName);
         this.teamName = teamName;
+        this.hackathonName = null;
         this.members = new HashSet<>();
     }
 
@@ -35,11 +38,26 @@ public class Team {
     public Team(TeamName teamName, Set<Person> members) {
         requireAllNonNull(teamName, members);
         this.teamName = teamName;
+        this.hackathonName = null;
+        this.members = new HashSet<>(members);
+    }
+
+    /**
+     * Creates a team with the given name, hackathon name, and initial members.
+     */
+    public Team(TeamName teamName, HackathonName hackathonName, Set<Person> members) {
+        requireAllNonNull(teamName, hackathonName, members);
+        this.teamName = teamName;
+        this.hackathonName = hackathonName;
         this.members = new HashSet<>(members);
     }
 
     public TeamName getTeamName() {
         return teamName;
+    }
+
+    public HackathonName getHackathonName() {
+        return hackathonName;
     }
 
     /**
@@ -78,7 +96,7 @@ public class Team {
     }
 
     /**
-     * Returns true if both teams have the same team name and members.
+     * Returns true if both teams have the same team name, hackathon name, and members.
      * This defines a stronger notion of equality between two teams.
      */
     @Override
@@ -93,19 +111,25 @@ public class Team {
 
         Team otherTeam = (Team) other;
         return teamName.equals(otherTeam.teamName)
+                && Objects.equals(hackathonName, otherTeam.hackathonName)
                 && members.equals(otherTeam.members);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(teamName, members);
+        return Objects.hash(teamName, hackathonName, members);
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this)
-                .add("teamName", teamName)
-                .add("members", members.size() + " member(s)")
-                .toString();
+        ToStringBuilder builder = new ToStringBuilder(this)
+                .add("teamName", teamName);
+
+        if (hackathonName != null) {
+            builder.add("hackathonName", hackathonName);
+        }
+
+        builder.add("members", members.size() + " member(s)");
+        return builder.toString();
     }
 }

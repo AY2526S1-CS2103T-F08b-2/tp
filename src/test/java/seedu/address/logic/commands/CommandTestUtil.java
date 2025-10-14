@@ -4,8 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -19,6 +22,7 @@ import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
 import seedu.address.model.person.Person;
+import seedu.address.model.team.Team;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
 /**
@@ -37,6 +41,14 @@ public class CommandTestUtil {
     public static final String VALID_GITHUB_AMY = "amybee-github";
     public static final String VALID_GITHUB_BOB = "bobchoo-github";
 
+    // Team-related valid values
+    public static final String VALID_TEAM_NAME_ALPHA = "Alpha Team";
+    public static final String VALID_TEAM_NAME_BETA = "Beta Squad";
+    public static final String VALID_HACKATHON_NAME_TECH = "Tech Challenge 2024";
+    public static final String VALID_HACKATHON_NAME_AI = "AI Innovation Contest";
+    public static final String VALID_PERSON_INDEX_1 = "1";
+    public static final String VALID_PERSON_INDEX_2 = "2";
+
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
     public static final String EMAIL_DESC_AMY = " " + PREFIX_EMAIL + VALID_EMAIL_AMY;
@@ -48,12 +60,26 @@ public class CommandTestUtil {
     public static final String GITHUB_DESC_AMY = " " + PREFIX_GITHUB + VALID_GITHUB_AMY;
     public static final String GITHUB_DESC_BOB = " " + PREFIX_GITHUB + VALID_GITHUB_BOB;
 
+    // Team-related descriptors
+    public static final String TEAM_NAME_DESC_ALPHA = " " + PREFIX_TEAM_NAME + VALID_TEAM_NAME_ALPHA;
+    public static final String TEAM_NAME_DESC_BETA = " " + PREFIX_TEAM_NAME + VALID_TEAM_NAME_BETA;
+    public static final String HACKATHON_NAME_DESC_TECH = " " + PREFIX_HACKATHON_NAME + VALID_HACKATHON_NAME_TECH;
+    public static final String HACKATHON_NAME_DESC_AI = " " + PREFIX_HACKATHON_NAME + VALID_HACKATHON_NAME_AI;
+    public static final String PERSON_INDEX_DESC_1 = " " + PREFIX_PERSON + VALID_PERSON_INDEX_1;
+    public static final String PERSON_INDEX_DESC_2 = " " + PREFIX_PERSON + VALID_PERSON_INDEX_2;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_EMAIL_DESC = " " + PREFIX_EMAIL + "bob!yahoo"; // missing '@' symbol
     public static final String INVALID_SKILL_DESC = " " + PREFIX_SKILL + "java*"; // '*' not allowed in skills
     public static final String INVALID_TELEGRAM_DESC = " " + PREFIX_TELEGRAM + "john@doe"; // invalid char '@'
     public static final String INVALID_GITHUB_DESC = " " + PREFIX_GITHUB + "john_doe_"; // ends with underscore
+
+    // Team-related invalid descriptors
+    public static final String INVALID_TEAM_NAME_DESC = " " + PREFIX_TEAM_NAME + "Team@Alpha"; // '@' not allowed
+    public static final String INVALID_HACKATHON_NAME_DESC = " "
+            + PREFIX_HACKATHON_NAME
+            + "Hack@thon"; // '@' not allowed
+    public static final String INVALID_PERSON_INDEX_DESC = " " + PREFIX_PERSON + "0"; // index must be positive
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
@@ -128,6 +154,39 @@ public class CommandTestUtil {
         model.updateFilteredPersonList(new NameContainsKeywordsPredicate(Arrays.asList(splitName[0])));
 
         assertEquals(1, model.getFilteredPersonList().size());
+    }
+
+    /**
+     * Updates {@code model}'s filtered team list to show only the team at the given {@code targetIndex} in the
+     * {@code model}'s address book.
+     */
+    public static void showTeamAtIndex(Model model, Index targetIndex) {
+        assertTrue(targetIndex.getZeroBased() < model.getFilteredTeamList().size());
+
+        Team team = model.getFilteredTeamList().get(targetIndex.getZeroBased());
+        final String teamName = team.getTeamName().fullTeamName;
+        model.updateFilteredTeamList(t -> t.getTeamName().fullTeamName.equals(teamName));
+
+        assertEquals(1, model.getFilteredTeamList().size());
+    }
+
+    /**
+     * Executes the given {@code command}, confirms that <br>
+     * - a {@code CommandException} is thrown <br>
+     * - the CommandException message matches {@code expectedMessage} <br>
+     * - the address book, filtered person list, filtered team list in {@code actualModel} remain unchanged
+     */
+    public static void assertCommandFailureWithTeams(Command command, Model actualModel, String expectedMessage) {
+        // we are unable to defensively copy the model for comparison later, so we can
+        // only do so by copying its components.
+        AddressBook expectedAddressBook = new AddressBook(actualModel.getAddressBook());
+        List<Person> expectedFilteredPersonList = new ArrayList<>(actualModel.getFilteredPersonList());
+        List<Team> expectedFilteredTeamList = new ArrayList<>(actualModel.getFilteredTeamList());
+
+        assertThrows(CommandException.class, expectedMessage, () -> command.execute(actualModel));
+        assertEquals(expectedAddressBook, actualModel.getAddressBook());
+        assertEquals(expectedFilteredPersonList, actualModel.getFilteredPersonList());
+        assertEquals(expectedFilteredTeamList, actualModel.getFilteredTeamList());
     }
 
 }
