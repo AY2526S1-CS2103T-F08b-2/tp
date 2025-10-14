@@ -27,6 +27,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
 import seedu.address.model.skill.Skill;
+import seedu.address.model.team.Team;
 
 /**
  * Edits the details of an existing person in the address book.
@@ -100,8 +101,12 @@ public class EditCommand extends Command {
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
         Set<Skill> updatedSkills = new HashSet<>(personToEdit.getSkills());
         editPersonDescriptor.getSkills().ifPresent(updatedSkills::addAll);
+        Optional<Team> updatedTeam = editPersonDescriptor.getTeam().isPresent()
+                ? editPersonDescriptor.getTeam()
+                : personToEdit.getTeam();
 
-        return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills);
+        return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills,
+                updatedTeam);
     }
 
     @Override
@@ -138,6 +143,7 @@ public class EditCommand extends Command {
         private Telegram telegram;
         private GitHub github;
         private Set<Skill> skills;
+        private Team team;
 
         public EditPersonDescriptor() {}
 
@@ -151,13 +157,14 @@ public class EditCommand extends Command {
             setTelegram(toCopy.telegram);
             setGitHub(toCopy.github);
             setSkills(toCopy.skills);
+            setTeam(toCopy.team);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills);
+            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, team);
         }
 
         public void setName(Name name) {
@@ -209,6 +216,14 @@ public class EditCommand extends Command {
             return (skills != null) ? Optional.of(Collections.unmodifiableSet(skills)) : Optional.empty();
         }
 
+        public void setTeam(Team team) {
+            this.team = team;
+        }
+
+        public Optional<Team> getTeam() {
+            return Optional.ofNullable(team);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -225,7 +240,8 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(telegram, otherEditPersonDescriptor.telegram)
                     && Objects.equals(github, otherEditPersonDescriptor.github)
-                    && Objects.equals(skills, otherEditPersonDescriptor.skills);
+                    && Objects.equals(skills, otherEditPersonDescriptor.skills)
+                    && Objects.equals(team, otherEditPersonDescriptor.team);
         }
 
         @Override
