@@ -11,7 +11,7 @@ public class Skill {
 
     public static final String MESSAGE_CONSTRAINTS = "Skills names should be lowercase alphanumeric "
             + "and may include '+' or '#' symbols, but cannot start with '#' and must be at least 1 character long";
-    public static final String VALIDATION_REGEX = "[a-z0-9+#]+";
+    public static final String VALIDATION_REGEX = "[a-z0-9][a-z0-9+#]*";
 
     public final String skillName;
     public final ExperienceLevel experienceLevel;
@@ -43,6 +43,9 @@ public class Skill {
      * Returns true if a given string is a valid skill name.
      */
     public static boolean isValidSkillName(String test) {
+        if (test == null) {
+            throw new NullPointerException();
+        }
         return test.matches(VALIDATION_REGEX);
     }
 

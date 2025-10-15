@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Test class for Skill name validation.
- * Tests that skill names must be lowercase, at least 2 characters long,
- * and can contain + and # symbols but cannot start with #.
+ * Tests that skill names must be lowercase, at least 1 character long,
+ * and can contain + and # symbols but cannot start with # or +.
  */
 public class TestValidation {
 
@@ -18,7 +18,7 @@ public class TestValidation {
      * - Standard lowercase skill names (java, python, javascript)
      * - Skills containing numbers (c++, c#, html5, react16)
      * - Skills with valid symbols + and # not at the start (node+express, spring#boot)
-     * - Minimum length skills with 2 characters (ab, a1, 1a, 12)
+     * - Minimum length skills with 1 character (a, b, 1, 2)
      */
     @Test
     public void isValidSkillName_validSkillNames_returnsTrue() {
@@ -38,17 +38,16 @@ public class TestValidation {
         assertTrue(Skill.isValidSkillName("spring#boot"));
         assertTrue(Skill.isValidSkillName("docker+kubernetes"));
 
-        // Valid minimum length (2 characters)
-        assertTrue(Skill.isValidSkillName("ab"));
-        assertTrue(Skill.isValidSkillName("a1"));
-        assertTrue(Skill.isValidSkillName("1a"));
-        assertTrue(Skill.isValidSkillName("12"));
+        // Valid minimum length (1 character)
+        assertTrue(Skill.isValidSkillName("a"));
+        assertTrue(Skill.isValidSkillName("b"));
+        assertTrue(Skill.isValidSkillName("1"));
+        assertTrue(Skill.isValidSkillName("2"));
     }
 
     /**
      * Tests that invalid skill names return false when validated.
      * This method tests various invalid skill name formats including:
-     * - Single character skills that are too short (a, 1, s)
      * - Skills containing uppercase letters (Java, PYTHON, JavaScript, C++, C#)
      * - Skills starting with forbidden symbols (# or +)
      * - Skills containing invalid special characters (., /, -, @)
@@ -56,11 +55,6 @@ public class TestValidation {
      */
     @Test
     public void isValidSkillName_invalidSkillNames_returnsFalse() {
-        // Too short (single character)
-        assertFalse(Skill.isValidSkillName("a"));
-        assertFalse(Skill.isValidSkillName("1"));
-        assertFalse(Skill.isValidSkillName("s"));
-
         // Contains uppercase letters
         assertFalse(Skill.isValidSkillName("Java"));
         assertFalse(Skill.isValidSkillName("PYTHON"));
