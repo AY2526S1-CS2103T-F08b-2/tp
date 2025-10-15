@@ -108,7 +108,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidSkills_throwsIllegalValueException() {
         List<JsonAdaptedSkill> invalidSkills = new ArrayList<>(VALID_SKILLS);
-        invalidSkills.add(new JsonAdaptedSkill(INVALID_SKILL));
+        invalidSkills.add(new JsonAdaptedSkill(INVALID_SKILL, "BEGINNER"));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_EMAIL,
                         VALID_TELEGRAM, VALID_GITHUB, invalidSkills, null);

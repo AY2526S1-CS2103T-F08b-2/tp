@@ -4,10 +4,13 @@ import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
+import seedu.address.model.skill.ExperienceLevel;
 
 /**
  * An UI component that displays information of a {@code Person}.
@@ -39,6 +42,12 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label github;
     @FXML
+    private ImageView emailIcon;
+    @FXML
+    private ImageView telegramIcon;
+    @FXML
+    private ImageView githubIcon;
+    @FXML
     private FlowPane skills;
 
     /**
@@ -52,8 +61,47 @@ public class PersonCard extends UiPart<Region> {
         email.setText(person.getEmail().value);
         telegram.setText(person.getTelegram().value);
         github.setText(person.getGitHub().value);
+
+        // Load and set icons
+        Image emailImage = new Image(getClass().getResourceAsStream("/images/Email.png"));
+        emailIcon.setImage(emailImage);
+
+        Image telegramImage = new Image(getClass().getResourceAsStream("/images/Telegram.png"));
+        telegramIcon.setImage(telegramImage);
+
+        Image githubImage = new Image(getClass().getResourceAsStream("/images/Github.png"));
+        githubIcon.setImage(githubImage);
+
         person.getSkills().stream()
                 .sorted(Comparator.comparing(skill -> skill.skillName))
-                .forEach(skill -> skills.getChildren().add(new Label(skill.skillName)));
+                .forEach(skill -> {
+                    Label skillLabel = new Label(skill.skillName);
+                    skillLabel.getStyleClass().add("skill-label");
+
+                    // Set background color based on experience level
+                    String backgroundColor = getColorForExperienceLevel(skill.getExperienceLevel());
+                    skillLabel.setStyle("-fx-background-color: " + backgroundColor + "; "
+                            + "-fx-padding: 3 7 3 7; "
+                            + "-fx-background-radius: 3; "
+                            + "-fx-text-fill: #000000;");
+
+                    skills.getChildren().add(skillLabel);
+                });
+    }
+
+    /**
+     * Returns the background color for a skill based on its experience level.
+     */
+    private String getColorForExperienceLevel(ExperienceLevel level) {
+        switch (level) {
+        case BEGINNER:
+            return "#b8f5b8"; // Light green
+        case INTERMEDIATE:
+            return "#fff4b8"; // Light yellow
+        case ADVANCED:
+            return "#ffb8b8"; // Light red
+        default:
+            return "#e0e0e0"; // Default gray
+        }
     }
 }

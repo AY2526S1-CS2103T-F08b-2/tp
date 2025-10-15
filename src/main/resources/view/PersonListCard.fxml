@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
@@ -28,9 +29,18 @@
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
       <FlowPane fx:id="skills" />
-      <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
-      <Label fx:id="telegram" styleClass="cell_small_label" text="\$telegram" />
-      <Label fx:id="github" styleClass="cell_small_label" text="\$github" />
+      <HBox spacing="5" alignment="CENTER_LEFT">
+        <ImageView fx:id="emailIcon" fitHeight="20" fitWidth="20" />
+        <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
+      </HBox>
+      <HBox spacing="5" alignment="CENTER_LEFT">
+        <ImageView fx:id="telegramIcon" fitHeight="20" fitWidth="20" />
+        <Label fx:id="telegram" styleClass="cell_small_label" text="\$telegram" />
+      </HBox>
+      <HBox spacing="5" alignment="CENTER_LEFT">
+        <ImageView fx:id="githubIcon" fitHeight="20" fitWidth="20" />
+        <Label fx:id="github" styleClass="cell_small_label" text="\$github" />
+      </HBox>
     </VBox>
   </GridPane>
 </HBox>

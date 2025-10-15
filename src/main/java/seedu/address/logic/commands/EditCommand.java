@@ -44,9 +44,11 @@ public class EditCommand extends Command {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_SKILL + "SKILL]...\n"
+            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]...\n"
+            + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_EMAIL + "johndoe@example.com";
+            + PREFIX_EMAIL + "johndoe@example.com "
+            + PREFIX_SKILL + "Java:Advanced";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -100,7 +102,16 @@ public class EditCommand extends Command {
         Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
         Set<Skill> updatedSkills = new HashSet<>(personToEdit.getSkills());
-        editPersonDescriptor.getSkills().ifPresent(updatedSkills::addAll);
+
+        // Remove existing skills with the same name and add new ones with updated levels
+        if (editPersonDescriptor.getSkills().isPresent()) {
+            Set<Skill> newSkills = editPersonDescriptor.getSkills().get();
+            // Remove old skills that have the same name as new skills
+            updatedSkills.removeAll(newSkills);
+            // Add all new skills with their updated experience levels
+            updatedSkills.addAll(newSkills);
+        }
+
         Optional<Team> updatedTeam = editPersonDescriptor.getTeam().isPresent()
                 ? editPersonDescriptor.getTeam()
                 : personToEdit.getTeam();

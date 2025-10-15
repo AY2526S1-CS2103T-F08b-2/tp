@@ -112,6 +112,9 @@ public class ModelManager implements Model {
         requireAllNonNull(target, editedPerson);
 
         addressBook.setPerson(target, editedPerson);
+        // Force UI refresh by temporarily changing predicate
+        updateFilteredPersonList(p -> false);
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override

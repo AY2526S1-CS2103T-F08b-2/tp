@@ -1,9 +1,10 @@
 package seedu.address.storage;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.skill.ExperienceLevel;
 import seedu.address.model.skill.Skill;
 
 /**
@@ -12,13 +13,16 @@ import seedu.address.model.skill.Skill;
 class JsonAdaptedSkill {
 
     private final String skillName;
+    private final String experienceLevel;
 
     /**
-     * Constructs a {@code JsonAdaptedSkill} with the given {@code skillName}.
+     * Constructs a {@code JsonAdaptedSkill} with the given skill details.
      */
     @JsonCreator
-    public JsonAdaptedSkill(String skillName) {
+    public JsonAdaptedSkill(@JsonProperty("skillName") String skillName,
+                            @JsonProperty("experienceLevel") String experienceLevel) {
         this.skillName = skillName;
+        this.experienceLevel = experienceLevel;
     }
 
     /**
@@ -26,11 +30,17 @@ class JsonAdaptedSkill {
      */
     public JsonAdaptedSkill(Skill source) {
         skillName = source.skillName;
+        experienceLevel = source.experienceLevel.name();
     }
 
-    @JsonValue
+    @JsonProperty("skillName")
     public String getSkillName() {
         return skillName;
+    }
+
+    @JsonProperty("experienceLevel")
+    public String getExperienceLevel() {
+        return experienceLevel;
     }
 
     /**
@@ -42,7 +52,17 @@ class JsonAdaptedSkill {
         if (!Skill.isValidSkillName(skillName)) {
             throw new IllegalValueException(Skill.MESSAGE_CONSTRAINTS);
         }
-        return new Skill(skillName);
+
+        // Handle backward compatibility - if no experience level is specified, default to BEGINNER
+        ExperienceLevel level = ExperienceLevel.BEGINNER;
+        if (experienceLevel != null && !experienceLevel.isEmpty()) {
+            if (!ExperienceLevel.isValidExperienceLevel(experienceLevel)) {
+                throw new IllegalValueException(ExperienceLevel.MESSAGE_CONSTRAINTS);
+            }
+            level = ExperienceLevel.fromString(experienceLevel);
+        }
+
+        return new Skill(skillName, level);
     }
 
 }

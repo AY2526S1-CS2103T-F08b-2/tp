@@ -5,13 +5,22 @@
     "email" : "alice@example.com",
     "telegram" : "alice_tg",
     "github" : "alice-github",
-    "skills" : [ "Java" ]
+    "skills" : [ {
+      "skillName" : "java",
+      "experienceLevel" : "BEGINNER"
+    } ]
   }, {
     "name" : "Benson Meier",
     "email" : "johnd@example.com",
     "telegram" : "benson_tg",
     "github" : "benson-github",
-    "skills" : [ "Python", "JavaScript" ]
+    "skills" : [ {
+      "skillName" : "python",
+      "experienceLevel" : "BEGINNER"
+    }, {
+      "skillName" : "javascript",
+      "experienceLevel" : "BEGINNER"
+    } ]
   }, {
     "name" : "Carl Kurz",
     "email" : "heinz@example.com",
@@ -23,7 +32,10 @@
     "email" : "cornelia@example.com",
     "telegram" : "daniel_tg",
     "github" : "daniel-github",
-    "skills" : [ "React" ]
+    "skills" : [ {
+      "skillName" : "react",
+      "experienceLevel" : "BEGINNER"
+    } ]
   }, {
     "name" : "Elle Meyer",
     "email" : "werner@example.com",
