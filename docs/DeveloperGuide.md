@@ -477,3 +477,16 @@ testers are expected to do more *exploratory* testing.
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 
 1. _{ more test cases …​ }_
+
+### RemoveSkillCommand
+
+The `RemoveSkillCommand` allows users to remove a skill from a person by specifying the person's index and the skill name.
+
+**Parser Integration:**
+- The command word `removeSkill` is recognized in `AddressBookParser`.
+- Arguments are parsed by `RemoveSkillCommandParser`, which expects an index and a skill name separated by a space.
+
+**Design Notes:**
+- The command checks if the person has the skill before removing it.
+- If successful, the skill is removed and a success message is shown.
+- If the skill is not found or the index is invalid, an error message is displayed.

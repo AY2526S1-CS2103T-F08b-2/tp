@@ -134,4 +134,13 @@ public class Person {
                 .toString();
     }
 
+    /**
+     * Returns a new Person with the given skill removed.
+     */
+    public Person removeSkill(Skill skill) {
+        Set<Skill> updatedSkills = new HashSet<>(skills);
+        updatedSkills.remove(skill);
+        return new Person(name, email, telegram, github, updatedSkills, team);
+    }
+
 }

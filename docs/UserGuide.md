@@ -249,3 +249,24 @@ Action | Format, Examples
 **List Team** | `listTeam`
 **Help** | `help`
 **Exit** | `exit`
+
+## Removing a Skill from a Person
+
+Removes a skill from a person in the address book.
+
+**Format:**
+```
+removeSkill INDEX SKILL
+```
+- `INDEX`: The index of the person in the displayed list (must be a positive integer).
+- `SKILL`: The name of the skill to remove (case-sensitive, must match the skill name exactly).
+
+**Example:**
+```
+removeSkill 2 java
+```
+Removes the skill `java` from the second person in the displayed list.
+
+**Notes:**
+- If the person does not have the specified skill, an error message will be shown.
+- If the index is invalid, an error message will be shown.
