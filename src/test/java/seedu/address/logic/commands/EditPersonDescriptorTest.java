@@ -45,6 +45,14 @@ public class EditPersonDescriptorTest {
         // different skills -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withSkills(VALID_SKILL_JAVA).build();
         assertFalse(DESC_AMY.equals(editedAmy));
+
+        // different looking for team status -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withLookingForTeam(true).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
+        // different interested hackathons -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withInterestedHackathons("NUSHack").build();
+        assertFalse(DESC_AMY.equals(editedAmy));
     }
 
     @Test
@@ -53,7 +61,9 @@ public class EditPersonDescriptorTest {
         String expected = EditPersonDescriptor.class.getCanonicalName() + "{name="
                 + editPersonDescriptor.getName().orElse(null) + ", email="
                 + editPersonDescriptor.getEmail().orElse(null) + ", skills="
-                + editPersonDescriptor.getSkills().orElse(null) + "}";
+                + editPersonDescriptor.getSkills().orElse(null) + ", isLookingForTeam="
+                + editPersonDescriptor.getIsLookingForTeam().orElse(null) + ", interestedHackathons="
+                + editPersonDescriptor.getInterestedHackathons().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }
 }

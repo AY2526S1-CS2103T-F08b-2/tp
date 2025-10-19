@@ -7,12 +7,16 @@
     "skills": [ {
       "skillName": "friends",
       "experienceLevel": "BEGINNER"
-    } ]
+    } ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name": "Alice Pauline",
     "email": "pauline@example.com",
     "telegram": "amybee_tg",
     "github": "amybee-github",
-    "skills": [ ]
+    "skills": [ ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   } ]
 }

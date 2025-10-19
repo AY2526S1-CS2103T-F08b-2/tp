@@ -175,6 +175,18 @@ public class ParserUtil {
     }
 
     /**
+     * Parses {@code Collection<String> hackathonNames} into a {@code Set<HackathonName>}.
+     */
+    public static Set<HackathonName> parseHackathonNames(Collection<String> hackathonNames) throws ParseException {
+        requireNonNull(hackathonNames);
+        final Set<HackathonName> hackathonSet = new HashSet<>();
+        for (String hackathonName : hackathonNames) {
+            hackathonSet.add(parseHackathonName(hackathonName));
+        }
+        return hackathonSet;
+    }
+
+    /**
      * Parses {@code Collection<String> personIndices} into a {@code Set<Index>}.
      */
     public static Set<Index> parsePersonIndices(Collection<String> personIndices) throws ParseException {

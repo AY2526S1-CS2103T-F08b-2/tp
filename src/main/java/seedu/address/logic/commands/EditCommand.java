@@ -3,6 +3,8 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -21,6 +23,7 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
@@ -44,11 +47,16 @@ public class EditCommand extends Command {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]...\n"
+            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
+            + "[" + PREFIX_LOOKING + "BOOLEAN] "
+            + "[" + PREFIX_HACKATHON_FILTER + "HACKATHON]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
+            + "BOOLEAN must be: true or false\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
-            + PREFIX_SKILL + "Java:Advanced";
+            + PREFIX_SKILL + "Java:Advanced "
+            + PREFIX_LOOKING + "true "
+            + PREFIX_HACKATHON_FILTER + "NUSHack";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -116,8 +124,18 @@ public class EditCommand extends Command {
                 ? editPersonDescriptor.getTeam()
                 : personToEdit.getTeam();
 
+        boolean updatedIsLookingForTeam = editPersonDescriptor.getIsLookingForTeam()
+                .orElse(personToEdit.isLookingForTeam());
+
+        Set<HackathonName> updatedInterestedHackathons;
+        if (editPersonDescriptor.getInterestedHackathons().isPresent()) {
+            updatedInterestedHackathons = editPersonDescriptor.getInterestedHackathons().get();
+        } else {
+            updatedInterestedHackathons = new HashSet<>(personToEdit.getInterestedHackathons());
+        }
+
         return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills,
-                updatedTeam);
+                updatedTeam, updatedIsLookingForTeam, updatedInterestedHackathons);
     }
 
     @Override
@@ -155,6 +173,8 @@ public class EditCommand extends Command {
         private GitHub github;
         private Set<Skill> skills;
         private Team team;
+        private Boolean isLookingForTeam;
+        private Set<HackathonName> interestedHackathons;
 
         public EditPersonDescriptor() {}
 
@@ -169,13 +189,16 @@ public class EditCommand extends Command {
             setGitHub(toCopy.github);
             setSkills(toCopy.skills);
             setTeam(toCopy.team);
+            setIsLookingForTeam(toCopy.isLookingForTeam);
+            setInterestedHackathons(toCopy.interestedHackathons);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, team);
+            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, team,
+                    isLookingForTeam, interestedHackathons);
         }
 
         public void setName(Name name) {
@@ -235,6 +258,33 @@ public class EditCommand extends Command {
             return Optional.ofNullable(team);
         }
 
+        public void setIsLookingForTeam(Boolean isLookingForTeam) {
+            this.isLookingForTeam = isLookingForTeam;
+        }
+
+        public Optional<Boolean> getIsLookingForTeam() {
+            return Optional.ofNullable(isLookingForTeam);
+        }
+
+        /**
+         * Sets {@code interestedHackathons} to this object's {@code interestedHackathons}.
+         * A defensive copy of {@code interestedHackathons} is used internally.
+         */
+        public void setInterestedHackathons(Set<HackathonName> interestedHackathons) {
+            this.interestedHackathons = (interestedHackathons != null)
+                    ? new HashSet<>(interestedHackathons) : null;
+        }
+
+        /**
+         * Returns an unmodifiable hackathon set, which throws {@code UnsupportedOperationException}
+         * if modification is attempted.
+         * Returns {@code Optional#empty()} if {@code interestedHackathons} is null.
+         */
+        public Optional<Set<HackathonName>> getInterestedHackathons() {
+            return (interestedHackathons != null)
+                    ? Optional.of(Collections.unmodifiableSet(interestedHackathons)) : Optional.empty();
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -252,7 +302,9 @@ public class EditCommand extends Command {
                     && Objects.equals(telegram, otherEditPersonDescriptor.telegram)
                     && Objects.equals(github, otherEditPersonDescriptor.github)
                     && Objects.equals(skills, otherEditPersonDescriptor.skills)
-                    && Objects.equals(team, otherEditPersonDescriptor.team);
+                    && Objects.equals(team, otherEditPersonDescriptor.team)
+                    && Objects.equals(isLookingForTeam, otherEditPersonDescriptor.isLookingForTeam)
+                    && Objects.equals(interestedHackathons, otherEditPersonDescriptor.interestedHackathons);
         }
 
         @Override
@@ -261,6 +313,8 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("email", email)
                     .add("skills", skills)
+                    .add("isLookingForTeam", isLookingForTeam)
+                    .add("interestedHackathons", interestedHackathons)
                     .toString();
         }
     }

@@ -14,7 +14,9 @@
           "skillName": "python",
           "experienceLevel": "BEGINNER"
         }
-      ]
+      ],
+      "isLookingForTeam": false,
+      "interestedHackathons": []
     },
     {
       "name": "Benson Meier",
@@ -30,7 +32,9 @@
           "skillName": "react",
           "experienceLevel": "BEGINNER"
         }
-      ]
+      ],
+      "isLookingForTeam": false,
+      "interestedHackathons": []
     }
   ],
   "teams": [
@@ -52,7 +56,9 @@
               "skillName": "python",
               "experienceLevel": "BEGINNER"
             }
-          ]
+          ],
+          "isLookingForTeam": false,
+          "interestedHackathons": []
         },
         {
           "name": "Benson Meier",
@@ -68,7 +74,9 @@
               "skillName": "react",
               "experienceLevel": "BEGINNER"
             }
-          ]
+          ],
+          "isLookingForTeam": false,
+          "interestedHackathons": []
         }
       ]
     },

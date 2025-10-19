@@ -14,5 +14,7 @@ public class CliSyntax {
     public static final Prefix PREFIX_HACKATHON_NAME = new Prefix("hn/");
     public static final Prefix PREFIX_PERSON = new Prefix("p/");
     public static final Prefix PREFIX_SKILL = new Prefix("s/");
+    public static final Prefix PREFIX_LOOKING = new Prefix("l/");
+    public static final Prefix PREFIX_HACKATHON_FILTER = new Prefix("h/");
 
 }

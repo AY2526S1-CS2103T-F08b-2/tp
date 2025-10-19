@@ -3,11 +3,15 @@
     "name": "Valid Person",
     "email": "hans@example.com",
     "telegram": "validhanstg",
-    "github": "hans-github"
+    "github": "hans-github",
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name": "Person With Invalid Telegram Field",
     "email": "john@example.com",
     "telegram": "john@doe",
-    "github": "john-github"
+    "github": "john-github",
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   } ]
 }

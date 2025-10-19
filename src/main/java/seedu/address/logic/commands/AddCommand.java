@@ -3,6 +3,8 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -24,17 +26,23 @@ public class AddCommand extends Command {
             + "Parameters: "
             + PREFIX_NAME + "NAME "
             + PREFIX_EMAIL + "EMAIL "
-            + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
-            + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]...\n"
+            + PREFIX_TELEGRAM + "TELEGRAM "
+            + PREFIX_GITHUB + "GITHUB "
+            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
+            + "[" + PREFIX_LOOKING + "BOOLEAN] "
+            + "[" + PREFIX_HACKATHON_FILTER + "HACKATHON]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
+            + "BOOLEAN must be: true or false (default: false)\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_TELEGRAM + "johndoe "
             + PREFIX_GITHUB + "johndoe123 "
             + PREFIX_SKILL + "Java:Advanced "
-            + PREFIX_SKILL + "Python:Intermediate";
+            + PREFIX_SKILL + "Python:Intermediate "
+            + PREFIX_LOOKING + "true "
+            + PREFIX_HACKATHON_FILTER + "NUSHack "
+            + PREFIX_HACKATHON_FILTER + "iNTUition";
 
     public static final String MESSAGE_SUCCESS = "New person added: %1$s";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
