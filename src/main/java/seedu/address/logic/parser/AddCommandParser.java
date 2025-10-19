@@ -49,7 +49,6 @@ public class AddCommandParser implements Parser<AddCommand> {
         Set<Skill> skillList = ParserUtil.parseSkills(argMultimap.getAllValues(PREFIX_SKILL));
         Telegram telegram = ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).orElse(""));
         GitHub github = ParserUtil.parseGitHub(argMultimap.getValue(PREFIX_GITHUB).orElse(""));
-
         // Parse looking for team status - only accept "true" or "false"
         boolean isLookingForTeam = false;
         if (argMultimap.getValue(PREFIX_LOOKING).isPresent()) {
@@ -62,7 +61,6 @@ public class AddCommandParser implements Parser<AddCommand> {
                 throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
             }
         }
-
         Set<HackathonName> interestedHackathons = ParserUtil.parseHackathonNames(
                 argMultimap.getAllValues(PREFIX_HACKATHON_FILTER));
 
