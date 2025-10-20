@@ -13,7 +13,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.skill.ExperienceLevel;
 
 /**
- * An UI component that displays information of a {@code Person}.
+ * A UI component that displays information of a {@code Person}.
  */
 public class PersonCard extends UiPart<Region> {
 
@@ -49,6 +49,10 @@ public class PersonCard extends UiPart<Region> {
     private ImageView githubIcon;
     @FXML
     private FlowPane skills;
+    @FXML
+    private Label lookingForTeam;
+    @FXML
+    private FlowPane hackathons;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -72,6 +76,11 @@ public class PersonCard extends UiPart<Region> {
         Image githubImage = new Image(getClass().getResourceAsStream("/images/Github.png"));
         githubIcon.setImage(githubImage);
 
+        // Set spacing for skills FlowPane
+        skills.setHgap(5);
+        skills.setVgap(5);
+
+        // Display skills
         person.getSkills().stream()
                 .sorted(Comparator.comparing(skill -> skill.skillName))
                 .forEach(skill -> {
@@ -86,6 +95,31 @@ public class PersonCard extends UiPart<Region> {
                             + "-fx-text-fill: #000000;");
 
                     skills.getChildren().add(skillLabel);
+                });
+
+        // Display looking for team status
+        if (person.isLookingForTeam()) {
+            lookingForTeam.setText("Looking for team");
+            lookingForTeam.setStyle("-fx-text-fill: #4CAF50;");
+        } else {
+            lookingForTeam.setText("Not looking for team");
+            lookingForTeam.setStyle("-fx-text-fill: #D32F2F;");
+        }
+
+        // Set spacing for hackathons FlowPane
+        hackathons.setHgap(5);
+        hackathons.setVgap(5);
+
+        // Display interested hackathons
+        person.getInterestedHackathons().stream()
+                .sorted(Comparator.comparing(hackathon -> hackathon.value))
+                .forEach(hackathon -> {
+                    Label hackathonLabel = new Label(hackathon.value);
+                    hackathonLabel.setStyle("-fx-background-color: #d4e6f1; "
+                            + "-fx-padding: 3 7 3 7; "
+                            + "-fx-background-radius: 3; "
+                            + "-fx-text-fill: #1565C0;");
+                    hackathons.getChildren().add(hackathonLabel);
                 });
     }
 

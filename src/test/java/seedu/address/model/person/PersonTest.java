@@ -94,7 +94,9 @@ public class PersonTest {
                 + ", email=" + ALICE.getEmail()
                 + ", telegram=" + ALICE.getTelegram() + ", github=" + ALICE.getGitHub()
                 + ", skills=" + ALICE.getSkills() + ", team="
-                + ALICE.getTeam().map(team -> team.getTeamName()).orElse(null) + "}";
+                + ALICE.getTeam().map(team -> team.getTeamName()).orElse(null)
+                + ", lookingForTeam=" + ALICE.isLookingForTeam()
+                + ", interestedHackathons=" + ALICE.getInterestedHackathons() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

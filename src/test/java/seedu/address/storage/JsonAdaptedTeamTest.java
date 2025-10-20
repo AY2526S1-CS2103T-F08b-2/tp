@@ -129,7 +129,9 @@ public class JsonAdaptedTeamTest {
                 "testTelegram",
                 "testGitHub",
                 new ArrayList<>(),
-                null));
+                null,
+                false,
+                new ArrayList<>()));
 
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, VALID_HACKATHON_NAME, invalidMembers);
         assertThrows(IllegalValueException.class, team::toModelType);

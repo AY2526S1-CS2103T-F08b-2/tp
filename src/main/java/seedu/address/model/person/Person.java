@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.skill.Skill;
 import seedu.address.model.team.Team;
 
@@ -27,25 +28,31 @@ public class Person {
     // Data fields
     private final Set<Skill> skills = new HashSet<>();
     private final Optional<Team> team;
+    private final boolean isLookingForTeam;
+    private final Set<HackathonName> interestedHackathons = new HashSet<>();
 
     /**
      * Every field must be present and not null. Team is optional.
      */
+    // To be removed in future
     public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills) {
-        this(name, email, telegram, github, skills, Optional.empty());
+        this(name, email, telegram, github, skills, Optional.empty(), false, new HashSet<>());
     }
 
     /**
      * Every field must be present and not null. Team is optional.
      */
-    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills, Optional<Team> team) {
-        requireAllNonNull(name, email, telegram, github, skills, team);
+    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills,
+                  Optional<Team> team, boolean isLookingForTeam, Set<HackathonName> interestedHackathons) {
+        requireAllNonNull(name, email, telegram, github, skills, team, isLookingForTeam, interestedHackathons);
         this.name = name;
         this.email = email;
         this.telegram = telegram;
         this.github = github;
         this.skills.addAll(skills);
         this.team = team;
+        this.isLookingForTeam = isLookingForTeam;
+        this.interestedHackathons.addAll(interestedHackathons);
     }
 
     public Name getName() {
@@ -77,6 +84,21 @@ public class Person {
      */
     public Optional<Team> getTeam() {
         return team;
+    }
+
+    /**
+     * Returns whether this person is looking for a team.
+     */
+    public boolean isLookingForTeam() {
+        return isLookingForTeam;
+    }
+
+    /**
+     * Returns an immutable hackathon set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
+     */
+    public Set<HackathonName> getInterestedHackathons() {
+        return Collections.unmodifiableSet(this.interestedHackathons);
     }
 
     /**
@@ -113,13 +135,14 @@ public class Person {
                 && telegram.equals(otherPerson.telegram)
                 && github.equals(otherPerson.github)
                 && skills.equals(otherPerson.skills)
-                && team.equals(otherPerson.team);
+                && team.equals(otherPerson.team)
+                && isLookingForTeam == otherPerson.isLookingForTeam
+                && interestedHackathons.equals(otherPerson.interestedHackathons);
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, email, telegram, github, skills, team);
+        return Objects.hash(name, email, telegram, github, skills, team, isLookingForTeam, interestedHackathons);
     }
 
     @Override
@@ -131,6 +154,8 @@ public class Person {
                 .add("github", github)
                 .add("skills", skills)
                 .add("team", team.map(Team::getTeamName).orElse(null))
+                .add("lookingForTeam", isLookingForTeam)
+                .add("interestedHackathons", interestedHackathons)
                 .toString();
     }
 
@@ -140,7 +165,7 @@ public class Person {
     public Person removeSkill(Skill skill) {
         Set<Skill> updatedSkills = new HashSet<>(skills);
         updatedSkills.remove(skill);
-        return new Person(name, email, telegram, github, updatedSkills, team);
+        return new Person(name, email, telegram, github, updatedSkills, team, isLookingForTeam, interestedHackathons);
     }
 
 }

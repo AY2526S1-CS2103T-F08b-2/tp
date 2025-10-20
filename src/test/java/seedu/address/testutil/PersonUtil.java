@@ -2,6 +2,8 @@ package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 import seedu.address.model.skill.Skill;
 
@@ -34,6 +37,7 @@ public class PersonUtil {
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
         sb.append(PREFIX_GITHUB + person.getGitHub().value + " ");
         sb.append(PREFIX_TELEGRAM + person.getTelegram().value + " ");
+        sb.append(PREFIX_LOOKING + (person.isLookingForTeam() ? "true" : "false") + " ");
         person.getSkills().stream().forEach(
             s -> sb.append(PREFIX_SKILL + s.skillName + " ")
         );
@@ -49,12 +53,22 @@ public class PersonUtil {
         descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
         descriptor.getGitHub().ifPresent(github -> sb.append(PREFIX_GITHUB).append(github.value).append(" "));
         descriptor.getTelegram().ifPresent(telegram -> sb.append(PREFIX_TELEGRAM).append(telegram.value).append(" "));
+        descriptor.getIsLookingForTeam().ifPresent(looking -> sb.append(PREFIX_LOOKING)
+                .append(looking ? "true" : "false").append(" "));
         if (descriptor.getSkills().isPresent()) {
             Set<Skill> skills = descriptor.getSkills().get();
             if (skills.isEmpty()) {
-                sb.append(PREFIX_SKILL);
+                sb.append(PREFIX_SKILL).append(" ");
             } else {
                 skills.forEach(s -> sb.append(PREFIX_SKILL).append(s.skillName).append(" "));
+            }
+        }
+        if (descriptor.getInterestedHackathons().isPresent()) {
+            Set<HackathonName> hackathons = descriptor.getInterestedHackathons().get();
+            if (hackathons.isEmpty()) {
+                sb.append(PREFIX_HACKATHON_FILTER).append(" ");
+            } else {
+                hackathons.forEach(h -> sb.append(PREFIX_HACKATHON_FILTER).append(h.value).append(" "));
             }
         }
         return sb.toString();

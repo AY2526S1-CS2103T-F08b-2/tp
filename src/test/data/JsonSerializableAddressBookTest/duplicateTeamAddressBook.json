@@ -10,7 +10,9 @@
           "skillName": "java",
           "experienceLevel": "BEGINNER"
         }
-      ]
+      ],
+      "isLookingForTeam": false,
+      "interestedHackathons": []
     }
   ],
   "teams": [

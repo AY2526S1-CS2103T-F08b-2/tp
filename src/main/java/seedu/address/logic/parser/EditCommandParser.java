@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -17,6 +19,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.skill.Skill;
 
 /**
@@ -34,7 +37,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
                         PREFIX_NAME, PREFIX_EMAIL,
-                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL);
+                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_LOOKING, PREFIX_HACKATHON_FILTER);
 
         Index index;
 
@@ -46,7 +49,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(
                 PREFIX_NAME, PREFIX_EMAIL,
-                PREFIX_TELEGRAM, PREFIX_GITHUB);
+                PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_LOOKING);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -65,6 +68,22 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         parseSkillsForEdit(argMultimap.getAllValues(PREFIX_SKILL)).ifPresent(editPersonDescriptor::setSkills);
+
+        // Parse looking for team status - only accept "true" or "false"
+        if (argMultimap.getValue(PREFIX_LOOKING).isPresent()) {
+            String lookingValue = argMultimap.getValue(PREFIX_LOOKING).get().trim();
+            if (lookingValue.equals("true")) {
+                editPersonDescriptor.setIsLookingForTeam(true);
+            } else if (lookingValue.equals("false")) {
+                editPersonDescriptor.setIsLookingForTeam(false);
+            } else {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+            }
+        }
+
+        // Parse interested hackathons
+        parseHackathonsForEdit(argMultimap.getAllValues(PREFIX_HACKATHON_FILTER))
+                .ifPresent(editPersonDescriptor::setInterestedHackathons);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
@@ -86,5 +105,21 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         Collection<String> skillSet = skills.size() == 1 && skills.contains("") ? Collections.emptySet() : skills;
         return Optional.of(ParserUtil.parseSkills(skillSet));
+    }
+
+    /**
+     * Parses {@code Collection<String> hackathons} into {@code Set<HackathonName>} if {@code hackathons} is non-empty.
+     * If {@code hackathons} contain only one element which is an empty string, it will be parsed into a
+     * {@code Set<HackathonName>} containing zero hackathons.
+     */
+    private Optional<Set<HackathonName>> parseHackathonsForEdit(Collection<String> hackathons) throws ParseException {
+        assert hackathons != null;
+
+        if (hackathons.isEmpty()) {
+            return Optional.empty();
+        }
+        Collection<String> hackathonSet = hackathons.size() == 1 && hackathons.contains("")
+                ? Collections.emptySet() : hackathons;
+        return Optional.of(ParserUtil.parseHackathonNames(hackathonSet));
     }
 }
