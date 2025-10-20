@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -84,7 +85,31 @@ public class CreateTeamCommand extends Command {
         }
 
         model.addTeam(toCreate);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toCreate)));
+
+        // Update each person to include this team in their teams set (maintain bidirectional relationship)
+        for (Person member : members) {
+            Set<Team> updatedTeams = new HashSet<>(member.getTeams());
+            updatedTeams.add(toCreate);
+
+            Person updatedPerson = new Person(
+                    member.getName(),
+                    member.getEmail(),
+                    member.getTelegram(),
+                    member.getGitHub(),
+                    member.getSkills(),
+                    updatedTeams,
+                    member.isLookingForTeam(),
+                    member.getInterestedHackathons()
+            );
+
+            model.setPerson(member, updatedPerson);
+        }
+
+        // Update the filtered team list to show all teams
+        model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
+
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toCreate)),
+                false, false, true); // showTeams = true to display teams list
     }
 
     @Override

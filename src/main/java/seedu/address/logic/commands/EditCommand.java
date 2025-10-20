@@ -120,9 +120,9 @@ public class EditCommand extends Command {
             updatedSkills.addAll(newSkills);
         }
 
-        Optional<Team> updatedTeam = editPersonDescriptor.getTeam().isPresent()
-                ? editPersonDescriptor.getTeam()
-                : personToEdit.getTeam();
+        Set<Team> updatedTeams = editPersonDescriptor.getTeams().isPresent()
+                ? editPersonDescriptor.getTeams().get()
+                : new HashSet<>(personToEdit.getTeams());
 
         boolean updatedIsLookingForTeam = editPersonDescriptor.getIsLookingForTeam()
                 .orElse(personToEdit.isLookingForTeam());
@@ -135,7 +135,7 @@ public class EditCommand extends Command {
         }
 
         return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills,
-                updatedTeam, updatedIsLookingForTeam, updatedInterestedHackathons);
+                updatedTeams, updatedIsLookingForTeam, updatedInterestedHackathons);
     }
 
     @Override
@@ -172,7 +172,7 @@ public class EditCommand extends Command {
         private Telegram telegram;
         private GitHub github;
         private Set<Skill> skills;
-        private Team team;
+        private Set<Team> teams;
         private Boolean isLookingForTeam;
         private Set<HackathonName> interestedHackathons;
 
@@ -180,7 +180,7 @@ public class EditCommand extends Command {
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code skills} is used internally.
+         * A defensive copy of {@code skills} and {@code teams} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             setName(toCopy.name);
@@ -188,7 +188,7 @@ public class EditCommand extends Command {
             setTelegram(toCopy.telegram);
             setGitHub(toCopy.github);
             setSkills(toCopy.skills);
-            setTeam(toCopy.team);
+            setTeams(toCopy.teams);
             setIsLookingForTeam(toCopy.isLookingForTeam);
             setInterestedHackathons(toCopy.interestedHackathons);
         }
@@ -197,7 +197,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, team,
+            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, teams,
                     isLookingForTeam, interestedHackathons);
         }
 
@@ -250,12 +250,21 @@ public class EditCommand extends Command {
             return (skills != null) ? Optional.of(Collections.unmodifiableSet(skills)) : Optional.empty();
         }
 
-        public void setTeam(Team team) {
-            this.team = team;
+        /**
+         * Sets {@code teams} to this object's {@code teams}.
+         * A defensive copy of {@code teams} is used internally.
+         */
+        public void setTeams(Set<Team> teams) {
+            this.teams = (teams != null) ? new HashSet<>(teams) : null;
         }
 
-        public Optional<Team> getTeam() {
-            return Optional.ofNullable(team);
+        /**
+         * Returns an unmodifiable teams set, which throws {@code UnsupportedOperationException}
+         * if modification is attempted.
+         * Returns {@code Optional#empty()} if {@code teams} is null.
+         */
+        public Optional<Set<Team>> getTeams() {
+            return (teams != null) ? Optional.of(Collections.unmodifiableSet(teams)) : Optional.empty();
         }
 
         public void setIsLookingForTeam(Boolean isLookingForTeam) {
@@ -302,7 +311,7 @@ public class EditCommand extends Command {
                     && Objects.equals(telegram, otherEditPersonDescriptor.telegram)
                     && Objects.equals(github, otherEditPersonDescriptor.github)
                     && Objects.equals(skills, otherEditPersonDescriptor.skills)
-                    && Objects.equals(team, otherEditPersonDescriptor.team)
+                    && Objects.equals(teams, otherEditPersonDescriptor.teams)
                     && Objects.equals(isLookingForTeam, otherEditPersonDescriptor.isLookingForTeam)
                     && Objects.equals(interestedHackathons, otherEditPersonDescriptor.interestedHackathons);
         }

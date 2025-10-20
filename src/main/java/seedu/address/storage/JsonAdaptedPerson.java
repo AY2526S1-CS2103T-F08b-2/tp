@@ -33,7 +33,7 @@ class JsonAdaptedPerson {
     private final String telegram;
     private final String github;
     private final List<JsonAdaptedSkill> skills = new ArrayList<>();
-    private final String teamName;
+    private final List<String> teamNames = new ArrayList<>(); // Changed from single teamName to list
     private final boolean isLookingForTeam;
     private final List<String> interestedHackathons = new ArrayList<>();
 
@@ -46,7 +46,7 @@ class JsonAdaptedPerson {
                              @JsonProperty("telegram") String telegram,
                              @JsonProperty("github") String github,
                              @JsonProperty("skills") List<JsonAdaptedSkill> skills,
-                             @JsonProperty("teamName") String teamName,
+                             @JsonProperty("teamNames") List<String> teamNames,
                              @JsonProperty("isLookingForTeam") boolean isLookingForTeam,
                              @JsonProperty("interestedHackathons") List<String> interestedHackathons) {
         this.name = name;
@@ -56,7 +56,9 @@ class JsonAdaptedPerson {
         if (skills != null) {
             this.skills.addAll(skills);
         }
-        this.teamName = teamName;
+        if (teamNames != null) {
+            this.teamNames.addAll(teamNames);
+        }
         this.isLookingForTeam = isLookingForTeam;
         if (interestedHackathons != null) {
             this.interestedHackathons.addAll(interestedHackathons);
@@ -74,7 +76,9 @@ class JsonAdaptedPerson {
         skills.addAll(source.getSkills().stream()
                 .map(JsonAdaptedSkill::new)
                 .collect(Collectors.toList()));
-        teamName = source.getTeam().map(team -> team.getTeamName().toString()).orElse(null);
+        teamNames.addAll(source.getTeams().stream()
+                .map(team -> team.getTeamName().toString())
+                .collect(Collectors.toList()));
         isLookingForTeam = source.isLookingForTeam();
         interestedHackathons.addAll(source.getInterestedHackathons().stream()
                 .map(HackathonName::toString)
@@ -127,14 +131,12 @@ class JsonAdaptedPerson {
 
         final Set<Skill> modelSkills = new HashSet<>(personSkills);
 
-        final Optional<Team> modelTeam;
-        if (teamName != null && !teamName.isEmpty()) {
+        final Set<Team> modelTeams = new HashSet<>();
+        for (String teamName : teamNames) {
             if (!TeamName.isValidTeamName(teamName)) {
                 throw new IllegalValueException(TeamName.MESSAGE_CONSTRAINTS);
             }
-            modelTeam = Optional.of(new Team(new TeamName(teamName)));
-        } else {
-            modelTeam = Optional.empty();
+            modelTeams.add(new Team(new TeamName(teamName)));
         }
 
         final Set<HackathonName> modelHackathons = new HashSet<>();
@@ -146,6 +148,6 @@ class JsonAdaptedPerson {
         }
 
         return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills,
-                modelTeam, isLookingForTeam, modelHackathons);
+                modelTeams, isLookingForTeam, modelHackathons);
     }
 }

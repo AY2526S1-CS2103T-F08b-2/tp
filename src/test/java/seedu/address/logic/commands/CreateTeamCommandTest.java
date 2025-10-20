@@ -305,6 +305,7 @@ public class CreateTeamCommandTest {
      */
     private class ModelStubAcceptingTeamAdded extends ModelStub {
         private final ArrayList<Team> teamsAdded = new ArrayList<>();
+        private final ArrayList<Person> personsUpdated = new ArrayList<>();
 
         @Override
         public boolean hasTeam(Team team) {
@@ -316,6 +317,18 @@ public class CreateTeamCommandTest {
         public void addTeam(Team team) {
             requireNonNull(team);
             teamsAdded.add(team);
+        }
+
+        @Override
+        public void setPerson(Person target, Person editedPerson) {
+            requireNonNull(target);
+            requireNonNull(editedPerson);
+            personsUpdated.add(editedPerson);
+        }
+
+        @Override
+        public void updateFilteredTeamList(Predicate<Team> predicate) {
+            // Do nothing for test stub
         }
 
         @Override

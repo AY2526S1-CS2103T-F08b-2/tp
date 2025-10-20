@@ -74,8 +74,11 @@ public class AddPersonToTeamCommand extends Command {
                 .orElseThrow(() -> new CommandException(
                         String.format(MESSAGE_TEAM_NOT_FOUND, teamName)));
 
-        // Check if person is already in this specific team
-        if (targetTeam.hasMember(personToAdd)) {
+        // Check if person is already in this specific team by checking the person's teams
+        boolean isAlreadyInTeam = personToAdd.getTeams().stream()
+                .anyMatch(team -> team.getTeamName().equals(teamName));
+
+        if (isAlreadyInTeam) {
             throw new CommandException(
                     String.format(MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
                             Messages.format(personToAdd), teamName));
@@ -88,14 +91,17 @@ public class AddPersonToTeamCommand extends Command {
         Team updatedTeam = new Team(targetTeam.getTeamName(),
                 targetTeam.getHackathonName(), updatedMembers);
 
-        // Create updated person with team reference (keeping existing team if any)
+        // Create updated person with new team added to existing teams
+        Set<Team> updatedTeams = new HashSet<>(personToAdd.getTeams());
+        updatedTeams.add(updatedTeam);
+
         Person updatedPerson = new Person(
                 personToAdd.getName(),
                 personToAdd.getEmail(),
                 personToAdd.getTelegram(),
                 personToAdd.getGitHub(),
                 personToAdd.getSkills(),
-                Optional.of(updatedTeam),
+                updatedTeams,
                 personToAdd.isLookingForTeam(),
                 personToAdd.getInterestedHackathons()
         );
@@ -104,8 +110,12 @@ public class AddPersonToTeamCommand extends Command {
         model.setTeam(targetTeam, updatedTeam);
         model.setPerson(personToAdd, updatedPerson);
 
+        // Update the filtered team list to show all teams
+        model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
+
         return new CommandResult(String.format(MESSAGE_SUCCESS,
-                Messages.format(personToAdd), Messages.format(updatedTeam)));
+                Messages.format(personToAdd), Messages.format(updatedTeam)),
+                false, false, true); // showTeams = true to display teams list
     }
 
     @Override

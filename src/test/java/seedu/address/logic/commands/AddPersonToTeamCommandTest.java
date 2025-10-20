@@ -54,24 +54,35 @@ public class AddPersonToTeamCommandTest {
                 .orElseThrow();
 
         assertEquals(true, updatedTeam.hasMember(personToAdd));
+
+        // Verify that the person now has the team in their teams set
+        Person updatedPerson = model.getFilteredPersonList().stream()
+                .filter(p -> p.getName().equals(personToAdd.getName()))
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(true, updatedPerson.getTeams().stream()
+                .anyMatch(t -> t.getTeamName().equals(teamName)));
     }
 
     @Test
     public void execute_personAlreadyInSameTeam_throwsCommandException() throws Exception {
-        // Create a team with a person already in it
+        // Create an empty team first
         TeamName teamName = new TeamName("Test Team");
         HackathonName hackathonName = new HackathonName("Test Hackathon");
-        Person personToAdd = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        Set<Person> initialMembers = new HashSet<>();
-        initialMembers.add(personToAdd);
-        Team team = new Team(teamName, hackathonName, initialMembers);
+        Team team = new Team(teamName, hackathonName, new HashSet<>());
         model.addTeam(team);
 
-        AddPersonToTeamCommand command = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        // First, add the person to the team successfully
+        AddPersonToTeamCommand command1 = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        command1.execute(model);
 
-        assertCommandFailure(command, model,
+        // Now try to add the same person to the same team again - this should throw an exception
+        AddPersonToTeamCommand command2 = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+
+        assertCommandFailure(command2, model,
                 String.format(AddPersonToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
-                        Messages.format(personToAdd), teamName));
+                        Messages.format(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased())), teamName));
     }
 
     @Test
