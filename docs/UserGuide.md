@@ -227,6 +227,44 @@ Format: `listTeam`
 Examples:
 * `listTeam` shows all teams currently stored in the address book.
 
+### Adding a person to a team : `addPersonToTeam`
+
+Adds an existing person to an existing team in the address book.
+
+Format: `addPersonToTeam tn/TEAM_NAME p/INDEX`
+
+* Adds the person at the specified `INDEX` to the team with the specified `TEAM_NAME`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* The team must already exist in the address book.
+* A person can be a member of multiple teams.
+* If the person is already a member of the specified team, an error message will be shown.
+* After successfully adding a person to a team, the teams list will be displayed automatically.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use the `listTeam` command first to see available teams, and `list` command to see the current index numbers of persons.
+</div>
+
+Examples:
+* `addPersonToTeam tn/Development Team p/3` adds the 3rd person in the displayed list to the "Development Team".
+* `addPersonToTeam tn/Alpha Squad p/1` adds the 1st person to the "Alpha Squad" team.
+
+### Removing a skill from a person : `removeSkill`
+
+Removes a skill from a person in the address book.
+
+Format: `removeSkill INDEX SKILL`
+
+* Removes the specified `SKILL` from the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* The skill name is case-sensitive and must match the skill name exactly.
+* If the person does not have the specified skill, an error message will be shown.
+
+Examples:
+* `removeSkill 2 Java` removes the skill "Java" from the 2nd person in the displayed list.
+* `removeSkill 1 Python` removes the skill "Python" from the 1st person in the displayed list.
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.
@@ -277,6 +315,7 @@ _Details coming soon ..._
 Action | Format, Examples
 --------|------------------
 **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner l/true h/NUSHack`
+**Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3`
 **Clear** | `clear`
 **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
@@ -285,27 +324,6 @@ Action | Format, Examples
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java`
 **List** | `list`
 **List Team** | `listTeam`
-**Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 java`
+**Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java`
 **Help** | `help`
 **Exit** | `exit`
-
-## Removing a Skill from a Person
-
-Removes a skill from a person in the address book.
-
-**Format:**
-```
-removeSkill INDEX SKILL
-```
-- `INDEX`: The index of the person in the displayed list (must be a positive integer).
-- `SKILL`: The name of the skill to remove (case-sensitive, must match the skill name exactly).
-
-**Example:**
-```
-removeSkill 2 java
-```
-Removes the skill `java` from the second person in the displayed list.
-
-**Notes:**
-- If the person does not have the specified skill, an error message will be shown.
-- If the index is invalid, an error message will be shown.
