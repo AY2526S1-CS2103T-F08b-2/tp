@@ -275,6 +275,16 @@ public class CreateTeamCommandTest {
         public void updateFilteredTeamList(Predicate<Team> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public Team addPersonToTeam(Team team, Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public Team removePersonFromTeam(Team team, Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -324,6 +334,51 @@ public class CreateTeamCommandTest {
             requireNonNull(target);
             requireNonNull(editedPerson);
             personsUpdated.add(editedPerson);
+        }
+
+        @Override
+        public void setTeam(Team target, Team editedTeam) {
+            requireNonNull(target);
+            requireNonNull(editedTeam);
+            // Replace the old team with the updated team
+            for (int i = 0; i < teamsAdded.size(); i++) {
+                if (teamsAdded.get(i).isSameTeam(target)) {
+                    teamsAdded.set(i, editedTeam);
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public Team addPersonToTeam(Team team, Person person) {
+            requireNonNull(team);
+            requireNonNull(person);
+
+            // Create updated team with new member (simulate the model's behavior)
+            Set<Person> updatedMembers = new HashSet<>(team.getMembers());
+            updatedMembers.add(person);
+            Team updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
+
+            // Update the team in our stub
+            setTeam(team, updatedTeam);
+
+            // Update person's teams list (simulate the model's behavior)
+            Set<Team> updatedTeams = new HashSet<>(person.getTeams());
+            updatedTeams.add(updatedTeam);
+            Person updatedPerson = new Person(
+                    person.getName(),
+                    person.getEmail(),
+                    person.getTelegram(),
+                    person.getGitHub(),
+                    person.getSkills(),
+                    updatedTeams,
+                    person.isLookingForTeam(),
+                    person.getInterestedHackathons()
+            );
+
+            setPerson(person, updatedPerson);
+
+            return updatedTeam;
         }
 
         @Override

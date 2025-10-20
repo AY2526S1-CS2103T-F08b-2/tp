@@ -78,31 +78,20 @@ public class CreateTeamCommand extends Command {
             members.add(person);
         }
 
-        Team toCreate = new Team(teamName, hackathonName, members);
+        // Create team with empty members initially
+        Team toCreate = new Team(teamName, hackathonName, new HashSet<>());
 
         if (model.hasTeam(toCreate)) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
+        // Add the empty team to the model first
         model.addTeam(toCreate);
 
-        // Update each person to include this team in their teams set (maintain bidirectional relationship)
+        // Use the model's relationship management methods to add each member
+        // This automatically handles all bidirectional relationship updates
         for (Person member : members) {
-            Set<Team> updatedTeams = new HashSet<>(member.getTeams());
-            updatedTeams.add(toCreate);
-
-            Person updatedPerson = new Person(
-                    member.getName(),
-                    member.getEmail(),
-                    member.getTelegram(),
-                    member.getGitHub(),
-                    member.getSkills(),
-                    updatedTeams,
-                    member.isLookingForTeam(),
-                    member.getInterestedHackathons()
-            );
-
-            model.setPerson(member, updatedPerson);
+            toCreate = model.addPersonToTeam(toCreate, member);
         }
 
         // Update the filtered team list to show all teams

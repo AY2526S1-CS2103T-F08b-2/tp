@@ -4,10 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -84,31 +81,9 @@ public class AddPersonToTeamCommand extends Command {
                             Messages.format(personToAdd), teamName));
         }
 
-        // Create updated team with new member
-        Set<Person> updatedMembers = new HashSet<>(targetTeam.getMembers());
-        updatedMembers.add(personToAdd);
-
-        Team updatedTeam = new Team(targetTeam.getTeamName(),
-                targetTeam.getHackathonName(), updatedMembers);
-
-        // Create updated person with new team added to existing teams
-        Set<Team> updatedTeams = new HashSet<>(personToAdd.getTeams());
-        updatedTeams.add(updatedTeam);
-
-        Person updatedPerson = new Person(
-                personToAdd.getName(),
-                personToAdd.getEmail(),
-                personToAdd.getTelegram(),
-                personToAdd.getGitHub(),
-                personToAdd.getSkills(),
-                updatedTeams,
-                personToAdd.isLookingForTeam(),
-                personToAdd.getInterestedHackathons()
-        );
-
-        // Update both team and person atomically
-        model.setTeam(targetTeam, updatedTeam);
-        model.setPerson(personToAdd, updatedPerson);
+        // Use the model's relationship management to add person to team
+        // This automatically handles all bidirectional relationship updates
+        Team updatedTeam = model.addPersonToTeam(targetTeam, personToAdd);
 
         // Update the filtered team list to show all teams
         model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
