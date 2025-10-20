@@ -2,7 +2,6 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
-import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
@@ -82,7 +81,8 @@ public class AddPersonToTeamCommandTest {
 
         assertCommandFailure(command2, model,
                 String.format(AddPersonToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
-                        Messages.format(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased())), teamName));
+                        Messages.format(model.getFilteredPersonList()
+                                .get(INDEX_FIRST_PERSON.getZeroBased())), teamName));
     }
 
     @Test
