@@ -120,4 +120,24 @@ public interface Model {
      */
     void updateFilteredTeamList(Predicate<Team> predicate);
 
+    /**
+     * Adds a person to a team, maintaining bidirectional relationship.
+     * Updates both the team's member list and the person's team list.
+     *
+     * @param team The team to add the person to
+     * @param person The person to add to the team
+     * @return Updated team with the new member
+     */
+    Team addPersonToTeam(Team team, Person person);
+
+    /**
+     * Removes a person from a team, maintaining bidirectional relationship.
+     * Updates both the team's member list and the person's team list.
+     *
+     * @param team The team to remove the person from
+     * @param person The person to remove from the team
+     * @return Updated team without the person
+     */
+    Team removePersonFromTeam(Team team, Person person);
+
 }

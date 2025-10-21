@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -173,6 +175,86 @@ public class ModelManager implements Model {
     public void updateFilteredTeamList(Predicate<Team> predicate) {
         requireNonNull(predicate);
         filteredTeams.setPredicate(predicate);
+    }
+
+    //=========== Team-Person Relationship Management ========================================================
+
+    /**
+     * Adds a person to a team, maintaining bidirectional relationship.
+     * Updates both the team's member list and the person's team list.
+     *
+     * @param team The team to add the person to
+     * @param person The person to add to the team
+     * @return Updated team with the new member
+     */
+    public Team addPersonToTeam(Team team, Person person) {
+        requireAllNonNull(team, person);
+
+        // Create updated team with new member
+        Set<Person> updatedMembers = new HashSet<>(team.getMembers());
+        updatedMembers.add(person);
+        Team updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
+
+        // Update the team in the model
+        setTeam(team, updatedTeam);
+
+        // Update person's teams list
+        Set<Team> updatedTeams = new HashSet<>(person.getTeams());
+        updatedTeams.add(updatedTeam);
+        Person updatedPerson = new Person(
+                person.getName(),
+                person.getEmail(),
+                person.getTelegram(),
+                person.getGitHub(),
+                person.getSkills(),
+                updatedTeams,
+                person.isLookingForTeam(),
+                person.getInterestedHackathons()
+        );
+
+        // Update the person in the model
+        setPerson(person, updatedPerson);
+
+        return updatedTeam;
+    }
+
+    /**
+     * Removes a person from a team, maintaining bidirectional relationship.
+     * Updates both the team's member list and the person's team list.
+     *
+     * @param team The team to remove the person from
+     * @param person The person to remove from the team
+     * @return Updated team without the person
+     */
+    public Team removePersonFromTeam(Team team, Person person) {
+        requireAllNonNull(team, person);
+
+        // Create updated team without the person
+        Set<Person> updatedMembers = new HashSet<>(team.getMembers());
+        updatedMembers.remove(person);
+        Team updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
+
+        // Update the team in the model
+        setTeam(team, updatedTeam);
+
+        // Update person's teams list
+        Set<Team> updatedTeams = new HashSet<>(person.getTeams());
+        updatedTeams.remove(team);
+        Person updatedPerson = new Person(
+                person.getName(),
+                person.getEmail(),
+                person.getTelegram(),
+                person.getGitHub(),
+                person.getSkills(),
+                updatedTeams,
+                person.isLookingForTeam(),
+                person.getInterestedHackathons()
+        );
+
+        // Update the person in the model
+        setPerson(person, updatedPerson);
+
+        return updatedTeam;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package seedu.address.testutil;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import seedu.address.model.hackathon.HackathonName;
@@ -29,7 +28,7 @@ public class PersonBuilder {
     private Telegram telegram;
     private GitHub github;
     private Set<Skill> skills;
-    private Optional<Team> team;
+    private Set<Team> teams;
     private boolean isLookingForTeam;
     private Set<HackathonName> interestedHackathons;
 
@@ -42,7 +41,7 @@ public class PersonBuilder {
         telegram = new Telegram(DEFAULT_TELEGRAM);
         github = new GitHub(DEFAULT_GITHUB);
         skills = new HashSet<>();
-        team = Optional.empty();
+        teams = new HashSet<>();
         isLookingForTeam = false;
         interestedHackathons = new HashSet<>();
     }
@@ -56,7 +55,7 @@ public class PersonBuilder {
         telegram = personToCopy.getTelegram();
         github = personToCopy.getGitHub();
         skills = new HashSet<>(personToCopy.getSkills());
-        team = personToCopy.getTeam();
+        teams = new HashSet<>(personToCopy.getTeams());
         isLookingForTeam = personToCopy.isLookingForTeam();
         interestedHackathons = new HashSet<>(personToCopy.getInterestedHackathons());
     }
@@ -105,7 +104,7 @@ public class PersonBuilder {
      * Sets the {@code Team} of the {@code Person} that we are building.
      */
     public PersonBuilder withTeam(Team team) {
-        this.team = Optional.of(team);
+        this.teams.add(team);
         return this;
     }
 
@@ -130,7 +129,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, email, telegram, github, skills, team, isLookingForTeam, interestedHackathons);
+        return new Person(name, email, telegram, github, skills, teams, isLookingForTeam, interestedHackathons);
     }
 
 }

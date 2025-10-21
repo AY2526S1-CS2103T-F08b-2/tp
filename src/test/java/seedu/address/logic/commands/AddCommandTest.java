@@ -187,6 +187,16 @@ public class AddCommandTest {
         public void updateFilteredTeamList(java.util.function.Predicate<seedu.address.model.team.Team> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public seedu.address.model.team.Team addPersonToTeam(seedu.address.model.team.Team team, Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public seedu.address.model.team.Team removePersonFromTeam(seedu.address.model.team.Team team, Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
