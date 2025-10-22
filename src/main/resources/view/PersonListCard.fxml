@@ -28,12 +28,10 @@
         </Label>
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
-      <FlowPane fx:id="hackathons">
+      <FlowPane fx:id="skills">
         <padding>
           <Insets bottom="5" />
         </padding>
-      </FlowPane>
-      <FlowPane fx:id="skills">
       </FlowPane>
       <HBox spacing="5" alignment="CENTER_LEFT">
         <ImageView fx:id="emailIcon" fitHeight="20" fitWidth="20" />
@@ -50,6 +48,11 @@
         <HBox spacing="5" alignment="CENTER_LEFT">
             <Label fx:id="lookingForTeam" styleClass="cell_small_label" text="\$lookingForTeam" />
         </HBox>
+      <FlowPane fx:id="hackathons">
+        <padding>
+          <Insets top="5" />
+        </padding>
+      </FlowPane>
     </VBox>
   </GridPane>
 </HBox>
