@@ -14,11 +14,12 @@ Class UserPrefs
 
 Class UniquePersonList
 Class Person
-Class Address
 Class Email
+Class Telegram
 Class Name
-Class Phone
-Class Tag
+Class Github
+Class Skills
+Class Hackathon
 
 Class I #FFFFFF
 }
@@ -38,17 +39,18 @@ UserPrefs .up.|> ReadOnlyUserPrefs
 AddressBook *--> "1" UniquePersonList
 UniquePersonList --> "~* all" Person
 Person *--> Name
-Person *--> Phone
 Person *--> Email
-Person *--> Address
-Person *--> "*" Tag
+Person *--> Telegram
+Person *--> Github
+Person *--> "*" Skills
+Person *--> "*" Hackathon
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
 
-Name -[hidden]right-> Phone
-Phone -[hidden]right-> Address
-Address -[hidden]right-> Email
+Name -[hidden]right-> Email
+Github -[hidden]right-> Github
+Telegram -[hidden]right-> Telegram
 
 ModelManager --> "~* filtered" Person
 @enduml
