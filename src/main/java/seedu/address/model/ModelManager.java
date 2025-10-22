@@ -231,7 +231,8 @@ public class ModelManager implements Model {
 
         // Create updated team without the person
         Set<Person> updatedMembers = new HashSet<>(team.getMembers());
-        updatedMembers.remove(person);
+        // remove by identity to handle different instances representing the same person
+        updatedMembers.removeIf(member -> member.isSamePerson(person));
         Team updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
 
         // Update the team in the model
@@ -239,7 +240,8 @@ public class ModelManager implements Model {
 
         // Update person's teams list
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
-        updatedTeams.remove(team);
+        // remove team by identity (isSameTeam) to handle different instances
+        updatedTeams.removeIf(t -> t.isSameTeam(team));
         Person updatedPerson = new Person(
                 person.getName(),
                 person.getEmail(),

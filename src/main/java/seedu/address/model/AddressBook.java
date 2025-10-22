@@ -2,7 +2,9 @@ package seedu.address.model;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
@@ -104,7 +106,31 @@ public class AddressBook implements ReadOnlyAddressBook {
      * {@code key} must exist in the address book.
      */
     public void removePerson(Person key) {
+        requireNonNull(key);
+
+        // Remove person from internal persons list
         persons.remove(key);
+
+        // Also remove the person from any teams they are members of.
+        // For each team that contains this person, create an updated Team with the person removed
+        // and replace the team in the UniqueTeamList.
+        for (Team team : teams) {
+            // Check membership by identity (isSamePerson) rather than equals to handle different instances
+            boolean containsByIdentity = team.getMembers().stream().anyMatch(member -> member.isSamePerson(key));
+            if (containsByIdentity) {
+                Set<Person> updatedMembers = new HashSet<>(team.getMembers());
+                updatedMembers.removeIf(member -> member.isSamePerson(key));
+
+                Team updatedTeam;
+                if (team.getHackathonName() == null) {
+                    updatedTeam = new Team(team.getTeamName(), updatedMembers);
+                } else {
+                    updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
+                }
+
+                teams.setTeam(team, updatedTeam);
+            }
+        }
     }
 
     //// team-level operations
