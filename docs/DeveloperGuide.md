@@ -114,6 +114,12 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+### Filter sequence diagram
+
+The sequence diagram below illustrates the interactions involved when a user issues a filter-related command (for example, filtering by skill or proficiency). It complements the other sequence diagrams and helps developers understand how the `Logic`, `Parser`, and `Model` components interact specifically for the filtering feature.
+
+<img src="images/filtersequencediagram.png" width="574" />
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -145,6 +151,10 @@ The `Storage` component,
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+### Remove Skill Sequence Diagram
+
+<img src="images/RemoveSkillSequence.png" width="550" />
+
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
@@ -154,6 +164,100 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 ## **Implementation**
 
 This section describes some noteworthy details on how certain features are implemented.
+
+### Create Team feature
+
+#### Implementation
+
+The Create Team feature allows users to form teams by selecting multiple persons from the address book and associating them with a hackathon. This feature is implemented through the `CreateTeamCommand` class and its associated parser `CreateTeamCommandParser`.
+
+**Key Components:**
+
+* `CreateTeamCommand` — Creates a team with a team name, hackathon name, and a set of team members.
+* `CreateTeamCommandParser` — Parses user input to extract team name, hackathon name, and person indices.
+* `Team` — Represents a team entity with a name, associated hackathon, and set of members.
+* `TeamName` — Value object representing a valid team name.
+* `HackathonName` — Value object representing a valid hackathon name.
+
+**Command Format:**
+```
+createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]...
+```
+
+**How the Create Team feature works:**
+
+1. The user enters a `createTeam` command with the team name, hackathon name, and indices of persons to add as members.
+2. `AddressBookParser` recognizes the `createTeam` command word and delegates parsing to `CreateTeamCommandParser`.
+3. `CreateTeamCommandParser` extracts the team name, hackathon name, and person indices from the input.
+4. A `CreateTeamCommand` object is created with the parsed information.
+5. When executed, `CreateTeamCommand` performs the following:
+    * Validates all person indices against the current filtered person list
+    * Retrieves the `Person` objects corresponding to each valid index
+    * Creates a new `Team` object with the specified name, hackathon, and members
+    * Checks if the team already exists in the model
+    * Adds the team to the model if it's unique
+6. A `CommandResult` is returned with a success message containing the team details.
+
+**Sequence of Operations:**
+
+![Create Team Command Sequence Diagram](images/CreateTeamSequenceDiagram.png)
+
+Given below is an example usage scenario:
+
+Step 1. The user has a list of persons displayed and wants to create a team for "Hackathon 2024" with persons at indices 1 and 3.
+
+Step 2. The user executes `createTeam tn/Development Team hn/Hackathon 2024 p/1 p/3`.
+
+Step 3. The command is parsed and `CreateTeamCommand` is executed with the following validations:
+* Check that indices 1 and 3 are within bounds of the filtered person list
+* Retrieve the persons at these indices
+* Create a `Team` object with name "Development Team", hackathon "Hackathon 2024", and the two selected persons
+
+Step 4. The command checks if a team with the same name and hackathon already exists.
+
+Step 5. If the team is unique, it is added to the model's team list.
+
+Step 6. A success message is displayed showing the created team details.
+
+**Error Handling:**
+
+The `CreateTeamCommand` handles several error cases:
+
+* **Invalid person index** — If any provided index is out of bounds, a `CommandException` is thrown with the message "The person index provided is invalid"
+* **Duplicate team** — If a team with the same name and hackathon already exists, a `CommandException` is thrown with the message "This team already exists in the address book"
+* **Missing parameters** — If required prefixes (team name, hackathon name, or at least one person index) are missing, the parser throws a `ParseException` with usage instructions
+
+#### Design considerations:
+
+**Aspect: How to identify team members:**
+
+* **Alternative 1 (current choice):** Use person indices from the currently displayed list.
+    * Pros: Simple and consistent with other commands (e.g., `delete`, `edit`). Users can filter the list first, then create teams from visible persons.
+    * Cons: Indices change when the list is filtered, which may confuse users if they don't realize the list has been filtered.
+
+* **Alternative 2:** Use unique identifiers (e.g., email or GitHub username).
+    * Pros: More stable—identifiers don't change based on display order. Less error-prone when the list is filtered.
+    * Cons: More verbose for users to type. Requires users to remember or look up exact identifiers.
+
+**Aspect: Team uniqueness:**
+
+* **Alternative 1 (current choice):** Teams are unique by team name and hackathon name combination.
+    * Pros: Allows multiple teams with the same name across different hackathons. Reflects real-world usage where team names might be reused.
+    * Cons: More complex uniqueness check.
+
+* **Alternative 2:** Teams are unique by team name only.
+    * Pros: Simpler implementation and uniqueness check.
+    * Cons: Prevents reusing team names across different hackathons, which is restrictive.
+
+**Aspect: Storage of team membership:**
+
+* **Alternative 1 (current choice):** Store references to `Person` objects in the `Team`.
+    * Pros: Direct access to full person information. Easier to display team details.
+    * Cons: Need to handle cascading updates if a person is modified or deleted.
+
+* **Alternative 2:** Store only person IDs/indices in the team.
+    * Pros: Reduces coupling between `Team` and `Person`. Simpler to handle person updates.
+    * Cons: Requires additional lookups to retrieve full person information. More complex to display team details.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -277,7 +381,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 |----------|---------|----------------------------------------------------------------------|----------------------------------------------------------|
 | `* * *`  | student | search for peers by programming language                             | quickly find potential teammates with matching skills.   |
 | `* * *`  | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
-| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them. 
+| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them.
 |
 | `* * *`  | student | search for multiple skills at once                                   | find students with overlapping technical expertise       |
 | `* * *`  | student | search for people by email                                         | directly connect with someone I already know             |
@@ -333,8 +437,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Student requests to create a new team. 
-2.  Mate requests for members to be added. 
+1.  Student requests to create a new team.
+2.  Mate requests for members to be added.
 3.  Student searches and selects multiple classmates by name or skill.
 4.  Mate confirms the selected members.
 5.  Student confirms creation of the team.
@@ -414,9 +518,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4.  Data should be stored locally in a human-editable file (JSON) so that advanced users can directly edit or back up the data.
 5.  Data file must not exceed 10 MB in size under normal use (≈ 1000 contacts with details).
 6.  Should provide useful error messages when invalid commands are entered, without crashing the system.
-7.  Should start up within 3 seconds on a standard laptop. 
-8.  Should not require an internet connection for normal usage (offline-first). 
-9.  The system should be portable (able to run as a standalone JAR without additional dependencies beyond Java). 
+7.  Should start up within 3 seconds on a standard laptop.
+8.  Should not require an internet connection for normal usage (offline-first).
+9.  The system should be portable (able to run as a standalone JAR without additional dependencies beyond Java).
 10. Source code should be maintainable by future developers with minimal onboarding, following clean code conventions and including developer documentation.
 
 ### Glossary

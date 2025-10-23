@@ -46,7 +46,7 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
 
 ## Features
 
-<div markdown="block" class="alert alert-info">
+<div class="alert alert-info">
 
 **:information_source: Notes about the command format:**<br>
 
@@ -79,7 +79,7 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book. 
+Adds a person to the address book.
 
 Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
 
@@ -95,7 +95,7 @@ Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…
   * **Intermediate** - Light yellow background  
   * **Advanced** - Light red background
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+<div class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of skills and hackathons (including 0).
 </div>
 
@@ -207,7 +207,7 @@ Format: `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​`
 * Team names and hackathon names should only contain alphanumeric characters and spaces, and should not be blank.
 * Duplicate teams (same team name) are not allowed.
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+<div class="alert alert-primary">:bulb: **Tip:**
 Make sure to use the `list` command first to see the current index numbers of persons before creating a team.
 </div>
 
@@ -235,19 +235,36 @@ Format: `addPersonToTeam tn/TEAM_NAME p/INDEX`
 
 * Adds the person at the specified `INDEX` to the team with the specified `TEAM_NAME`.
 * The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* The index **must be a positive integer** 1, 2, 3, …
 * The team must already exist in the address book.
 * A person can be a member of multiple teams.
 * If the person is already a member of the specified team, an error message will be shown.
 * After successfully adding a person to a team, the teams list will be displayed automatically.
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+<div class="alert alert-primary">:bulb: **Tip:**
 Use the `listTeam` command first to see available teams, and `list` command to see the current index numbers of persons.
 </div>
 
 Examples:
 * `addPersonToTeam tn/Development Team p/3` adds the 3rd person in the displayed list to the "Development Team".
 * `addPersonToTeam tn/Alpha Squad p/1` adds the 1st person to the "Alpha Squad" team.
+
+### Removing a person from a team : `removePersonFromTeam`
+
+Removes an existing person from an existing team in the address book.
+
+Format: `removePersonFromTeam tn/TEAM_NAME p/INDEX`
+
+* Removes the person at the specified `INDEX` from the team with the specified `TEAM_NAME`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …
+* The team must already exist in the address book.
+* If the person is not a member of the specified team, an error message will be shown.
+* After successfully removing a person from a team, the person's record and the team's membership are both updated, and the teams list will be displayed automatically.
+
+Examples:
+* `removePersonFromTeam tn/Tech Innovators p/2` removes the 2nd person in the displayed list from the "Tech Innovators" team.
+* `removePersonFromTeam tn/Alpha Squad p/1` removes the 1st person from the "Alpha Squad" team.
 
 ### Removing a skill from a person : `removeSkill`
 
@@ -257,7 +274,7 @@ Format: `removeSkill INDEX SKILL`
 
 * Removes the specified `SKILL` from the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* The index **must be a positive integer** 1, 2, 3, …
 * The skill name is case-sensitive and must match the skill name exactly.
 * If the person does not have the specified skill, an error message will be shown.
 
@@ -285,7 +302,7 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
+<div class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
@@ -312,18 +329,19 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action | Format, Examples
---------|------------------
-**Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner l/true h/NUSHack`
-**Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3`
-**Clear** | `clear`
-**Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3`
-**Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack`
-**Filter** | `filter [l/BOOLEAN] [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter l/true`, `filter l/false`, `filter h/NUSHack`, `filter l/true h/NUSHack`
-**Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java`
-**List** | `list`
-**List Team** | `listTeam`
-**Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java`
-**Help** | `help`
-**Exit** | `exit`
+| Action | Format, Examples |
+|--------|------------------|
+| **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner l/true h/NUSHack` |
+| **Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
+| **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
+| **Clear** | `clear` |
+| **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
+| **Delete** | `delete INDEX`<br> e.g., `delete 3` |
+| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack` |
+| **Filter** | `filter [l/BOOLEAN] [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter l/true`, `filter l/false`, `filter h/NUSHack`, `filter l/true h/NUSHack` |
+| **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
+| **List** | `list` |
+| **List Team** | `listTeam` |
+| **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
+| **Help** | `help` |
+| **Exit** | `exit` |

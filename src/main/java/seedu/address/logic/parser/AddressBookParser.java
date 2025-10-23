@@ -14,6 +14,7 @@ import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CreateTeamCommand;
 import seedu.address.logic.commands.DeleteCommand;
+import seedu.address.logic.commands.DeleteTeamCommand;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FilterCommand;
@@ -21,6 +22,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTeamCommand;
+import seedu.address.logic.commands.RemovePersonFromTeamCommand;
 import seedu.address.logic.commands.RemoveSkillCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -88,11 +90,17 @@ public class AddressBookParser {
         case CreateTeamCommand.COMMAND_WORD:
             return new CreateTeamCommandParser().parse(arguments);
 
+        case DeleteTeamCommand.COMMAND_WORD:
+            return new DeleteTeamCommandParser().parse(arguments);
+
         case RemoveSkillCommand.COMMAND_WORD:
             return new RemoveSkillCommandParser().parse(arguments);
 
         case AddPersonToTeamCommand.COMMAND_WORD:
             return new AddPersonToTeamCommandParser().parse(arguments);
+
+        case RemovePersonFromTeamCommand.COMMAND_WORD:
+            return new RemovePersonFromTeamCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);
