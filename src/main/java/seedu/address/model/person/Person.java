@@ -167,4 +167,13 @@ public class Person {
         return new Person(name, email, telegram, github, updatedSkills, teams, isLookingForTeam, interestedHackathons);
     }
 
+    /**
+     * Returns a new Person with the given team removed.
+     */
+    public Person removeTeam(Team team) {
+        Set<Team> updatedTeams = new HashSet<>(teams);
+        updatedTeams.removeIf(t -> t.isSameTeam(team));
+        return new Person(name, email, telegram, github, skills, updatedTeams, isLookingForTeam, interestedHackathons);
+    }
+
 }
