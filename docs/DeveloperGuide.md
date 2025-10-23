@@ -114,6 +114,12 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
+### Filter sequence diagram
+
+The sequence diagram below illustrates the interactions involved when a user issues a filter-related command (for example, filtering by skill or proficiency). It complements the other sequence diagrams and helps developers understand how the `Logic`, `Parser`, and `Model` components interact specifically for the filtering feature.
+
+<img src="images/filtersequencediagram.png" width="574" />
+
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
