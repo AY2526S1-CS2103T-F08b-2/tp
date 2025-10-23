@@ -101,4 +101,5 @@ deactivate CreateTeamCommand
 
 [<--LogicManager
 deactivate LogicManager
+
 @enduml

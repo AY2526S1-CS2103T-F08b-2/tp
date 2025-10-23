@@ -90,8 +90,8 @@ Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…
   * **Intermediate** - Light yellow background  
   * **Advanced** - Light red background
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of skills (including 0)
+<div markdown="span" class="alert alert-primary">
+:bulb: **Tip:** A person can have any number of skills (including 0)
 </div>
 
 Examples:
