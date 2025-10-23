@@ -145,6 +145,10 @@ The `Storage` component,
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
+### Team Sequence Diagram
+
+<img src="images/CreateTeamSequenceDiagram.png" width="550" />
+
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
