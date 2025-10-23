@@ -1,9 +1,9 @@
 package seedu.address.testutil;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
@@ -28,7 +28,9 @@ public class PersonBuilder {
     private Telegram telegram;
     private GitHub github;
     private Set<Skill> skills;
-    private Optional<Team> team;
+    private Set<Team> teams;
+    private boolean isLookingForTeam;
+    private Set<HackathonName> interestedHackathons;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -39,7 +41,9 @@ public class PersonBuilder {
         telegram = new Telegram(DEFAULT_TELEGRAM);
         github = new GitHub(DEFAULT_GITHUB);
         skills = new HashSet<>();
-        team = Optional.empty();
+        teams = new HashSet<>();
+        isLookingForTeam = false;
+        interestedHackathons = new HashSet<>();
     }
 
     /**
@@ -51,7 +55,9 @@ public class PersonBuilder {
         telegram = personToCopy.getTelegram();
         github = personToCopy.getGitHub();
         skills = new HashSet<>(personToCopy.getSkills());
-        team = personToCopy.getTeam();
+        teams = new HashSet<>(personToCopy.getTeams());
+        isLookingForTeam = personToCopy.isLookingForTeam();
+        interestedHackathons = new HashSet<>(personToCopy.getInterestedHackathons());
     }
 
     /**
@@ -98,12 +104,32 @@ public class PersonBuilder {
      * Sets the {@code Team} of the {@code Person} that we are building.
      */
     public PersonBuilder withTeam(Team team) {
-        this.team = Optional.of(team);
+        this.teams.add(team);
+        return this;
+    }
+
+    /**
+     * Sets the {@code isLookingForTeam} status of the {@code Person} that we are building.
+     */
+    public PersonBuilder withLookingForTeam(boolean isLookingForTeam) {
+        this.isLookingForTeam = isLookingForTeam;
+        return this;
+    }
+
+    /**
+     * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it to the {@code Person}
+     * that we are building.
+     */
+    public PersonBuilder withInterestedHackathons(String ... hackathons) {
+        this.interestedHackathons = new HashSet<>();
+        for (String hackathon : hackathons) {
+            this.interestedHackathons.add(new HackathonName(hackathon));
+        }
         return this;
     }
 
     public Person build() {
-        return new Person(name, email, telegram, github, skills, team);
+        return new Person(name, email, telegram, github, skills, teams, isLookingForTeam, interestedHackathons);
     }
 
 }

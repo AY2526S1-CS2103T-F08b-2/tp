@@ -8,7 +8,9 @@
     "skills" : [ {
       "skillName" : "java",
       "experienceLevel" : "BEGINNER"
-    } ]
+    } ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name" : "Benson Meier",
     "email" : "johnd@example.com",
@@ -20,13 +22,17 @@
     }, {
       "skillName" : "javascript",
       "experienceLevel" : "BEGINNER"
-    } ]
+    } ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name" : "Carl Kurz",
     "email" : "heinz@example.com",
     "telegram" : "carl_tg",
     "github" : "carl-github",
-    "skills" : [ ]
+    "skills" : [ ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name" : "Daniel Meier",
     "email" : "cornelia@example.com",
@@ -35,24 +41,32 @@
     "skills" : [ {
       "skillName" : "react",
       "experienceLevel" : "BEGINNER"
-    } ]
+    } ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name" : "Elle Meyer",
     "email" : "werner@example.com",
     "telegram" : "elle_tg",
     "github" : "elle-github",
-    "skills" : [ ]
+    "skills" : [ ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name" : "Fiona Kunz",
     "email" : "lydia@example.com",
     "telegram" : "fiona_tg",
     "github" : "fiona-github",
-    "skills" : [ ]
+    "skills" : [ ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   }, {
     "name" : "George Best",
     "email" : "anna@example.com",
     "telegram" : "george_tg",
     "github" : "george-github",
-    "skills" : [ ]
+    "skills" : [ ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   } ]
 }

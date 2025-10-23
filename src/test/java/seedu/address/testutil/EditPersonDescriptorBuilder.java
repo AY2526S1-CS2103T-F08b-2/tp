@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
@@ -37,6 +38,8 @@ public class EditPersonDescriptorBuilder {
         descriptor.setTelegram(person.getTelegram());
         descriptor.setGitHub(person.getGitHub());
         descriptor.setSkills(person.getSkills());
+        descriptor.setIsLookingForTeam(person.isLookingForTeam());
+        descriptor.setInterestedHackathons(person.getInterestedHackathons());
     }
 
     /**
@@ -78,6 +81,24 @@ public class EditPersonDescriptorBuilder {
     public EditPersonDescriptorBuilder withSkills(String... skills) {
         Set<Skill> skillSet = Stream.of(skills).map(Skill::new).collect(Collectors.toSet());
         descriptor.setSkills(skillSet);
+        return this;
+    }
+
+    /**
+     * Sets the {@code isLookingForTeam} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withLookingForTeam(boolean isLookingForTeam) {
+        descriptor.setIsLookingForTeam(isLookingForTeam);
+        return this;
+    }
+
+    /**
+     * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it to the {@code EditPersonDescriptor}
+     * that we are building.
+     */
+    public EditPersonDescriptorBuilder withInterestedHackathons(String... hackathons) {
+        Set<HackathonName> hackathonSet = Stream.of(hackathons).map(HackathonName::new).collect(Collectors.toSet());
+        descriptor.setInterestedHackathons(hackathonSet);
         return this;
     }
 

@@ -81,23 +81,29 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​`
+Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
 
 * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
 * If no level is specified for a skill, it defaults to `Beginner`
+* `BOOLEAN` must be: `true` or `false`
+  * `l/true` marks the person as looking for a team
+  * `l/false` marks the person as not looking for a team
+  * If not specified, the person is not looking for a team (default: false)
+* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to add multiple hackathons.
 * Skills are displayed with color-coded backgrounds in the UI:
   * **Beginner** - Light green background
   * **Intermediate** - Light yellow background  
   * **Advanced** - Light red background
 
-<div markdown="span" class="alert alert-primary">
-:bulb: **Tip:** A person can have any number of skills (including 0)
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+A person can have any number of skills and hackathons (including 0).
 </div>
 
 Examples:
 * `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner`
-* `add n/Betsy Crowe s/Java:Advanced e/betsycrowe@example.com s/C#:Intermediate tg/Betsy gh/Betsy03`
-* `add n/Alice e/alice@example.com tg/alice_tg gh/alice123 s/Docker` (skill defaults to Beginner level)
+* `add n/Betsy Crowe e/betsycrowe@example.com tg/Betsy gh/Betsy03 s/C#:Intermediate s/Java:Advanced l/true h/NUSHack h/iNTUition`
+* `add n/Alice e/alice@example.com tg/alice_tg gh/alice123 s/Docker l/true` (person is looking for a team)
+* `add n/Bob e/bob@example.com tg/bobbygram gh/bobhub l/false h/HackNRoll` (person explicitly not looking for a team but interested in HackNRoll)
 
 ### Listing all persons : `list`
 
@@ -109,7 +115,7 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -118,11 +124,19 @@ Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SK
 * If you edit a skill that already exists (same skill name), the experience level will be updated to the new level specified.
 * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
 * If no level is specified for a skill, it defaults to `Beginner`
+* `BOOLEAN` must be: `true` or `false`
+  * `l/true` marks the person as looking for a team
+  * `l/false` marks the person as not looking for a team
+* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all hackathons.
 
 Examples:
 *  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
 *  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
 *  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
+*  `edit 1 l/true` Marks the 1st person as looking for a team.
+*  `edit 2 l/false` Marks the 2nd person as not looking for a team.
+*  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition.
+*  `edit 4 l/true h/HackNRoll` Marks the 4th person as looking for a team and sets their interested hackathon to HackNRoll.
 
 ### Locating persons : `find`
 
@@ -142,6 +156,29 @@ Examples:
 * `find Java` returns persons who have `Java` as a skill
 * `find alex david` returns `Alex Yeoh`, `David Li`, or anyone with Telegram username `alex` or GitHub username `david`<br>
   ![result for 'find alex david'](images/findAlexDavidResult.png)
+
+### Filtering persons : `filter`
+
+Filters persons based on their team-looking status and/or interested hackathons.
+
+Format: `filter [l/BOOLEAN] [h/HACKATHON [MORE_HACKATHONS]...]`
+
+* At least one of the optional parameters must be provided.
+* The `l/BOOLEAN` flag filters for persons based on their team-looking status:
+  * `l/true` filters for persons who are looking for a team.
+  * `l/false` filters for persons who are not looking for a team.
+* `h/HACKATHON` filters for persons interested in the specified hackathon(s).
+* Both parameters can be used together to find persons who match the team-looking status AND are interested in specific hackathons.
+* The hackathon search is case-insensitive. e.g. `nushack` will match `NUSHack`
+* Only full words will be matched e.g. `NUS` will not match `NUSHack`
+* Persons matching at least one hackathon keyword will be returned (i.e. `OR` search for hackathons).
+
+Examples:
+* `filter l/true` returns all persons who are looking for a team
+* `filter l/false` returns all persons who are not looking for a team
+* `filter h/NUSHack` returns all persons interested in NUSHack
+* `filter l/true h/NUSHack` returns all persons who are looking for a team AND interested in NUSHack
+* `filter h/NUSHack iNTUition` returns all persons interested in NUSHack or iNTUition
 
 ### Deleting a person : `delete`
 
@@ -189,6 +226,44 @@ Format: `listTeam`
 
 Examples:
 * `listTeam` shows all teams currently stored in the address book.
+
+### Adding a person to a team : `addPersonToTeam`
+
+Adds an existing person to an existing team in the address book.
+
+Format: `addPersonToTeam tn/TEAM_NAME p/INDEX`
+
+* Adds the person at the specified `INDEX` to the team with the specified `TEAM_NAME`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* The team must already exist in the address book.
+* A person can be a member of multiple teams.
+* If the person is already a member of the specified team, an error message will be shown.
+* After successfully adding a person to a team, the teams list will be displayed automatically.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use the `listTeam` command first to see available teams, and `list` command to see the current index numbers of persons.
+</div>
+
+Examples:
+* `addPersonToTeam tn/Development Team p/3` adds the 3rd person in the displayed list to the "Development Team".
+* `addPersonToTeam tn/Alpha Squad p/1` adds the 1st person to the "Alpha Squad" team.
+
+### Removing a skill from a person : `removeSkill`
+
+Removes a skill from a person in the address book.
+
+Format: `removeSkill INDEX SKILL`
+
+* Removes the specified `SKILL` from the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …​
+* The skill name is case-sensitive and must match the skill name exactly.
+* If the person does not have the specified skill, an error message will be shown.
+
+Examples:
+* `removeSkill 2 Java` removes the skill "Java" from the 2nd person in the displayed list.
+* `removeSkill 1 Python` removes the skill "Python" from the 1st person in the displayed list.
 
 ### Clearing all entries : `clear`
 
@@ -239,34 +314,16 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner s/Java:Advanced`
+**Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner l/true h/NUSHack`
+**Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3`
 **Clear** | `clear`
 **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3`
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
-**Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com s/Docker:Intermediate`
+**Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack`
+**Filter** | `filter [l/BOOLEAN] [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter l/true`, `filter l/false`, `filter h/NUSHack`, `filter l/true h/NUSHack`
 **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java`
 **List** | `list`
 **List Team** | `listTeam`
+**Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java`
 **Help** | `help`
 **Exit** | `exit`
-
-## Removing a Skill from a Person
-
-Removes a skill from a person in the address book.
-
-**Format:**
-```
-removeSkill INDEX SKILL
-```
-- `INDEX`: The index of the person in the displayed list (must be a positive integer).
-- `SKILL`: The name of the skill to remove (case-sensitive, must match the skill name exactly).
-
-**Example:**
-```
-removeSkill 2 java
-```
-Removes the skill `java` from the second person in the displayed list.
-
-**Notes:**
-- If the person does not have the specified skill, an error message will be shown.
-- If the index is invalid, an error message will be shown.

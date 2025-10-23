@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -77,14 +78,27 @@ public class CreateTeamCommand extends Command {
             members.add(person);
         }
 
-        Team toCreate = new Team(teamName, hackathonName, members);
+        // Create team with empty members initially
+        Team toCreate = new Team(teamName, hackathonName, new HashSet<>());
 
         if (model.hasTeam(toCreate)) {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
+        // Add the empty team to the model first
         model.addTeam(toCreate);
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toCreate)));
+
+        // Use the model's relationship management methods to add each member
+        // This automatically handles all bidirectional relationship updates
+        for (Person member : members) {
+            toCreate = model.addPersonToTeam(toCreate, member);
+        }
+
+        // Update the filtered team list to show all teams
+        model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
+
+        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toCreate)),
+                false, false, true); // showTeams = true to display teams list
     }
 
     @Override

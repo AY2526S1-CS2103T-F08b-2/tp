@@ -3,7 +3,6 @@ package seedu.address.storage;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -11,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
@@ -32,7 +32,9 @@ class JsonAdaptedPerson {
     private final String telegram;
     private final String github;
     private final List<JsonAdaptedSkill> skills = new ArrayList<>();
-    private final String teamName;
+    private final List<String> teamNames = new ArrayList<>(); // Changed from single teamName to list
+    private final boolean isLookingForTeam;
+    private final List<String> interestedHackathons = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -43,7 +45,9 @@ class JsonAdaptedPerson {
                              @JsonProperty("telegram") String telegram,
                              @JsonProperty("github") String github,
                              @JsonProperty("skills") List<JsonAdaptedSkill> skills,
-                             @JsonProperty("teamName") String teamName) {
+                             @JsonProperty("teamNames") List<String> teamNames,
+                             @JsonProperty("isLookingForTeam") boolean isLookingForTeam,
+                             @JsonProperty("interestedHackathons") List<String> interestedHackathons) {
         this.name = name;
         this.email = email;
         this.telegram = telegram;
@@ -51,7 +55,13 @@ class JsonAdaptedPerson {
         if (skills != null) {
             this.skills.addAll(skills);
         }
-        this.teamName = teamName;
+        if (teamNames != null) {
+            this.teamNames.addAll(teamNames);
+        }
+        this.isLookingForTeam = isLookingForTeam;
+        if (interestedHackathons != null) {
+            this.interestedHackathons.addAll(interestedHackathons);
+        }
     }
 
     /**
@@ -65,7 +75,13 @@ class JsonAdaptedPerson {
         skills.addAll(source.getSkills().stream()
                 .map(JsonAdaptedSkill::new)
                 .collect(Collectors.toList()));
-        teamName = source.getTeam().map(team -> team.getTeamName().toString()).orElse(null);
+        teamNames.addAll(source.getTeams().stream()
+                .map(team -> team.getTeamName().toString())
+                .collect(Collectors.toList()));
+        isLookingForTeam = source.isLookingForTeam();
+        interestedHackathons.addAll(source.getInterestedHackathons().stream()
+                .map(HackathonName::toString)
+                .collect(Collectors.toList()));
     }
 
     /**
@@ -114,16 +130,23 @@ class JsonAdaptedPerson {
 
         final Set<Skill> modelSkills = new HashSet<>(personSkills);
 
-        final Optional<Team> modelTeam;
-        if (teamName != null && !teamName.isEmpty()) {
+        final Set<Team> modelTeams = new HashSet<>();
+        for (String teamName : teamNames) {
             if (!TeamName.isValidTeamName(teamName)) {
                 throw new IllegalValueException(TeamName.MESSAGE_CONSTRAINTS);
             }
-            modelTeam = Optional.of(new Team(new TeamName(teamName)));
-        } else {
-            modelTeam = Optional.empty();
+            modelTeams.add(new Team(new TeamName(teamName)));
         }
 
-        return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills, modelTeam);
+        final Set<HackathonName> modelHackathons = new HashSet<>();
+        for (String hackathon : interestedHackathons) {
+            if (!HackathonName.isValidHackathonName(hackathon)) {
+                throw new IllegalValueException(HackathonName.MESSAGE_CONSTRAINTS);
+            }
+            modelHackathons.add(new HackathonName(hackathon));
+        }
+
+        return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills,
+                modelTeams, isLookingForTeam, modelHackathons);
     }
 }

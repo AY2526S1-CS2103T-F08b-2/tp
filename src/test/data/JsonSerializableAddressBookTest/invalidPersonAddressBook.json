@@ -4,6 +4,8 @@
     "email": "invalid@email!3e",
     "telegram": "amybee_tg",
     "github": "amybee-github",
-    "skills": [ ]
+    "skills": [ ],
+    "isLookingForTeam" : false,
+    "interestedHackathons" : [ ]
   } ]
 }
