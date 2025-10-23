@@ -8,8 +8,6 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -202,7 +200,7 @@ public class DeleteTeamCommandTest {
 
             // Verify all persons have no team
             for (Person person : model.getAddressBook().getPersonList()) {
-                assertEquals(Optional.empty(), person.getTeam(),
+                assertTrue(person.getTeams().isEmpty(),
                         "Person " + person.getName() + " should have no team after deletion");
             }
 
@@ -260,7 +258,7 @@ public class DeleteTeamCommandTest {
                     .filter(p -> p.getName().fullName.equals("Team Member"))
                     .findFirst()
                     .orElseThrow();
-            assertEquals(Optional.empty(), updatedMember.getTeam(),
+            assertTrue(updatedMember.getTeams().isEmpty(),
                     "Team member should have no team after deletion");
 
             // Verify non-member still has their team
@@ -268,9 +266,10 @@ public class DeleteTeamCommandTest {
                     .filter(p -> p.getName().fullName.equals("Non Member"))
                     .findFirst()
                     .orElseThrow();
-            assertTrue(updatedNonMember.getTeam().isPresent(),
+            assertFalse(updatedNonMember.getTeams().isEmpty(),
                     "Non-member should still have their team");
-            assertEquals(otherTeam.getTeamName(), updatedNonMember.getTeam().get().getTeamName(),
+            assertTrue(updatedNonMember.getTeams().stream()
+                    .anyMatch(t -> t.getTeamName().equals(otherTeam.getTeamName())),
                     "Non-member should still have the same team");
 
         } catch (Exception e) {

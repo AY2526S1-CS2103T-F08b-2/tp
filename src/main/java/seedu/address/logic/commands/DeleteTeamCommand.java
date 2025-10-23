@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.Optional;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -48,18 +47,9 @@ public class DeleteTeamCommand extends Command {
         // Update all persons who belong to this team
         List<Person> allPersons = model.getAddressBook().getPersonList();
         for (Person person : allPersons) {
-            if (person.getTeam().isPresent() && person.getTeam().get().isSameTeam(teamToDelete)) {
-                // Create a new person with no team
-                Person updatedPerson = new Person(
-                        person.getName(),
-                        person.getEmail(),
-                        person.getTelegram(),
-                        person.getGitHub(),
-                        person.getSkills(),
-                        Optional.empty(),
-                        person.isLookingForTeam(),
-                        person.getInterestedHackathons()
-                );
+            if (person.getTeams().stream().anyMatch(team -> team.isSameTeam(teamToDelete))) {
+                // Create a new person with the team removed from their teams set
+                Person updatedPerson = person.removeTeam(teamToDelete);
                 model.setPerson(person, updatedPerson);
             }
         }
