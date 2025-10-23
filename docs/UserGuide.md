@@ -79,7 +79,7 @@ Format: `help`
 
 ### Adding a person: `add`
 
-Adds a person to the address book. 
+Adds a person to the address book.
 
 Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​`
 

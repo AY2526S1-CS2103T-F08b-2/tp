@@ -371,7 +371,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 |----------|---------|----------------------------------------------------------------------|----------------------------------------------------------|
 | `* * *`  | student | search for peers by programming language                             | quickly find potential teammates with matching skills.   |
 | `* * *`  | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
-| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them. 
+| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them.
 |
 | `* * *`  | student | search for multiple skills at once                                   | find students with overlapping technical expertise       |
 | `* * *`  | student | search for people by email                                         | directly connect with someone I already know             |
@@ -427,8 +427,8 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 **MSS**
 
-1.  Student requests to create a new team. 
-2.  Mate requests for members to be added. 
+1.  Student requests to create a new team.
+2.  Mate requests for members to be added.
 3.  Student searches and selects multiple classmates by name or skill.
 4.  Mate confirms the selected members.
 5.  Student confirms creation of the team.
@@ -508,9 +508,9 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 4.  Data should be stored locally in a human-editable file (JSON) so that advanced users can directly edit or back up the data.
 5.  Data file must not exceed 10 MB in size under normal use (≈ 1000 contacts with details).
 6.  Should provide useful error messages when invalid commands are entered, without crashing the system.
-7.  Should start up within 3 seconds on a standard laptop. 
-8.  Should not require an internet connection for normal usage (offline-first). 
-9.  The system should be portable (able to run as a standalone JAR without additional dependencies beyond Java). 
+7.  Should start up within 3 seconds on a standard laptop.
+8.  Should not require an internet connection for normal usage (offline-first).
+9.  The system should be portable (able to run as a standalone JAR without additional dependencies beyond Java).
 10. Source code should be maintainable by future developers with minimal onboarding, following clean code conventions and including developer documentation.
 
 ### Glossary
