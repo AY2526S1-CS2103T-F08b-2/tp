@@ -5,7 +5,9 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.StringUtil;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -25,6 +27,7 @@ import seedu.address.model.team.TeamName;
 public class ParserUtil {
 
     public static final String MESSAGE_INVALID_INDEX = "Index is not a non-zero unsigned integer.";
+    private static final Logger logger = LogsCenter.getLogger(ParserUtil.class);
 
     /**
      * Parses {@code oneBasedIndex} into an {@code Index} and returns it. Leading and trailing whitespaces will be
@@ -80,25 +83,45 @@ public class ParserUtil {
     public static Skill parseSkill(String skill) throws ParseException {
         requireNonNull(skill);
         String trimmedSkill = skill.trim();
+        logger.fine("Parsing skill: '" + trimmedSkill + "'");
 
         // Check if skill contains experience level (format: skillName:level)
         String[] parts = trimmedSkill.split(":", 2);
         String skillName = parts[0].trim();
 
         if (!Skill.isValidSkillName(skillName)) {
+            logger.warning("Invalid skill name detected: '" + skillName + "'");
+            logger.warning("Skill validation failed. Reason: " + Skill.MESSAGE_CONSTRAINTS);
+
+            // Additional detailed logging for common mistakes
+            if (skillName.matches(".*[A-Z].*")) {
+                logger.warning("Detected uppercase letters in skill name. Skill names must be lowercase.");
+            }
+            if (skillName.startsWith("#")) {
+                logger.warning("Detected skill name starting with '#'. This is not allowed.");
+            }
+            if (skillName.matches(".*[^a-z0-9+#].*")) {
+                logger.warning("Detected invalid characters in skill name. Only lowercase letters, "
+                        + "numbers, '+', and '#' are allowed.");
+            }
+
             throw new ParseException(Skill.MESSAGE_CONSTRAINTS);
         }
 
         // Parse experience level if provided
         if (parts.length == 2) {
             String levelStr = parts[1].trim();
+            logger.fine("Parsing experience level: '" + levelStr + "'");
             if (!ExperienceLevel.isValidExperienceLevel(levelStr)) {
+                logger.warning("Invalid experience level: '" + levelStr + "'. " + ExperienceLevel.MESSAGE_CONSTRAINTS);
                 throw new ParseException(ExperienceLevel.MESSAGE_CONSTRAINTS);
             }
             ExperienceLevel level = ExperienceLevel.fromString(levelStr);
+            logger.info("Successfully parsed skill: '" + skillName + "' with level: " + level);
             return new Skill(skillName, level);
         }
 
+        logger.info("Successfully parsed skill: '" + skillName + "' with default level: BEGINNER");
         return new Skill(skillName);
     }
 

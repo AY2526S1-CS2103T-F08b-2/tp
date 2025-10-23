@@ -14,7 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
@@ -27,6 +29,8 @@ import seedu.address.model.skill.Skill;
  */
 public class EditCommandParser implements Parser<EditCommand> {
 
+    private static final Logger logger = LogsCenter.getLogger(EditCommandParser.class);
+
     /**
      * Parses the given {@code String} of arguments in the context of the EditCommand
      * and returns an EditCommand object for execution.
@@ -34,6 +38,8 @@ public class EditCommandParser implements Parser<EditCommand> {
      */
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
+        logger.info("=============================[ Parsing Edit Command ]=============================");
+        logger.info("Raw arguments: " + args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
                         PREFIX_NAME, PREFIX_EMAIL,
@@ -43,7 +49,9 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            logger.fine("Successfully parsed index: " + index.getOneBased());
         } catch (ParseException pe) {
+            logger.warning("Failed to parse index from preamble: " + argMultimap.getPreamble());
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
@@ -67,6 +75,10 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setGitHub(ParserUtil.parseGitHub(argMultimap.getValue(PREFIX_GITHUB).get()));
         }
 
+        // Parse skills with detailed logging
+        if (!argMultimap.getAllValues(PREFIX_SKILL).isEmpty()) {
+            logger.info("Attempting to parse skills: " + argMultimap.getAllValues(PREFIX_SKILL));
+        }
         parseSkillsForEdit(argMultimap.getAllValues(PREFIX_SKILL)).ifPresent(editPersonDescriptor::setSkills);
 
         // Parse looking for team status - only accept "true" or "false"
@@ -101,10 +113,23 @@ public class EditCommandParser implements Parser<EditCommand> {
         assert skills != null;
 
         if (skills.isEmpty()) {
+            logger.fine("No skills provided for editing");
             return Optional.empty();
         }
         Collection<String> skillSet = skills.size() == 1 && skills.contains("") ? Collections.emptySet() : skills;
-        return Optional.of(ParserUtil.parseSkills(skillSet));
+        try {
+            Set<Skill> parsedSkills = ParserUtil.parseSkills(skillSet);
+            logger.info("Successfully parsed " + parsedSkills.size() + " skill(s)");
+            return Optional.of(parsedSkills);
+        } catch (ParseException e) {
+            logger.warning("=============================[ Skill Parsing Error ]=============================");
+            logger.warning("Error parsing skills: " + skillSet);
+            logger.warning("Error message: " + e.getMessage());
+            logger.warning("Possible cause: Skill names must be lowercase alphanumeric, "
+                    + "may include '+' or '#' symbols, but cannot start with '#'");
+            logger.warning("=================================================================================");
+            throw e;
+        }
     }
 
     /**
