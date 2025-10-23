@@ -9,6 +9,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -65,7 +66,7 @@ public class AddCommandParser implements Parser<AddCommand> {
                 argMultimap.getAllValues(PREFIX_HACKATHON_FILTER));
 
         Person person = new Person(name, email, telegram, github, skillList,
-                java.util.Optional.empty(), isLookingForTeam, interestedHackathons);
+                new HashSet<>(), isLookingForTeam, interestedHackathons);
 
         return new AddCommand(person);
     }
