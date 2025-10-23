@@ -40,7 +40,6 @@ public class EditCommandParser implements Parser<EditCommand> {
         requireNonNull(args);
         logger.info("=============================[ Parsing Edit Command ]=============================");
         logger.info("Raw arguments: " + args);
-        
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
                         PREFIX_NAME, PREFIX_EMAIL,
@@ -118,7 +117,6 @@ public class EditCommandParser implements Parser<EditCommand> {
             return Optional.empty();
         }
         Collection<String> skillSet = skills.size() == 1 && skills.contains("") ? Collections.emptySet() : skills;
-        
         try {
             Set<Skill> parsedSkills = ParserUtil.parseSkills(skillSet);
             logger.info("Successfully parsed " + parsedSkills.size() + " skill(s)");
