@@ -38,8 +38,8 @@ public class AddCommand extends Command {
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_TELEGRAM + "johndoe "
             + PREFIX_GITHUB + "johndoe123 "
-            + PREFIX_SKILL + "Java:Advanced "
-            + PREFIX_SKILL + "Python:Intermediate "
+            + PREFIX_SKILL + "java:Advanced "
+            + PREFIX_SKILL + "python:Intermediate "
             + PREFIX_LOOKING + "true "
             + PREFIX_HACKATHON_FILTER + "NUSHack "
             + PREFIX_HACKATHON_FILTER + "iNTUition";
