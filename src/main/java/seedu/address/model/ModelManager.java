@@ -218,7 +218,6 @@ public class ModelManager implements Model {
                 person.getGitHub(),
                 person.getSkills(),
                 updatedTeams,
-                person.isLookingForTeam(),
                 person.getInterestedHackathons(),
                 updatedCurrentHackathons
         );
@@ -256,8 +255,8 @@ public class ModelManager implements Model {
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
         // remove team by identity (isSameTeam) to handle different instances
         updatedTeams.removeIf(t -> t.isSameTeam(team));
-
-        // Update person's currentHackathons - remove the hackathon only if they're not in other teams with same hackathon
+        // Update person's currentHackathons - remove the hackathon only
+        // if they're not in other teams with same hackathon
         Set<HackathonName> updatedCurrentHackathons = new HashSet<>(person.getCurrentHackathons());
         if (team.getHackathonName() != null) {
             // Check if person is still in other teams with the same hackathon
@@ -275,7 +274,6 @@ public class ModelManager implements Model {
                 person.getGitHub(),
                 person.getSkills(),
                 updatedTeams,
-                person.isLookingForTeam(),
                 person.getInterestedHackathons(),
                 updatedCurrentHackathons
         );

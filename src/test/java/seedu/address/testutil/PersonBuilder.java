@@ -29,7 +29,6 @@ public class PersonBuilder {
     private GitHub github;
     private Set<Skill> skills;
     private Set<Team> teams;
-    private boolean isLookingForTeam;
     private Set<HackathonName> interestedHackathons;
     private Set<HackathonName> currentHackathons;
 
@@ -43,7 +42,6 @@ public class PersonBuilder {
         github = new GitHub(DEFAULT_GITHUB);
         skills = new HashSet<>();
         teams = new HashSet<>();
-        isLookingForTeam = false;
         interestedHackathons = new HashSet<>();
         currentHackathons = new HashSet<>();
     }
@@ -58,7 +56,6 @@ public class PersonBuilder {
         github = personToCopy.getGitHub();
         skills = new HashSet<>(personToCopy.getSkills());
         teams = new HashSet<>(personToCopy.getTeams());
-        isLookingForTeam = personToCopy.isLookingForTeam();
         interestedHackathons = new HashSet<>(personToCopy.getInterestedHackathons());
         currentHackathons = new HashSet<>(personToCopy.getCurrentHackathons());
     }
@@ -112,14 +109,6 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code isLookingForTeam} status of the {@code Person} that we are building.
-     */
-    public PersonBuilder withLookingForTeam(boolean isLookingForTeam) {
-        this.isLookingForTeam = isLookingForTeam;
-        return this;
-    }
-
-    /**
      * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it to the {@code Person}
      * that we are building.
      */
@@ -143,8 +132,13 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Builds and returns a {@code Person} object with the current builder's field values.
+     *
+     * @return A new Person object constructed with the builder's current field values.
+     */
     public Person build() {
-        return new Person(name, email, telegram, github, skills, teams, isLookingForTeam,
+        return new Person(name, email, telegram, github, skills, teams,
                 interestedHackathons, currentHackathons);
     }
 

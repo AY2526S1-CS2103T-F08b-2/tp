@@ -49,27 +49,27 @@ public class SampleDataUtil {
         // Create all persons
         Person alex = new Person(new Name("Alex Yeoh"), new Email("alexyeoh@example.com"),
                 new Telegram("alexyeoh"), new GitHub("alexyeoh"), getSkillSet("java"),
-                new HashSet<>(), true, getHackathonSet("NUSHacks", "AI Challenge 2024"));
+                new HashSet<>(), getHackathonSet("NUSHacks", "AI Challenge 2024"));
 
         Person bernice = new Person(new Name("Bernice Yu"), new Email("berniceyu@example.com"),
                 new Telegram("bernicey"), new GitHub("berniceyu"), getSkillSet("python", "javascript"),
-                new HashSet<>(), true, getHackathonSet("Web Dev Contest"));
+                new HashSet<>(), getHackathonSet("Web Dev Contest"));
 
         Person charlotte = new Person(new Name("Charlotte Oliveiro"), new Email("charlotte@example.com"),
                 new Telegram("charoliveiro"), new GitHub("charlotteoliveiro"), getSkillSet("react"),
-                new HashSet<>(), false, getHackathonSet("Mobile App Hackathon", "Innovation Day"));
+                new HashSet<>(), getHackathonSet("Mobile App Hackathon", "Innovation Day"));
 
         Person david = new Person(new Name("David Li"), new Email("lidavid@example.com"),
                 new Telegram("davidli"), new GitHub("davidli"), getSkillSet("c"),
-                new HashSet<>(), true, getHackathonSet("Backend Challenge"));
+                new HashSet<>(), getHackathonSet("Backend Challenge"));
 
         Person irfan = new Person(new Name("Irfan Ibrahim"), new Email("irfan@example.com"),
                 new Telegram("irfanib"), new GitHub("irfanibrahim"), getSkillSet("nodejs"),
-                new HashSet<>(), false, getHackathonSet("NUSHacks", "Backend Challenge"));
+                new HashSet<>(), getHackathonSet("NUSHacks", "Backend Challenge"));
 
         Person roy = new Person(new Name("Roy Balakrishnan"), new Email("royb@example.com"),
                 new Telegram("roybala"), new GitHub("roybalakrishnan"), getSkillSet("swift"),
-                new HashSet<>(), true, getHackathonSet("Mobile App Hackathon"));
+                new HashSet<>(), getHackathonSet("Mobile App Hackathon"));
 
         // Add all persons first
         sampleAb.addPerson(alex);

@@ -5,12 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
-import seedu.address.model.person.IsLookingForTeamPredicate;
+import seedu.address.model.person.HackathonContainsKeywordsPredicate;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FilterCommand}.
@@ -22,8 +24,10 @@ public class FilterCommandTest {
 
     @Test
     public void equals() {
-        IsLookingForTeamPredicate firstPredicate = new IsLookingForTeamPredicate(true);
-        IsLookingForTeamPredicate secondPredicate = new IsLookingForTeamPredicate(true);
+        HackathonContainsKeywordsPredicate firstPredicate =
+                new HackathonContainsKeywordsPredicate(Arrays.asList("NUSHacks"));
+        HackathonContainsKeywordsPredicate secondPredicate =
+                new HackathonContainsKeywordsPredicate(Arrays.asList("NUSHacks"));
 
         FilterCommand filterFirstCommand = new FilterCommand(firstPredicate);
         FilterCommand filterSecondCommand = new FilterCommand(secondPredicate);
@@ -46,9 +50,10 @@ public class FilterCommandTest {
     }
 
     @Test
-    public void execute_zeroPersonsLookingForTeam_noPersonFound() {
+    public void execute_hackathonFilter_personsFound() {
         String expectedMessage = String.format(seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
-        IsLookingForTeamPredicate predicate = new IsLookingForTeamPredicate(true);
+        HackathonContainsKeywordsPredicate predicate =
+                new HackathonContainsKeywordsPredicate(Arrays.asList("NUSHacks"));
         FilterCommand command = new FilterCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         CommandResult result = command.execute(model);
@@ -58,7 +63,8 @@ public class FilterCommandTest {
 
     @Test
     public void toStringMethod() {
-        IsLookingForTeamPredicate predicate = new IsLookingForTeamPredicate(true);
+        HackathonContainsKeywordsPredicate predicate =
+                new HackathonContainsKeywordsPredicate(Arrays.asList("NUSHacks"));
         FilterCommand filterCommand = new FilterCommand(predicate);
         String expected = FilterCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, filterCommand.toString());

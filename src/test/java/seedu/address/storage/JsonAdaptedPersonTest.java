@@ -31,7 +31,6 @@ public class JsonAdaptedPersonTest {
     private static final List<JsonAdaptedSkill> VALID_SKILLS = BENSON.getSkills().stream()
             .map(JsonAdaptedSkill::new)
             .collect(Collectors.toList());
-    private static final boolean VALID_LOOKING_FOR_TEAM = false;
     private static final List<String> VALID_HACKATHONS = new ArrayList<>();
     private static final List<String> VALID_CURRENT_HACKATHONS = new ArrayList<>();
 
@@ -45,7 +44,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidName_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(INVALID_NAME, VALID_EMAIL,
-                        VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                        VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null,
                         VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = Name.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -54,7 +53,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullName_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(null, VALID_EMAIL,
-                VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null,
                 VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -64,7 +63,7 @@ public class JsonAdaptedPersonTest {
     public void toModelType_invalidEmail_throwsIllegalValueException() {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, INVALID_EMAIL,
-                        VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                        VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null,
                         VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = Email.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -73,7 +72,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullEmail_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, null,
-                VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                VALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null,
                 VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Email.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -82,7 +81,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidTelegram_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_EMAIL,
-                INVALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                INVALID_TELEGRAM, VALID_GITHUB, VALID_SKILLS, null,
                 VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = Telegram.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -91,7 +90,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullTelegram_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_EMAIL,
-                null, VALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                null, VALID_GITHUB, VALID_SKILLS, null,
                 VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, Telegram.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -101,7 +100,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_invalidGitHub_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_EMAIL,
-                VALID_TELEGRAM, INVALID_GITHUB, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                VALID_TELEGRAM, INVALID_GITHUB, VALID_SKILLS, null,
                 VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = GitHub.MESSAGE_CONSTRAINTS;
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -110,7 +109,7 @@ public class JsonAdaptedPersonTest {
     @Test
     public void toModelType_nullGitHub_throwsIllegalValueException() {
         JsonAdaptedPerson person = new JsonAdaptedPerson(VALID_NAME, VALID_EMAIL,
-                VALID_TELEGRAM, null, VALID_SKILLS, null, VALID_LOOKING_FOR_TEAM,
+                VALID_TELEGRAM, null, VALID_SKILLS, null,
                 VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, GitHub.class.getSimpleName());
         assertThrows(IllegalValueException.class, expectedMessage, person::toModelType);
@@ -122,7 +121,7 @@ public class JsonAdaptedPersonTest {
         invalidSkills.add(new JsonAdaptedSkill(INVALID_SKILL, "BEGINNER"));
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_EMAIL,
-                        VALID_TELEGRAM, VALID_GITHUB, invalidSkills, null, VALID_LOOKING_FOR_TEAM,
+                        VALID_TELEGRAM, VALID_GITHUB, invalidSkills, null,
                         VALID_HACKATHONS, VALID_CURRENT_HACKATHONS);
         assertThrows(IllegalValueException.class, person::toModelType);
     }

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -39,7 +38,6 @@ public class CurrentHackathonsTest {
         Person person = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024", "AI Challenge")
                 .build();
-        
         assertEquals(2, person.getCurrentHackathons().size());
         assert person.getCurrentHackathons().size() == 2 : "Person should have 2 current hackathons";
     }
@@ -52,7 +50,6 @@ public class CurrentHackathonsTest {
         Person person = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024")
                 .build();
-        
         Set<HackathonName> hackathons = person.getCurrentHackathons();
         assertThrows(UnsupportedOperationException.class, () -> hackathons.add(new HackathonName("NewHack")));
         assertThrows(UnsupportedOperationException.class, () -> hackathons.clear());
@@ -65,7 +62,6 @@ public class CurrentHackathonsTest {
     public void equals_differentCurrentHackathons_returnsFalse() {
         Person person1 = new PersonBuilder().withCurrentHackathons("HackNUS2024").build();
         Person person2 = new PersonBuilder().withCurrentHackathons("AI Challenge").build();
-        
         assertFalse(person1.equals(person2));
         assertNotEquals(person1, person2);
         assert !person1.equals(person2) : "Persons with different current hackathons should not be equal";
@@ -82,7 +78,6 @@ public class CurrentHackathonsTest {
         Person person2 = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024", "AI Challenge")
                 .build();
-        
         assertTrue(person1.equals(person2));
         assertEquals(person1, person2);
         assert person1.equals(person2) : "Persons with same current hackathons should be equal";
@@ -95,7 +90,6 @@ public class CurrentHackathonsTest {
     public void hashCode_differentCurrentHackathons_differentHashCodes() {
         Person person1 = new PersonBuilder().withCurrentHackathons("HackNUS2024").build();
         Person person2 = new PersonBuilder().withCurrentHackathons("AI Challenge").build();
-        
         assertNotEquals(person1.hashCode(), person2.hashCode());
     }
 
@@ -110,7 +104,6 @@ public class CurrentHackathonsTest {
         Person person2 = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024", "AI Challenge")
                 .build();
-        
         assertEquals(person1.hashCode(), person2.hashCode());
         assert person1.hashCode() == person2.hashCode() : "Equal persons should have equal hash codes";
     }
@@ -123,7 +116,6 @@ public class CurrentHackathonsTest {
         Person person = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024")
                 .build();
-        
         String personString = person.toString();
         assertTrue(personString.contains("currentHackathons"));
         assertTrue(personString.contains("HackNUS2024"));
@@ -137,15 +129,12 @@ public class CurrentHackathonsTest {
         Person person = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024", "AI Challenge", "Web Dev Contest", "Innovation Day")
                 .build();
-        
         Set<HackathonName> hackathons = person.getCurrentHackathons();
         assertEquals(4, hackathons.size());
-        
         assertTrue(hackathons.stream().anyMatch(h -> h.value.equals("HackNUS2024")));
         assertTrue(hackathons.stream().anyMatch(h -> h.value.equals("AI Challenge")));
         assertTrue(hackathons.stream().anyMatch(h -> h.value.equals("Web Dev Contest")));
         assertTrue(hackathons.stream().anyMatch(h -> h.value.equals("Innovation Day")));
-        
         assert hackathons.size() == 4 : "Person should have all 4 current hackathons";
     }
 
@@ -157,7 +146,6 @@ public class CurrentHackathonsTest {
         Person person = new PersonBuilder()
                 .withCurrentHackathons("AI Challenge 2024", "Web Development Hackathon")
                 .build();
-        
         assertEquals(2, person.getCurrentHackathons().size());
         assertTrue(person.getCurrentHackathons().stream()
                 .anyMatch(h -> h.value.equals("AI Challenge 2024")));
@@ -174,7 +162,6 @@ public class CurrentHackathonsTest {
         Person personWithHackathons = new PersonBuilder()
                 .withCurrentHackathons("HackNUS2024")
                 .build();
-        
         assertFalse(personWithoutHackathons.equals(personWithHackathons));
         assertFalse(personWithHackathons.equals(personWithoutHackathons));
         assertNotEquals(personWithoutHackathons, personWithHackathons);
@@ -189,12 +176,9 @@ public class CurrentHackathonsTest {
                 .withName("John Doe")
                 .withCurrentHackathons("HackNUS2024", "AI Challenge", "Innovation Day")
                 .build();
-        
         Person copy = new PersonBuilder(original).build();
-        
         assertEquals(original.getCurrentHackathons(), copy.getCurrentHackathons());
         assertEquals(3, copy.getCurrentHackathons().size());
-        
         // Verify all hackathons are copied
         assertTrue(copy.getCurrentHackathons().stream()
                 .anyMatch(h -> h.value.equals("HackNUS2024")));
@@ -202,7 +186,6 @@ public class CurrentHackathonsTest {
                 .anyMatch(h -> h.value.equals("AI Challenge")));
         assertTrue(copy.getCurrentHackathons().stream()
                 .anyMatch(h -> h.value.equals("Innovation Day")));
-        
         assert copy.getCurrentHackathons().equals(original.getCurrentHackathons())
                 : "Copied person should have same current hackathons as original";
     }
@@ -217,13 +200,11 @@ public class CurrentHackathonsTest {
                 .withEmail("alice@example.com")
                 .withCurrentHackathons("HackNUS2024")
                 .build();
-        
         Person person2 = new PersonBuilder()
                 .withName("Alice")
                 .withEmail("alice@example.com")
                 .withCurrentHackathons("AI Challenge")
                 .build();
-        
         assertFalse(person1.equals(person2));
         assert !person1.equals(person2) : "Same person data but different current hackathons should not be equal";
     }
@@ -237,15 +218,12 @@ public class CurrentHackathonsTest {
                 .withInterestedHackathons("HackNUS2024", "AI Challenge")
                 .withCurrentHackathons("Web Dev Contest")
                 .build();
-        
         assertEquals(2, person.getInterestedHackathons().size());
         assertEquals(1, person.getCurrentHackathons().size());
-        
         assertTrue(person.getInterestedHackathons().stream()
                 .anyMatch(h -> h.value.equals("HackNUS2024")));
         assertTrue(person.getCurrentHackathons().stream()
                 .anyMatch(h -> h.value.equals("Web Dev Contest")));
-        
         // Current hackathons should not contain interested hackathons
         assertFalse(person.getCurrentHackathons().stream()
                 .anyMatch(h -> h.value.equals("HackNUS2024")));
@@ -260,14 +238,11 @@ public class CurrentHackathonsTest {
                 .withInterestedHackathons("HackNUS2024")
                 .withCurrentHackathons("HackNUS2024")
                 .build();
-        
         assertEquals(1, person.getInterestedHackathons().size());
         assertEquals(1, person.getCurrentHackathons().size());
-        
         assertTrue(person.getInterestedHackathons().stream()
                 .anyMatch(h -> h.value.equals("HackNUS2024")));
         assertTrue(person.getCurrentHackathons().stream()
                 .anyMatch(h -> h.value.equals("HackNUS2024")));
     }
 }
-

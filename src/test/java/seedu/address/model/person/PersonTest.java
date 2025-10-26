@@ -95,7 +95,6 @@ public class PersonTest {
                 + ", telegram=" + ALICE.getTelegram() + ", github=" + ALICE.getGitHub()
                 + ", skills=" + ALICE.getSkills() + ", teams="
                 + ALICE.getTeams()
-                + ", lookingForTeam=" + ALICE.isLookingForTeam()
                 + ", interestedHackathons=" + ALICE.getInterestedHackathons()
                 + ", currentHackathons=" + ALICE.getCurrentHackathons() + "}";
         assertEquals(expected, ALICE.toString());

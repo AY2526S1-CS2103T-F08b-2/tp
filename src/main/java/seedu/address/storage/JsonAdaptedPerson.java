@@ -33,7 +33,6 @@ class JsonAdaptedPerson {
     private final String github;
     private final List<JsonAdaptedSkill> skills = new ArrayList<>();
     private final List<String> teamNames = new ArrayList<>(); // Changed from single teamName to list
-    private final boolean isLookingForTeam;
     private final List<String> interestedHackathons = new ArrayList<>();
     private final List<String> currentHackathons = new ArrayList<>();
 
@@ -47,7 +46,6 @@ class JsonAdaptedPerson {
                              @JsonProperty("github") String github,
                              @JsonProperty("skills") List<JsonAdaptedSkill> skills,
                              @JsonProperty("teamNames") List<String> teamNames,
-                             @JsonProperty("isLookingForTeam") boolean isLookingForTeam,
                              @JsonProperty("interestedHackathons") List<String> interestedHackathons,
                              @JsonProperty("currentHackathons") List<String> currentHackathons) {
         this.name = name;
@@ -60,7 +58,6 @@ class JsonAdaptedPerson {
         if (teamNames != null) {
             this.teamNames.addAll(teamNames);
         }
-        this.isLookingForTeam = isLookingForTeam;
         if (interestedHackathons != null) {
             this.interestedHackathons.addAll(interestedHackathons);
         }
@@ -83,7 +80,6 @@ class JsonAdaptedPerson {
         teamNames.addAll(source.getTeams().stream()
                 .map(team -> team.getTeamName().toString())
                 .collect(Collectors.toList()));
-        isLookingForTeam = source.isLookingForTeam();
         interestedHackathons.addAll(source.getInterestedHackathons().stream()
                 .map(HackathonName::toString)
                 .collect(Collectors.toList()));
@@ -163,6 +159,6 @@ class JsonAdaptedPerson {
         }
 
         return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills,
-                modelTeams, isLookingForTeam, modelHackathons, modelCurrentHackathons);
+                modelTeams, modelHackathons, modelCurrentHackathons);
     }
 }

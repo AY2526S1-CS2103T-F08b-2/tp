@@ -38,7 +38,6 @@ public class EditPersonDescriptorBuilder {
         descriptor.setTelegram(person.getTelegram());
         descriptor.setGitHub(person.getGitHub());
         descriptor.setSkills(person.getSkills());
-        descriptor.setIsLookingForTeam(person.isLookingForTeam());
         descriptor.setInterestedHackathons(person.getInterestedHackathons());
     }
 
@@ -81,14 +80,6 @@ public class EditPersonDescriptorBuilder {
     public EditPersonDescriptorBuilder withSkills(String... skills) {
         Set<Skill> skillSet = Stream.of(skills).map(Skill::new).collect(Collectors.toSet());
         descriptor.setSkills(skillSet);
-        return this;
-    }
-
-    /**
-     * Sets the {@code isLookingForTeam} of the {@code EditPersonDescriptor} that we are building.
-     */
-    public EditPersonDescriptorBuilder withLookingForTeam(boolean isLookingForTeam) {
-        descriptor.setIsLookingForTeam(isLookingForTeam);
         return this;
     }
 

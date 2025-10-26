@@ -5,7 +5,6 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -43,7 +42,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
                         PREFIX_NAME, PREFIX_EMAIL,
-                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_LOOKING, PREFIX_HACKATHON_FILTER);
+                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON_FILTER);
 
         Index index;
 
@@ -57,7 +56,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(
                 PREFIX_NAME, PREFIX_EMAIL,
-                PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_LOOKING);
+                PREFIX_TELEGRAM, PREFIX_GITHUB);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -81,17 +80,6 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         parseSkillsForEdit(argMultimap.getAllValues(PREFIX_SKILL)).ifPresent(editPersonDescriptor::setSkills);
 
-        // Parse looking for team status - only accept "true" or "false"
-        if (argMultimap.getValue(PREFIX_LOOKING).isPresent()) {
-            String lookingValue = argMultimap.getValue(PREFIX_LOOKING).get().trim();
-            if (lookingValue.equals("true")) {
-                editPersonDescriptor.setIsLookingForTeam(true);
-            } else if (lookingValue.equals("false")) {
-                editPersonDescriptor.setIsLookingForTeam(false);
-            } else {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
-            }
-        }
 
         // Parse interested hackathons
         parseHackathonsForEdit(argMultimap.getAllValues(PREFIX_HACKATHON_FILTER))
