@@ -53,6 +53,8 @@ public class PersonCard extends UiPart<Region> {
     private Label lookingForTeam;
     @FXML
     private FlowPane hackathons;
+    @FXML
+    private FlowPane currentHackathons;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -120,6 +122,22 @@ public class PersonCard extends UiPart<Region> {
                             + "-fx-background-radius: 3; "
                             + "-fx-text-fill: #1565C0;");
                     hackathons.getChildren().add(hackathonLabel);
+                });
+
+        // Set spacing for currentHackathons FlowPane
+        currentHackathons.setHgap(5);
+        currentHackathons.setVgap(5);
+
+        // Display current hackathons (participating) with light orange
+        person.getCurrentHackathons().stream()
+                .sorted(Comparator.comparing(hackathon -> hackathon.value))
+                .forEach(hackathon -> {
+                    Label hackathonLabel = new Label(hackathon.value);
+                    hackathonLabel.setStyle("-fx-background-color: #ffe4b3; "
+                            + "-fx-padding: 3 7 3 7; "
+                            + "-fx-background-radius: 3; "
+                            + "-fx-text-fill: #E65100;");
+                    currentHackathons.getChildren().add(hackathonLabel);
                 });
     }
 

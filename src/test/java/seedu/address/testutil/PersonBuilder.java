@@ -31,6 +31,7 @@ public class PersonBuilder {
     private Set<Team> teams;
     private boolean isLookingForTeam;
     private Set<HackathonName> interestedHackathons;
+    private Set<HackathonName> currentHackathons;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -44,6 +45,7 @@ public class PersonBuilder {
         teams = new HashSet<>();
         isLookingForTeam = false;
         interestedHackathons = new HashSet<>();
+        currentHackathons = new HashSet<>();
     }
 
     /**
@@ -58,6 +60,7 @@ public class PersonBuilder {
         teams = new HashSet<>(personToCopy.getTeams());
         isLookingForTeam = personToCopy.isLookingForTeam();
         interestedHackathons = new HashSet<>(personToCopy.getInterestedHackathons());
+        currentHackathons = new HashSet<>(personToCopy.getCurrentHackathons());
     }
 
     /**
@@ -128,8 +131,21 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it as the current hackathons
+     * that the {@code Person} is participating in.
+     */
+    public PersonBuilder withCurrentHackathons(String ... hackathons) {
+        this.currentHackathons = new HashSet<>();
+        for (String hackathon : hackathons) {
+            this.currentHackathons.add(new HackathonName(hackathon));
+        }
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, email, telegram, github, skills, teams, isLookingForTeam, interestedHackathons);
+        return new Person(name, email, telegram, github, skills, teams, isLookingForTeam,
+                interestedHackathons, currentHackathons);
     }
 
 }

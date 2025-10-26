@@ -35,6 +35,7 @@ class JsonAdaptedPerson {
     private final List<String> teamNames = new ArrayList<>(); // Changed from single teamName to list
     private final boolean isLookingForTeam;
     private final List<String> interestedHackathons = new ArrayList<>();
+    private final List<String> currentHackathons = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -47,7 +48,8 @@ class JsonAdaptedPerson {
                              @JsonProperty("skills") List<JsonAdaptedSkill> skills,
                              @JsonProperty("teamNames") List<String> teamNames,
                              @JsonProperty("isLookingForTeam") boolean isLookingForTeam,
-                             @JsonProperty("interestedHackathons") List<String> interestedHackathons) {
+                             @JsonProperty("interestedHackathons") List<String> interestedHackathons,
+                             @JsonProperty("currentHackathons") List<String> currentHackathons) {
         this.name = name;
         this.email = email;
         this.telegram = telegram;
@@ -61,6 +63,9 @@ class JsonAdaptedPerson {
         this.isLookingForTeam = isLookingForTeam;
         if (interestedHackathons != null) {
             this.interestedHackathons.addAll(interestedHackathons);
+        }
+        if (currentHackathons != null) {
+            this.currentHackathons.addAll(currentHackathons);
         }
     }
 
@@ -80,6 +85,9 @@ class JsonAdaptedPerson {
                 .collect(Collectors.toList()));
         isLookingForTeam = source.isLookingForTeam();
         interestedHackathons.addAll(source.getInterestedHackathons().stream()
+                .map(HackathonName::toString)
+                .collect(Collectors.toList()));
+        currentHackathons.addAll(source.getCurrentHackathons().stream()
                 .map(HackathonName::toString)
                 .collect(Collectors.toList()));
     }
@@ -146,7 +154,15 @@ class JsonAdaptedPerson {
             modelHackathons.add(new HackathonName(hackathon));
         }
 
+        final Set<HackathonName> modelCurrentHackathons = new HashSet<>();
+        for (String hackathon : currentHackathons) {
+            if (!HackathonName.isValidHackathonName(hackathon)) {
+                throw new IllegalValueException(HackathonName.MESSAGE_CONSTRAINTS);
+            }
+            modelCurrentHackathons.add(new HackathonName(hackathon));
+        }
+
         return new Person(modelName, modelEmail, modelTelegram, modelGitHub, modelSkills,
-                modelTeams, isLookingForTeam, modelHackathons);
+                modelTeams, isLookingForTeam, modelHackathons, modelCurrentHackathons);
     }
 }

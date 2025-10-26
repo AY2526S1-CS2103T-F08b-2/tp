@@ -48,11 +48,25 @@
         <HBox spacing="5" alignment="CENTER_LEFT">
             <Label fx:id="lookingForTeam" styleClass="cell_small_label" text="\$lookingForTeam" />
         </HBox>
-      <FlowPane fx:id="hackathons">
+      <HBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Interested:" styleClass="cell_small_label" />
+        <FlowPane fx:id="hackathons">
+          <padding>
+            <Insets top="0" />
+          </padding>
+        </FlowPane>
+      </HBox>
+      <HBox spacing="5" alignment="CENTER_LEFT">
         <padding>
           <Insets top="5" />
         </padding>
-      </FlowPane>
+        <Label text="Participating:" styleClass="cell_small_label" />
+        <FlowPane fx:id="currentHackathons">
+          <padding>
+            <Insets top="0" />
+          </padding>
+        </FlowPane>
+      </HBox>
     </VBox>
   </GridPane>
 </HBox>

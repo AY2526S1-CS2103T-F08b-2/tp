@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 
@@ -182,6 +183,8 @@ public class ModelManager implements Model {
     /**
      * Adds a person to a team, maintaining bidirectional relationship.
      * Updates both the team's member list and the person's team list.
+     * Also updates the person's currentHackathons to include the team's
+     * hackathon.
      *
      * @param team The team to add the person to
      * @param person The person to add to the team
@@ -201,6 +204,13 @@ public class ModelManager implements Model {
         // Update person's teams list
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
         updatedTeams.add(updatedTeam);
+
+        // Update person's currentHackathons to include the team's hackathon
+        Set<HackathonName> updatedCurrentHackathons = new HashSet<>(person.getCurrentHackathons());
+        if (team.getHackathonName() != null) {
+            updatedCurrentHackathons.add(team.getHackathonName());
+        }
+
         Person updatedPerson = new Person(
                 person.getName(),
                 person.getEmail(),
@@ -209,7 +219,8 @@ public class ModelManager implements Model {
                 person.getSkills(),
                 updatedTeams,
                 person.isLookingForTeam(),
-                person.getInterestedHackathons()
+                person.getInterestedHackathons(),
+                updatedCurrentHackathons
         );
 
         // Update the person in the model
@@ -221,6 +232,8 @@ public class ModelManager implements Model {
     /**
      * Removes a person from a team, maintaining bidirectional relationship.
      * Updates both the team's member list and the person's team list.
+     * Also updates the person's currentHackathons to remove the team's hackathon
+     * (only if they're not in other teams with the same hackathon).
      *
      * @param team The team to remove the person from
      * @param person The person to remove from the team
@@ -231,7 +244,8 @@ public class ModelManager implements Model {
 
         // Create updated team without the person
         Set<Person> updatedMembers = new HashSet<>(team.getMembers());
-        // remove by identity to handle different instances representing the same person
+        // remove by identity to handle different instances representing
+        // the same person
         updatedMembers.removeIf(member -> member.isSamePerson(person));
         Team updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
 
@@ -242,6 +256,18 @@ public class ModelManager implements Model {
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
         // remove team by identity (isSameTeam) to handle different instances
         updatedTeams.removeIf(t -> t.isSameTeam(team));
+
+        // Update person's currentHackathons - remove the hackathon only if they're not in other teams with same hackathon
+        Set<HackathonName> updatedCurrentHackathons = new HashSet<>(person.getCurrentHackathons());
+        if (team.getHackathonName() != null) {
+            // Check if person is still in other teams with the same hackathon
+            boolean stillInSameHackathon = updatedTeams.stream()
+                    .anyMatch(t -> team.getHackathonName().equals(t.getHackathonName()));
+            if (!stillInSameHackathon) {
+                updatedCurrentHackathons.remove(team.getHackathonName());
+            }
+        }
+
         Person updatedPerson = new Person(
                 person.getName(),
                 person.getEmail(),
@@ -250,7 +276,8 @@ public class ModelManager implements Model {
                 person.getSkills(),
                 updatedTeams,
                 person.isLookingForTeam(),
-                person.getInterestedHackathons()
+                person.getInterestedHackathons(),
+                updatedCurrentHackathons
         );
 
         // Update the person in the model
