@@ -50,9 +50,13 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane skills;
     @FXML
-    private Label lookingForTeam;
+    private HBox interestedHackathonsContainer;
     @FXML
     private FlowPane hackathons;
+    @FXML
+    private HBox participatingHackathonsContainer;
+    @FXML
+    private FlowPane participatingHackathons;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -97,30 +101,50 @@ public class PersonCard extends UiPart<Region> {
                     skills.getChildren().add(skillLabel);
                 });
 
-        // Display looking for team status
-        if (person.isLookingForTeam()) {
-            lookingForTeam.setText("Looking for team");
-            lookingForTeam.setStyle("-fx-text-fill: #4CAF50;");
-        } else {
-            lookingForTeam.setText("Not looking for team");
-            lookingForTeam.setStyle("-fx-text-fill: #D32F2F;");
-        }
 
         // Set spacing for hackathons FlowPane
         hackathons.setHgap(5);
         hackathons.setVgap(5);
 
         // Display interested hackathons
-        person.getInterestedHackathons().stream()
-                .sorted(Comparator.comparing(hackathon -> hackathon.value))
-                .forEach(hackathon -> {
-                    Label hackathonLabel = new Label(hackathon.value);
-                    hackathonLabel.setStyle("-fx-background-color: #d4e6f1; "
-                            + "-fx-padding: 3 7 3 7; "
-                            + "-fx-background-radius: 3; "
-                            + "-fx-text-fill: #1565C0;");
-                    hackathons.getChildren().add(hackathonLabel);
-                });
+        if (person.getInterestedHackathons().isEmpty()) {
+            // Hide the entire interested hackathons section if empty
+            interestedHackathonsContainer.setVisible(false);
+            interestedHackathonsContainer.setManaged(false);
+        } else {
+            person.getInterestedHackathons().stream()
+                    .sorted(Comparator.comparing(hackathon -> hackathon.value))
+                    .forEach(hackathon -> {
+                        Label hackathonLabel = new Label(hackathon.value);
+                        hackathonLabel.setStyle("-fx-background-color: #d4e6f1; "
+                                + "-fx-padding: 3 7 3 7; "
+                                + "-fx-background-radius: 3; "
+                                + "-fx-text-fill: #1565C0;");
+                        hackathons.getChildren().add(hackathonLabel);
+                    });
+        }
+
+        // Set spacing for participatingHackathons FlowPane
+        participatingHackathons.setHgap(5);
+        participatingHackathons.setVgap(5);
+
+        // Display current hackathons (participating) with light orange
+        if (person.getParticipatingHackathons().isEmpty()) {
+            // Hide the entire participating hackathons section if empty
+            participatingHackathonsContainer.setVisible(false);
+            participatingHackathonsContainer.setManaged(false);
+        } else {
+            person.getParticipatingHackathons().stream()
+                    .sorted(Comparator.comparing(hackathon -> hackathon.value))
+                    .forEach(hackathon -> {
+                        Label hackathonLabel = new Label(hackathon.value);
+                        hackathonLabel.setStyle("-fx-background-color: #ffe4b3; "
+                                + "-fx-padding: 3 7 3 7; "
+                                + "-fx-background-radius: 3; "
+                                + "-fx-text-fill: #E65100;");
+                        participatingHackathons.getChildren().add(hackathonLabel);
+                    });
+        }
     }
 
     /**

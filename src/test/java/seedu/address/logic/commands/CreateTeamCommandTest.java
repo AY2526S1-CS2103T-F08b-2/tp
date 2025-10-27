@@ -372,7 +372,6 @@ public class CreateTeamCommandTest {
                     person.getGitHub(),
                     person.getSkills(),
                     updatedTeams,
-                    person.isLookingForTeam(),
                     person.getInterestedHackathons()
             );
 

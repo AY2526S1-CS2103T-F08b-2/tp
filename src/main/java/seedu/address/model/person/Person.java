@@ -27,31 +27,41 @@ public class Person {
     // Data fields
     private final Set<Skill> skills = new HashSet<>();
     private final Set<Team> teams = new HashSet<>();
-    private final boolean isLookingForTeam;
     private final Set<HackathonName> interestedHackathons = new HashSet<>();
+    private final Set<HackathonName> participatingHackathons = new HashSet<>();
 
     /**
      * Every field must be present and not null. Teams can be empty.
      */
     // To be removed in future
     public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills) {
-        this(name, email, telegram, github, skills, new HashSet<>(), false, new HashSet<>());
+        this(name, email, telegram, github, skills, new HashSet<>(), new HashSet<>(), new HashSet<>());
     }
 
     /**
      * Every field must be present and not null. Teams can be empty.
      */
     public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills,
-                  Set<Team> teams, boolean isLookingForTeam, Set<HackathonName> interestedHackathons) {
-        requireAllNonNull(name, email, telegram, github, skills, teams, isLookingForTeam, interestedHackathons);
+                  Set<Team> teams, Set<HackathonName> interestedHackathons) {
+        this(name, email, telegram, github, skills, teams, interestedHackathons, new HashSet<>());
+    }
+
+    /**
+     * Every field must be present and not null. Teams and hackathons can be empty.
+     */
+    public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills,
+                  Set<Team> teams, Set<HackathonName> interestedHackathons,
+                  Set<HackathonName> participatingHackathons) {
+        requireAllNonNull(name, email, telegram, github, skills, teams,
+                interestedHackathons, participatingHackathons);
         this.name = name;
         this.email = email;
         this.telegram = telegram;
         this.github = github;
         this.skills.addAll(skills);
         this.teams.addAll(teams);
-        this.isLookingForTeam = isLookingForTeam;
         this.interestedHackathons.addAll(interestedHackathons);
+        this.participatingHackathons.addAll(participatingHackathons);
     }
 
     public Name getName() {
@@ -85,12 +95,6 @@ public class Person {
         return Collections.unmodifiableSet(this.teams);
     }
 
-    /**
-     * Returns whether this person is looking for a team.
-     */
-    public boolean isLookingForTeam() {
-        return isLookingForTeam;
-    }
 
     /**
      * Returns an immutable hackathon set, which throws {@code UnsupportedOperationException}
@@ -98,6 +102,14 @@ public class Person {
      */
     public Set<HackathonName> getInterestedHackathons() {
         return Collections.unmodifiableSet(this.interestedHackathons);
+    }
+
+    /**
+     * Returns an immutable set of current hackathons the person is participating in,
+     * which throws {@code UnsupportedOperationException} if modification is attempted.
+     */
+    public Set<HackathonName> getParticipatingHackathons() {
+        return Collections.unmodifiableSet(this.participatingHackathons);
     }
 
     /**
@@ -135,13 +147,14 @@ public class Person {
                 && github.equals(otherPerson.github)
                 && skills.equals(otherPerson.skills)
                 && teams.equals(otherPerson.teams)
-                && isLookingForTeam == otherPerson.isLookingForTeam
-                && interestedHackathons.equals(otherPerson.interestedHackathons);
+                && interestedHackathons.equals(otherPerson.interestedHackathons)
+                && participatingHackathons.equals(otherPerson.participatingHackathons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, email, telegram, github, skills, teams, isLookingForTeam, interestedHackathons);
+        return Objects.hash(name, email, telegram, github, skills, teams,
+                interestedHackathons, participatingHackathons);
     }
 
     @Override
@@ -153,8 +166,8 @@ public class Person {
                 .add("github", github)
                 .add("skills", skills)
                 .add("teams", teams)
-                .add("lookingForTeam", isLookingForTeam)
                 .add("interestedHackathons", interestedHackathons)
+                .add("participatingHackathons", participatingHackathons)
                 .toString();
     }
 
@@ -164,7 +177,8 @@ public class Person {
     public Person removeSkill(Skill skill) {
         Set<Skill> updatedSkills = new HashSet<>(skills);
         updatedSkills.remove(skill);
-        return new Person(name, email, telegram, github, updatedSkills, teams, isLookingForTeam, interestedHackathons);
+        return new Person(name, email, telegram, github, updatedSkills, teams,
+                interestedHackathons, participatingHackathons);
     }
 
     /**
@@ -173,7 +187,8 @@ public class Person {
     public Person removeTeam(Team team) {
         Set<Team> updatedTeams = new HashSet<>(teams);
         updatedTeams.removeIf(t -> t.isSameTeam(team));
-        return new Person(name, email, telegram, github, skills, updatedTeams, isLookingForTeam, interestedHackathons);
+        return new Person(name, email, telegram, github, skills, updatedTeams,
+                interestedHackathons, participatingHackathons);
     }
 
 }

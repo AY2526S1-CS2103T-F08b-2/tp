@@ -124,9 +124,6 @@ public class EditCommand extends Command {
                 ? editPersonDescriptor.getTeams().get()
                 : new HashSet<>(personToEdit.getTeams());
 
-        boolean updatedIsLookingForTeam = editPersonDescriptor.getIsLookingForTeam()
-                .orElse(personToEdit.isLookingForTeam());
-
         Set<HackathonName> updatedInterestedHackathons;
         if (editPersonDescriptor.getInterestedHackathons().isPresent()) {
             updatedInterestedHackathons = editPersonDescriptor.getInterestedHackathons().get();
@@ -135,7 +132,7 @@ public class EditCommand extends Command {
         }
 
         return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills,
-                updatedTeams, updatedIsLookingForTeam, updatedInterestedHackathons);
+                updatedTeams, updatedInterestedHackathons);
     }
 
     @Override
@@ -173,7 +170,6 @@ public class EditCommand extends Command {
         private GitHub github;
         private Set<Skill> skills;
         private Set<Team> teams;
-        private Boolean isLookingForTeam;
         private Set<HackathonName> interestedHackathons;
 
         public EditPersonDescriptor() {}
@@ -189,7 +185,6 @@ public class EditCommand extends Command {
             setGitHub(toCopy.github);
             setSkills(toCopy.skills);
             setTeams(toCopy.teams);
-            setIsLookingForTeam(toCopy.isLookingForTeam);
             setInterestedHackathons(toCopy.interestedHackathons);
         }
 
@@ -198,7 +193,7 @@ public class EditCommand extends Command {
          */
         public boolean isAnyFieldEdited() {
             return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, teams,
-                    isLookingForTeam, interestedHackathons);
+                    interestedHackathons);
         }
 
         public void setName(Name name) {
@@ -267,13 +262,6 @@ public class EditCommand extends Command {
             return (teams != null) ? Optional.of(Collections.unmodifiableSet(teams)) : Optional.empty();
         }
 
-        public void setIsLookingForTeam(Boolean isLookingForTeam) {
-            this.isLookingForTeam = isLookingForTeam;
-        }
-
-        public Optional<Boolean> getIsLookingForTeam() {
-            return Optional.ofNullable(isLookingForTeam);
-        }
 
         /**
          * Sets {@code interestedHackathons} to this object's {@code interestedHackathons}.
@@ -312,7 +300,6 @@ public class EditCommand extends Command {
                     && Objects.equals(github, otherEditPersonDescriptor.github)
                     && Objects.equals(skills, otherEditPersonDescriptor.skills)
                     && Objects.equals(teams, otherEditPersonDescriptor.teams)
-                    && Objects.equals(isLookingForTeam, otherEditPersonDescriptor.isLookingForTeam)
                     && Objects.equals(interestedHackathons, otherEditPersonDescriptor.interestedHackathons);
         }
 
@@ -322,7 +309,6 @@ public class EditCommand extends Command {
                     .add("name", name)
                     .add("email", email)
                     .add("skills", skills)
-                    .add("isLookingForTeam", isLookingForTeam)
                     .add("interestedHackathons", interestedHackathons)
                     .toString();
         }

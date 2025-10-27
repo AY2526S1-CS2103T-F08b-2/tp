@@ -95,8 +95,118 @@ public class PersonTest {
                 + ", telegram=" + ALICE.getTelegram() + ", github=" + ALICE.getGitHub()
                 + ", skills=" + ALICE.getSkills() + ", teams="
                 + ALICE.getTeams()
-                + ", lookingForTeam=" + ALICE.isLookingForTeam()
-                + ", interestedHackathons=" + ALICE.getInterestedHackathons() + "}";
+                + ", interestedHackathons=" + ALICE.getInterestedHackathons()
+                + ", participatingHackathons=" + ALICE.getParticipatingHackathons() + "}";
         assertEquals(expected, ALICE.toString());
+    }
+
+    /**
+     * Tests that a person with no interested hackathons returns an empty set.
+     */
+    @Test
+    public void getInterestedHackathons_noHackathons_returnsEmptySet() {
+        Person person = new PersonBuilder().build();
+        assertTrue(person.getInterestedHackathons().isEmpty());
+        assert person.getInterestedHackathons().isEmpty() : "Expected empty hackathons set";
+    }
+
+    /**
+     * Tests that a person with single interested hackathon returns correct set.
+     */
+    @Test
+    public void getInterestedHackathons_singleHackathon_returnsCorrectSet() {
+        Person person = new PersonBuilder().withInterestedHackathons("HackNUS2024").build();
+        assertEquals(1, person.getInterestedHackathons().size());
+        assertTrue(person.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("HackNUS2024")));
+        assert person.getInterestedHackathons().size() == 1 : "Expected exactly one hackathon";
+    }
+
+    /**
+     * Tests that a person with multiple interested hackathons returns correct set.
+     */
+    @Test
+    public void getInterestedHackathons_multipleHackathons_returnsCorrectSet() {
+        Person person = new PersonBuilder()
+                .withInterestedHackathons("HackNUS2024", "AI Challenge 2024", "Web Dev Contest").build();
+        assertEquals(3, person.getInterestedHackathons().size());
+        assertTrue(person.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("HackNUS2024")));
+        assertTrue(person.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")));
+        assertTrue(person.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("Web Dev Contest")));
+        assert person.getInterestedHackathons().size() == 3 : "Expected exactly three hackathons";
+    }
+
+    /**
+     * Tests that the interested hackathons set is immutable.
+     */
+    @Test
+    public void getInterestedHackathons_modifySet_throwsUnsupportedOperationException() {
+        Person person = new PersonBuilder().withInterestedHackathons("HackNUS2024").build();
+        assertThrows(UnsupportedOperationException.class, () ->
+                person.getInterestedHackathons().clear());
+    }
+
+    /**
+     * Tests that two persons with different interested hackathons are not equal.
+     */
+    @Test
+    public void equals_differentInterestedHackathons_returnsFalse() {
+        Person alice = new PersonBuilder(ALICE).withInterestedHackathons("HackNUS2024").build();
+        Person aliceWithDifferentHackathons = new PersonBuilder(ALICE)
+                .withInterestedHackathons("AI Challenge 2024").build();
+        assertFalse(alice.equals(aliceWithDifferentHackathons));
+        assert !alice.equals(aliceWithDifferentHackathons) : "Persons with different hackathons should not be equal";
+    }
+
+    /**
+     * Tests that two persons with same interested hackathons are equal.
+     */
+    @Test
+    public void equals_sameInterestedHackathons_returnsTrue() {
+        Person alice = new PersonBuilder(ALICE).withInterestedHackathons("HackNUS2024").build();
+        Person aliceCopy = new PersonBuilder(ALICE).withInterestedHackathons("HackNUS2024").build();
+        assertTrue(alice.equals(aliceCopy));
+        assert alice.equals(aliceCopy) : "Persons with same hackathons should be equal";
+    }
+
+    /**
+     * Tests that hashCode is consistent with equals for interested hackathons.
+     */
+    @Test
+    public void hashCode_sameInterestedHackathons_returnsSameHashCode() {
+        Person alice = new PersonBuilder(ALICE).withInterestedHackathons("HackNUS2024").build();
+        Person aliceCopy = new PersonBuilder(ALICE).withInterestedHackathons("HackNUS2024").build();
+        assertEquals(alice.hashCode(), aliceCopy.hashCode());
+        assert alice.hashCode() == aliceCopy.hashCode() : "Equal persons should have same hash code";
+    }
+
+    /**
+     * Tests that persons with empty vs non-empty hackathons are not equal.
+     */
+    @Test
+    public void equals_emptyVsNonEmptyHackathons_returnsFalse() {
+        Person personWithNoHackathons = new PersonBuilder(ALICE).build();
+        Person personWithHackathons = new PersonBuilder(ALICE)
+                .withInterestedHackathons("HackNUS2024").build();
+        assertFalse(personWithNoHackathons.equals(personWithHackathons));
+        assertFalse(personWithHackathons.equals(personWithNoHackathons));
+    }
+
+    /**
+     * Tests that interested hackathons are correctly copied in PersonBuilder copy constructor.
+     */
+    @Test
+    public void personBuilder_copyConstructor_copiesInterestedHackathons() {
+        Person original = new PersonBuilder()
+                .withInterestedHackathons("HackNUS2024", "AI Challenge 2024").build();
+        Person copy = new PersonBuilder(original).build();
+        assertEquals(original.getInterestedHackathons(), copy.getInterestedHackathons());
+        assertTrue(copy.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("HackNUS2024")));
+        assertTrue(copy.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")));
     }
 }

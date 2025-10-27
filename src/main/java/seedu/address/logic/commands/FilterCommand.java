@@ -19,11 +19,9 @@ public class FilterCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Filters all persons based on the specified criteria "
             + "and displays them as a list with index numbers.\n"
-            + "Parameters: [l/BOOLEAN] [h/HACKATHON_NAME [MORE_HACKATHON_NAMES]...]\n"
-            + "Example: " + COMMAND_WORD + " l/true\n"
-            + "Example: " + COMMAND_WORD + " l/false\n"
+            + "Parameters: [h/HACKATHON_NAME [MORE_HACKATHON_NAMES]...]\n"
             + "Example: " + COMMAND_WORD + " h/NUSHack\n"
-            + "Example: " + COMMAND_WORD + " l/true h/NUSHack iNTUition";
+            + "Example: " + COMMAND_WORD + " h/NUSHack iNTUition";
 
     private final Predicate<Person> predicate;
 

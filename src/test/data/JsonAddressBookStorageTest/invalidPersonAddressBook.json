@@ -4,7 +4,6 @@
     "email": "hans@example.com",
     "telegram": "hans_tg",
     "github": "hans-github",
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   } ]
 }

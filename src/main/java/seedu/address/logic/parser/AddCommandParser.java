@@ -4,7 +4,6 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -36,7 +35,7 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_EMAIL,
-                         PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_LOOKING, PREFIX_HACKATHON_FILTER);
+                         PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON_FILTER);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -44,29 +43,17 @@ public class AddCommandParser implements Parser<AddCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_EMAIL,
-                PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_LOOKING);
+                PREFIX_TELEGRAM, PREFIX_GITHUB);
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Email email = ParserUtil.parseEmail(argMultimap.getValue(PREFIX_EMAIL).get());
         Set<Skill> skillList = ParserUtil.parseSkills(argMultimap.getAllValues(PREFIX_SKILL));
         Telegram telegram = ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).orElse(""));
         GitHub github = ParserUtil.parseGitHub(argMultimap.getValue(PREFIX_GITHUB).orElse(""));
-        // Parse looking for team status - only accept "true" or "false"
-        boolean isLookingForTeam = false;
-        if (argMultimap.getValue(PREFIX_LOOKING).isPresent()) {
-            String lookingValue = argMultimap.getValue(PREFIX_LOOKING).get().trim();
-            if (lookingValue.equals("true")) {
-                isLookingForTeam = true;
-            } else if (lookingValue.equals("false")) {
-                isLookingForTeam = false;
-            } else {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
-            }
-        }
         Set<HackathonName> interestedHackathons = ParserUtil.parseHackathonNames(
                 argMultimap.getAllValues(PREFIX_HACKATHON_FILTER));
 
         Person person = new Person(name, email, telegram, github, skillList,
-                new HashSet<>(), isLookingForTeam, interestedHackathons);
+                new HashSet<>(), interestedHackathons);
 
         return new AddCommand(person);
     }

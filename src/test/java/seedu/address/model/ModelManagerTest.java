@@ -129,4 +129,85 @@ public class ModelManagerTest {
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
     }
+
+    @Test
+    public void addPersonToTeam_hackathonInInterested_movesToParticipating() {
+        // Setup: Create a person with an interested hackathon
+        seedu.address.model.person.Person person = new seedu.address.testutil.PersonBuilder()
+                .withName("Test Person")
+                .withEmail("test@example.com")
+                .withTelegram("testperson")
+                .withGitHub("testperson")
+                .withInterestedHackathons("AI Challenge 2024")
+                .build();
+
+        // Create a team with the same hackathon
+        seedu.address.model.team.Team team = new seedu.address.model.team.Team(
+                new seedu.address.model.team.TeamName("Test Team"),
+                new seedu.address.model.hackathon.HackathonName("AI Challenge 2024"),
+                new java.util.HashSet<>());
+
+        modelManager.addPerson(person);
+        modelManager.addTeam(team);
+
+        // Before adding to team: hackathon should be in interested, not in participating
+        assertTrue(person.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")));
+        assertTrue(person.getParticipatingHackathons().isEmpty());
+
+        // Add person to team
+        modelManager.addPersonToTeam(team, person);
+
+        // After adding to team: hackathon should be in participating, NOT in interested
+        seedu.address.model.person.Person updatedPerson = modelManager.getFilteredPersonList().stream()
+                .filter(p -> p.isSamePerson(person))
+                .findFirst()
+                .get();
+
+        assertFalse(updatedPerson.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")),
+                "Hackathon should be removed from interestedHackathons");
+        assertTrue(updatedPerson.getParticipatingHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")),
+                "Hackathon should be added to participatingHackathons");
+    }
+
+    @Test
+    public void removePersonFromTeam_hackathonInParticipating_movesToInterested() {
+        // Setup: Create a person with participating hackathon
+        seedu.address.model.person.Person person = new seedu.address.testutil.PersonBuilder()
+                .withName("Test Person")
+                .withEmail("test@example.com")
+                .withTelegram("testperson")
+                .withGitHub("testperson")
+                .withParticipatingHackathons("AI Challenge 2024")
+                .build();
+        // Create a team with the same hackathon
+        seedu.address.model.team.Team team = new seedu.address.model.team.Team(
+                new seedu.address.model.team.TeamName("Test Team"),
+                new seedu.address.model.hackathon.HackathonName("AI Challenge 2024"),
+                new java.util.HashSet<>());
+        modelManager.addPerson(person);
+        modelManager.addTeam(team);
+        // Add person to team first - this returns the updated team
+        seedu.address.model.team.Team updatedTeam = modelManager.addPersonToTeam(team, person);
+        // Get the updated person after adding to team
+        seedu.address.model.person.Person personAfterAdd = modelManager.getFilteredPersonList().stream()
+                .filter(p -> p.isSamePerson(person))
+                .findFirst()
+                .get();
+        // Remove person from team using the updated team reference
+        modelManager.removePersonFromTeam(updatedTeam, personAfterAdd);
+        // After removing from team: hackathon should be back in interested, NOT in participating
+        seedu.address.model.person.Person updatedPerson = modelManager.getFilteredPersonList().stream()
+                .filter(p -> p.isSamePerson(person))
+                .findFirst()
+                .get();
+        assertTrue(updatedPerson.getInterestedHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")),
+                "Hackathon should be added back to interestedHackathons");
+        assertFalse(updatedPerson.getParticipatingHackathons().stream()
+                .anyMatch(h -> h.value.equals("AI Challenge 2024")),
+                "Hackathon should be removed from participatingHackathons");
+    }
 }

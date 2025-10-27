@@ -29,8 +29,8 @@ public class PersonBuilder {
     private GitHub github;
     private Set<Skill> skills;
     private Set<Team> teams;
-    private boolean isLookingForTeam;
     private Set<HackathonName> interestedHackathons;
+    private Set<HackathonName> participatingHackathons;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -42,8 +42,8 @@ public class PersonBuilder {
         github = new GitHub(DEFAULT_GITHUB);
         skills = new HashSet<>();
         teams = new HashSet<>();
-        isLookingForTeam = false;
         interestedHackathons = new HashSet<>();
+        participatingHackathons = new HashSet<>();
     }
 
     /**
@@ -56,8 +56,8 @@ public class PersonBuilder {
         github = personToCopy.getGitHub();
         skills = new HashSet<>(personToCopy.getSkills());
         teams = new HashSet<>(personToCopy.getTeams());
-        isLookingForTeam = personToCopy.isLookingForTeam();
         interestedHackathons = new HashSet<>(personToCopy.getInterestedHackathons());
+        participatingHackathons = new HashSet<>(personToCopy.getParticipatingHackathons());
     }
 
     /**
@@ -109,14 +109,6 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code isLookingForTeam} status of the {@code Person} that we are building.
-     */
-    public PersonBuilder withLookingForTeam(boolean isLookingForTeam) {
-        this.isLookingForTeam = isLookingForTeam;
-        return this;
-    }
-
-    /**
      * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it to the {@code Person}
      * that we are building.
      */
@@ -128,8 +120,26 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it as the current hackathons
+     * that the {@code Person} is participating in.
+     */
+    public PersonBuilder withParticipatingHackathons(String ... hackathons) {
+        this.participatingHackathons = new HashSet<>();
+        for (String hackathon : hackathons) {
+            this.participatingHackathons.add(new HackathonName(hackathon));
+        }
+        return this;
+    }
+
+    /**
+     * Builds and returns a {@code Person} object with the current builder's field values.
+     *
+     * @return A new Person object constructed with the builder's current field values.
+     */
     public Person build() {
-        return new Person(name, email, telegram, github, skills, teams, isLookingForTeam, interestedHackathons);
+        return new Person(name, email, telegram, github, skills, teams,
+                interestedHackathons, participatingHackathons);
     }
 
 }

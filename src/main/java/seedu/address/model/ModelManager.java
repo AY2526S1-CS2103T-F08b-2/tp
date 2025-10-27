@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 
@@ -182,6 +183,8 @@ public class ModelManager implements Model {
     /**
      * Adds a person to a team, maintaining bidirectional relationship.
      * Updates both the team's member list and the person's team list.
+     * Also updates the person's participatingHackathons to include the team's
+     * hackathon, and removes it from interestedHackathons if present.
      *
      * @param team The team to add the person to
      * @param person The person to add to the team
@@ -201,6 +204,19 @@ public class ModelManager implements Model {
         // Update person's teams list
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
         updatedTeams.add(updatedTeam);
+
+        // Update person's interestedHackathons - remove the team's hackathon if present
+        Set<HackathonName> updatedInterestedHackathons = new HashSet<>(person.getInterestedHackathons());
+        if (team.getHackathonName() != null) {
+            updatedInterestedHackathons.remove(team.getHackathonName());
+        }
+
+        // Update person's participatingHackathons to include the team's hackathon
+        Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(person.getParticipatingHackathons());
+        if (team.getHackathonName() != null) {
+            updatedParticipatingHackathons.add(team.getHackathonName());
+        }
+
         Person updatedPerson = new Person(
                 person.getName(),
                 person.getEmail(),
@@ -208,8 +224,8 @@ public class ModelManager implements Model {
                 person.getGitHub(),
                 person.getSkills(),
                 updatedTeams,
-                person.isLookingForTeam(),
-                person.getInterestedHackathons()
+                updatedInterestedHackathons,
+                updatedParticipatingHackathons
         );
 
         // Update the person in the model
@@ -221,6 +237,8 @@ public class ModelManager implements Model {
     /**
      * Removes a person from a team, maintaining bidirectional relationship.
      * Updates both the team's member list and the person's team list.
+     * Also removes the team's hackathon from the person's participatingHackathons
+     * and adds it back to interestedHackathons.
      *
      * @param team The team to remove the person from
      * @param person The person to remove from the team
@@ -231,7 +249,8 @@ public class ModelManager implements Model {
 
         // Create updated team without the person
         Set<Person> updatedMembers = new HashSet<>(team.getMembers());
-        // remove by identity to handle different instances representing the same person
+        // remove by identity to handle different instances representing
+        // the same person
         updatedMembers.removeIf(member -> member.isSamePerson(person));
         Team updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
 
@@ -242,6 +261,18 @@ public class ModelManager implements Model {
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
         // remove team by identity (isSameTeam) to handle different instances
         updatedTeams.removeIf(t -> t.isSameTeam(team));
+
+        // Update person's hackathons - always remove the team's hackathon from participating
+        Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(person.getParticipatingHackathons());
+        Set<HackathonName> updatedInterestedHackathons = new HashSet<>(person.getInterestedHackathons());
+
+        if (team.getHackathonName() != null) {
+            // Always remove the team's hackathon from participating hackathons
+            updatedParticipatingHackathons.remove(team.getHackathonName());
+            // Add back to interested hackathons (they were interested before joining)
+            updatedInterestedHackathons.add(team.getHackathonName());
+        }
+
         Person updatedPerson = new Person(
                 person.getName(),
                 person.getEmail(),
@@ -249,8 +280,8 @@ public class ModelManager implements Model {
                 person.getGitHub(),
                 person.getSkills(),
                 updatedTeams,
-                person.isLookingForTeam(),
-                person.getInterestedHackathons()
+                updatedInterestedHackathons,
+                updatedParticipatingHackathons
         );
 
         // Update the person in the model

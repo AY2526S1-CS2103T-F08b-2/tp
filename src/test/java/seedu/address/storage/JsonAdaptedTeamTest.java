@@ -130,7 +130,7 @@ public class JsonAdaptedTeamTest {
                 "testGitHub",
                 new ArrayList<>(),
                 null,
-                false,
+                new ArrayList<>(),
                 new ArrayList<>()));
 
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, VALID_HACKATHON_NAME, invalidMembers);

@@ -46,9 +46,7 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
 
 ## Features
 
-<div class="alert alert-info">
-
-**:information_source: Notes about the command format:**<br>
+<div markdown="span" class="alert alert-info">:information_source: **Notes about the command format:**<br>
 
 * Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
@@ -95,7 +93,7 @@ Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…
   * **Intermediate** - Light yellow background  
   * **Advanced** - Light red background
 
-<div class="alert alert-primary">:bulb: **Tip:**
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 A person can have any number of skills and hackathons (including 0).
 </div>
 
@@ -161,23 +159,17 @@ Examples:
 
 Filters persons based on their team-looking status and/or interested hackathons.
 
-Format: `filter [l/BOOLEAN] [h/HACKATHON [MORE_HACKATHONS]...]`
+Format: `filter [h/HACKATHON [MORE_HACKATHONS]...]`
 
 * At least one of the optional parameters must be provided.
-* The `l/BOOLEAN` flag filters for persons based on their team-looking status:
-  * `l/true` filters for persons who are looking for a team.
-  * `l/false` filters for persons who are not looking for a team.
 * `h/HACKATHON` filters for persons interested in the specified hackathon(s).
-* Both parameters can be used together to find persons who match the team-looking status AND are interested in specific hackathons.
 * The hackathon search is case-insensitive. e.g. `nushack` will match `NUSHack`
+* As long Hackathon contains the parameter, it will be included e.g. `filter h/AI` will match `Dev AI` and `Tech AI`
 * Only full words will be matched e.g. `NUS` will not match `NUSHack`
 * Persons matching at least one hackathon keyword will be returned (i.e. `OR` search for hackathons).
 
 Examples:
-* `filter l/true` returns all persons who are looking for a team
-* `filter l/false` returns all persons who are not looking for a team
 * `filter h/NUSHack` returns all persons interested in NUSHack
-* `filter l/true h/NUSHack` returns all persons who are looking for a team AND interested in NUSHack
 * `filter h/NUSHack iNTUition` returns all persons interested in NUSHack or iNTUition
 
 ### Deleting a person : `delete`
@@ -207,7 +199,7 @@ Format: `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​`
 * Team names and hackathon names should only contain alphanumeric characters and spaces, and should not be blank.
 * Duplicate teams (same team name) are not allowed.
 
-<div class="alert alert-primary">:bulb: **Tip:**
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Make sure to use the `list` command first to see the current index numbers of persons before creating a team.
 </div>
 
@@ -239,9 +231,13 @@ Format: `addPersonToTeam tn/TEAM_NAME p/INDEX`
 * The team must already exist in the address book.
 * A person can be a member of multiple teams.
 * If the person is already a member of the specified team, an error message will be shown.
+* **Hackathon Management**: When a person is added to a team:
+  * If the team's hackathon is in the person's **interested hackathons**, it will be automatically removed from interested
+  * The team's hackathon is automatically added to the person's **participating hackathons**
+  * This ensures a hackathon cannot be in both interested and participating lists simultaneously
 * After successfully adding a person to a team, the teams list will be displayed automatically.
 
-<div class="alert alert-primary">:bulb: **Tip:**
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use the `listTeam` command first to see available teams, and `list` command to see the current index numbers of persons.
 </div>
 
@@ -260,6 +256,9 @@ Format: `removePersonFromTeam tn/TEAM_NAME p/INDEX`
 * The index **must be a positive integer** 1, 2, 3, …
 * The team must already exist in the address book.
 * If the person is not a member of the specified team, an error message will be shown.
+* **Hackathon Management**: When a person is removed from a team:
+  * The team's hackathon is **always** removed from the person's **participating hackathons**
+  * The hackathon is automatically added back to the person's **interested hackathons** (since they were participating, they must have been interested)
 * After successfully removing a person from a team, the person's record and the team's membership are both updated, and the teams list will be displayed automatically.
 
 Examples:
@@ -302,7 +301,7 @@ AddressBook data are saved in the hard disk automatically after any command that
 
 AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
-<div class="alert alert-warning">:exclamation: **Caution:**
+<div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
 Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
@@ -331,14 +330,14 @@ _Details coming soon ..._
 
 | Action | Format, Examples |
 |--------|------------------|
-| **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner l/true h/NUSHack` |
+| **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
 | **Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
 | **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
-| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack` |
-| **Filter** | `filter [l/BOOLEAN] [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter l/true`, `filter l/false`, `filter h/NUSHack`, `filter l/true h/NUSHack` |
+| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​  [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack` |
+| **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack`, `filter h/NUSHack` |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
 | **List** | `list` |
 | **List Team** | `listTeam` |

@@ -9,7 +9,6 @@
       "skillName" : "java",
       "experienceLevel" : "BEGINNER"
     } ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   }, {
     "name" : "Benson Meier",
@@ -23,7 +22,6 @@
       "skillName" : "javascript",
       "experienceLevel" : "BEGINNER"
     } ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   }, {
     "name" : "Carl Kurz",
@@ -31,7 +29,6 @@
     "telegram" : "carl_tg",
     "github" : "carl-github",
     "skills" : [ ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   }, {
     "name" : "Daniel Meier",
@@ -42,7 +39,6 @@
       "skillName" : "react",
       "experienceLevel" : "BEGINNER"
     } ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   }, {
     "name" : "Elle Meyer",
@@ -50,7 +46,6 @@
     "telegram" : "elle_tg",
     "github" : "elle-github",
     "skills" : [ ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   }, {
     "name" : "Fiona Kunz",
@@ -58,7 +53,6 @@
     "telegram" : "fiona_tg",
     "github" : "fiona-github",
     "skills" : [ ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   }, {
     "name" : "George Best",
@@ -66,7 +60,6 @@
     "telegram" : "george_tg",
     "github" : "george-github",
     "skills" : [ ],
-    "isLookingForTeam" : false,
     "interestedHackathons" : [ ]
   } ]
 }
