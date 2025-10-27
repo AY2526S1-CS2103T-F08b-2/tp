@@ -154,8 +154,10 @@ public class ModelManagerTest {
         assertTrue(person.getInterestedHackathons().stream()
                 .anyMatch(h -> h.value.equals("AI Challenge 2024")));
         assertTrue(person.getParticipatingHackathons().isEmpty());
+
         // Add person to team
         modelManager.addPersonToTeam(team, person);
+
         // After adding to team: hackathon should be in participating, NOT in interested
         seedu.address.model.person.Person updatedPerson = modelManager.getFilteredPersonList().stream()
                 .filter(p -> p.isSamePerson(person))
