@@ -170,7 +170,6 @@ Format: `filter [h/HACKATHON [MORE_HACKATHONS]...]`
 
 Examples:
 * `filter h/NUSHack` returns all persons interested in NUSHack
-* `filter h/NUSHack` returns all persons interested in NUSHack
 * `filter h/NUSHack iNTUition` returns all persons interested in NUSHack or iNTUition
 
 ### Deleting a person : `delete`
@@ -232,6 +231,10 @@ Format: `addPersonToTeam tn/TEAM_NAME p/INDEX`
 * The team must already exist in the address book.
 * A person can be a member of multiple teams.
 * If the person is already a member of the specified team, an error message will be shown.
+* **Hackathon Management**: When a person is added to a team:
+  * If the team's hackathon is in the person's **interested hackathons**, it will be automatically removed from interested
+  * The team's hackathon is automatically added to the person's **participating hackathons**
+  * This ensures a hackathon cannot be in both interested and participating lists simultaneously
 * After successfully adding a person to a team, the teams list will be displayed automatically.
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -253,6 +256,9 @@ Format: `removePersonFromTeam tn/TEAM_NAME p/INDEX`
 * The index **must be a positive integer** 1, 2, 3, …
 * The team must already exist in the address book.
 * If the person is not a member of the specified team, an error message will be shown.
+* **Hackathon Management**: When a person is removed from a team:
+  * The team's hackathon is **always** removed from the person's **participating hackathons**
+  * The hackathon is automatically added back to the person's **interested hackathons** (since they were participating, they must have been interested)
 * After successfully removing a person from a team, the person's record and the team's membership are both updated, and the teams list will be displayed automatically.
 
 Examples:

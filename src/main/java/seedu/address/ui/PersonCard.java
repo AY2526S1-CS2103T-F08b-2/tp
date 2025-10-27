@@ -54,9 +54,9 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane hackathons;
     @FXML
-    private HBox currentHackathonsContainer;
+    private HBox participatingHackathonsContainer;
     @FXML
-    private FlowPane currentHackathons;
+    private FlowPane participatingHackathons;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -124,17 +124,17 @@ public class PersonCard extends UiPart<Region> {
                     });
         }
 
-        // Set spacing for currentHackathons FlowPane
-        currentHackathons.setHgap(5);
-        currentHackathons.setVgap(5);
+        // Set spacing for participatingHackathons FlowPane
+        participatingHackathons.setHgap(5);
+        participatingHackathons.setVgap(5);
 
         // Display current hackathons (participating) with light orange
-        if (person.getCurrentHackathons().isEmpty()) {
+        if (person.getParticipatingHackathons().isEmpty()) {
             // Hide the entire participating hackathons section if empty
-            currentHackathonsContainer.setVisible(false);
-            currentHackathonsContainer.setManaged(false);
+            participatingHackathonsContainer.setVisible(false);
+            participatingHackathonsContainer.setManaged(false);
         } else {
-            person.getCurrentHackathons().stream()
+            person.getParticipatingHackathons().stream()
                     .sorted(Comparator.comparing(hackathon -> hackathon.value))
                     .forEach(hackathon -> {
                         Label hackathonLabel = new Label(hackathon.value);
@@ -142,7 +142,7 @@ public class PersonCard extends UiPart<Region> {
                                 + "-fx-padding: 3 7 3 7; "
                                 + "-fx-background-radius: 3; "
                                 + "-fx-text-fill: #E65100;");
-                        currentHackathons.getChildren().add(hackathonLabel);
+                        participatingHackathons.getChildren().add(hackathonLabel);
                     });
         }
     }

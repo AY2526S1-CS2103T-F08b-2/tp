@@ -96,7 +96,7 @@ public class PersonTest {
                 + ", skills=" + ALICE.getSkills() + ", teams="
                 + ALICE.getTeams()
                 + ", interestedHackathons=" + ALICE.getInterestedHackathons()
-                + ", currentHackathons=" + ALICE.getCurrentHackathons() + "}";
+                + ", participatingHackathons=" + ALICE.getParticipatingHackathons() + "}";
         assertEquals(expected, ALICE.toString());
     }
 

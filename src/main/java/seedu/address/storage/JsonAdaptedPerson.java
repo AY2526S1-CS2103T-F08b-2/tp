@@ -34,7 +34,7 @@ class JsonAdaptedPerson {
     private final List<JsonAdaptedSkill> skills = new ArrayList<>();
     private final List<String> teamNames = new ArrayList<>(); // Changed from single teamName to list
     private final List<String> interestedHackathons = new ArrayList<>();
-    private final List<String> currentHackathons = new ArrayList<>();
+    private final List<String> participatingHackathons = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -47,7 +47,7 @@ class JsonAdaptedPerson {
                              @JsonProperty("skills") List<JsonAdaptedSkill> skills,
                              @JsonProperty("teamNames") List<String> teamNames,
                              @JsonProperty("interestedHackathons") List<String> interestedHackathons,
-                             @JsonProperty("currentHackathons") List<String> currentHackathons) {
+                             @JsonProperty("participatingHackathons") List<String> participatingHackathons) {
         this.name = name;
         this.email = email;
         this.telegram = telegram;
@@ -61,8 +61,8 @@ class JsonAdaptedPerson {
         if (interestedHackathons != null) {
             this.interestedHackathons.addAll(interestedHackathons);
         }
-        if (currentHackathons != null) {
-            this.currentHackathons.addAll(currentHackathons);
+        if (participatingHackathons != null) {
+            this.participatingHackathons.addAll(participatingHackathons);
         }
     }
 
@@ -83,7 +83,7 @@ class JsonAdaptedPerson {
         interestedHackathons.addAll(source.getInterestedHackathons().stream()
                 .map(HackathonName::toString)
                 .collect(Collectors.toList()));
-        currentHackathons.addAll(source.getCurrentHackathons().stream()
+        participatingHackathons.addAll(source.getParticipatingHackathons().stream()
                 .map(HackathonName::toString)
                 .collect(Collectors.toList()));
     }
@@ -151,7 +151,7 @@ class JsonAdaptedPerson {
         }
 
         final Set<HackathonName> modelCurrentHackathons = new HashSet<>();
-        for (String hackathon : currentHackathons) {
+        for (String hackathon : participatingHackathons) {
             if (!HackathonName.isValidHackathonName(hackathon)) {
                 throw new IllegalValueException(HackathonName.MESSAGE_CONSTRAINTS);
             }

@@ -30,7 +30,7 @@ public class PersonBuilder {
     private Set<Skill> skills;
     private Set<Team> teams;
     private Set<HackathonName> interestedHackathons;
-    private Set<HackathonName> currentHackathons;
+    private Set<HackathonName> participatingHackathons;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -43,7 +43,7 @@ public class PersonBuilder {
         skills = new HashSet<>();
         teams = new HashSet<>();
         interestedHackathons = new HashSet<>();
-        currentHackathons = new HashSet<>();
+        participatingHackathons = new HashSet<>();
     }
 
     /**
@@ -57,7 +57,7 @@ public class PersonBuilder {
         skills = new HashSet<>(personToCopy.getSkills());
         teams = new HashSet<>(personToCopy.getTeams());
         interestedHackathons = new HashSet<>(personToCopy.getInterestedHackathons());
-        currentHackathons = new HashSet<>(personToCopy.getCurrentHackathons());
+        participatingHackathons = new HashSet<>(personToCopy.getParticipatingHackathons());
     }
 
     /**
@@ -124,10 +124,10 @@ public class PersonBuilder {
      * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it as the current hackathons
      * that the {@code Person} is participating in.
      */
-    public PersonBuilder withCurrentHackathons(String ... hackathons) {
-        this.currentHackathons = new HashSet<>();
+    public PersonBuilder withParticipatingHackathons(String ... hackathons) {
+        this.participatingHackathons = new HashSet<>();
         for (String hackathon : hackathons) {
-            this.currentHackathons.add(new HackathonName(hackathon));
+            this.participatingHackathons.add(new HackathonName(hackathon));
         }
         return this;
     }
@@ -139,7 +139,7 @@ public class PersonBuilder {
      */
     public Person build() {
         return new Person(name, email, telegram, github, skills, teams,
-                interestedHackathons, currentHackathons);
+                interestedHackathons, participatingHackathons);
     }
 
 }

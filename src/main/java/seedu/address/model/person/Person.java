@@ -28,7 +28,7 @@ public class Person {
     private final Set<Skill> skills = new HashSet<>();
     private final Set<Team> teams = new HashSet<>();
     private final Set<HackathonName> interestedHackathons = new HashSet<>();
-    private final Set<HackathonName> currentHackathons = new HashSet<>();
+    private final Set<HackathonName> participatingHackathons = new HashSet<>();
 
     /**
      * Every field must be present and not null. Teams can be empty.
@@ -51,9 +51,9 @@ public class Person {
      */
     public Person(Name name, Email email, Telegram telegram, GitHub github, Set<Skill> skills,
                   Set<Team> teams, Set<HackathonName> interestedHackathons,
-                  Set<HackathonName> currentHackathons) {
+                  Set<HackathonName> participatingHackathons) {
         requireAllNonNull(name, email, telegram, github, skills, teams,
-                interestedHackathons, currentHackathons);
+                interestedHackathons, participatingHackathons);
         this.name = name;
         this.email = email;
         this.telegram = telegram;
@@ -61,7 +61,7 @@ public class Person {
         this.skills.addAll(skills);
         this.teams.addAll(teams);
         this.interestedHackathons.addAll(interestedHackathons);
-        this.currentHackathons.addAll(currentHackathons);
+        this.participatingHackathons.addAll(participatingHackathons);
     }
 
     public Name getName() {
@@ -108,8 +108,8 @@ public class Person {
      * Returns an immutable set of current hackathons the person is participating in,
      * which throws {@code UnsupportedOperationException} if modification is attempted.
      */
-    public Set<HackathonName> getCurrentHackathons() {
-        return Collections.unmodifiableSet(this.currentHackathons);
+    public Set<HackathonName> getParticipatingHackathons() {
+        return Collections.unmodifiableSet(this.participatingHackathons);
     }
 
     /**
@@ -148,13 +148,13 @@ public class Person {
                 && skills.equals(otherPerson.skills)
                 && teams.equals(otherPerson.teams)
                 && interestedHackathons.equals(otherPerson.interestedHackathons)
-                && currentHackathons.equals(otherPerson.currentHackathons);
+                && participatingHackathons.equals(otherPerson.participatingHackathons);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(name, email, telegram, github, skills, teams,
-                interestedHackathons, currentHackathons);
+                interestedHackathons, participatingHackathons);
     }
 
     @Override
@@ -167,7 +167,7 @@ public class Person {
                 .add("skills", skills)
                 .add("teams", teams)
                 .add("interestedHackathons", interestedHackathons)
-                .add("currentHackathons", currentHackathons)
+                .add("participatingHackathons", participatingHackathons)
                 .toString();
     }
 
@@ -178,7 +178,7 @@ public class Person {
         Set<Skill> updatedSkills = new HashSet<>(skills);
         updatedSkills.remove(skill);
         return new Person(name, email, telegram, github, updatedSkills, teams,
-                interestedHackathons, currentHackathons);
+                interestedHackathons, participatingHackathons);
     }
 
     /**
@@ -188,7 +188,7 @@ public class Person {
         Set<Team> updatedTeams = new HashSet<>(teams);
         updatedTeams.removeIf(t -> t.isSameTeam(team));
         return new Person(name, email, telegram, github, skills, updatedTeams,
-                interestedHackathons, currentHackathons);
+                interestedHackathons, participatingHackathons);
     }
 
 }

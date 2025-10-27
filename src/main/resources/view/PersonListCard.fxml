@@ -53,12 +53,12 @@
           </padding>
         </FlowPane>
       </HBox>
-      <HBox fx:id="currentHackathonsContainer" spacing="5" alignment="CENTER_LEFT">
+      <HBox fx:id="participatingHackathonsContainer" spacing="5" alignment="CENTER_LEFT">
         <padding>
           <Insets top="5" />
         </padding>
         <Label text="Participating:" styleClass="cell_small_label" />
-        <FlowPane fx:id="currentHackathons">
+        <FlowPane fx:id="participatingHackathons">
           <padding>
             <Insets top="0" />
           </padding>
