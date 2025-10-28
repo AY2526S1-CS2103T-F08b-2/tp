@@ -352,3 +352,14 @@
     -fx-scale-x: 1.03;
     -fx-scale-y: 1.03;
 }
+
+#hackathons .label, #participatingHackathons .label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-cursor: hand;
+}
+
+#hackathons .label:hover, #participatingHackathons .label:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}

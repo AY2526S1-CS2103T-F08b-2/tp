@@ -122,10 +122,16 @@ public class PersonCard extends UiPart<Region> {
                     .sorted(Comparator.comparing(hackathon -> hackathon.value))
                     .forEach(hackathon -> {
                         Label hackathonLabel = new Label(hackathon.value);
-                        hackathonLabel.setStyle("-fx-background-color: #d4e6f1; "
+                        hackathonLabel.setStyle("-fx-background-color: #dbeafe; "
+                                + "-fx-text-fill: #1e40af; "
                                 + "-fx-padding: 3 7 3 7; "
-                                + "-fx-background-radius: 3; "
-                                + "-fx-text-fill: #1565C0;");
+                                + "-fx-background-radius: 35; "
+                                + "-fx-border-color: #60a5fa; "
+                                + "-fx-border-width: 1.25; "
+                                + "-fx-border-radius: 20; "
+                                + "-fx-font-size: 12px; "
+                                + "-fx-font-weight: bold; "
+                                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
                         hackathons.getChildren().add(hackathonLabel);
                     });
         }
@@ -144,10 +150,16 @@ public class PersonCard extends UiPart<Region> {
                     .sorted(Comparator.comparing(hackathon -> hackathon.value))
                     .forEach(hackathon -> {
                         Label hackathonLabel = new Label(hackathon.value);
-                        hackathonLabel.setStyle("-fx-background-color: #ffe4b3; "
+                        hackathonLabel.setStyle("-fx-background-color: #fed7aa; "
+                                + "-fx-text-fill: #c2410c; "
                                 + "-fx-padding: 3 7 3 7; "
-                                + "-fx-background-radius: 3; "
-                                + "-fx-text-fill: #E65100;");
+                                + "-fx-background-radius: 35; "
+                                + "-fx-border-color: #fb923c; "
+                                + "-fx-border-width: 1.25; "
+                                + "-fx-border-radius: 20; "
+                                + "-fx-font-size: 12px; "
+                                + "-fx-font-weight: bold; "
+                                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
                         participatingHackathons.getChildren().add(hackathonLabel);
                     });
         }
