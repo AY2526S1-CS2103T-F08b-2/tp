@@ -41,20 +41,44 @@ public class TeamCard extends UiPart<Region> {
 
         if (team.getHackathonName() != null) {
             hackathonName.setText("Hackathon: " + team.getHackathonName().value);
+            hackathonName.setStyle("-fx-background-color: #fed7aa; "
+                    + "-fx-text-fill: #c2410c; "
+                    + "-fx-padding: 3 7 3 7; "
+                    + "-fx-background-radius: 35; "
+                    + "-fx-border-color: #fb923c; "
+                    + "-fx-border-width: 1.25; "
+                    + "-fx-border-radius: 20; "
+                    + "-fx-font-size: 12px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
         } else {
-            hackathonName.setText("No hackathon assigned");
+            hackathonName.setText("Hackathon: No hackathon");
+            hackathonName.setStyle("-fx-text-fill: #888888; "
+                    + "-fx-font-size: 12px; "
+                    + "-fx-font-style: italic;");
         }
 
         memberCount.setText("Members: " + team.getSize());
+        memberCount.setStyle("-fx-font-size: 13px; "
+                + "-fx-text-fill: #b8b8b8;");
 
         // Set spacing for the FlowPane to add space between member labels
-        members.setHgap(8); // Horizontal gap between items
-        members.setVgap(4); // Vertical gap between rows
+        members.setHgap(6);
+        members.setVgap(6);
 
-        // Display member names
+        // Display member names with modern tag styling
         for (Person member : team.getMembers()) {
             Label memberLabel = new Label(member.getName().fullName);
-            memberLabel.getStyleClass().add("cell_small_label");
+            memberLabel.setStyle("-fx-background-color: #e8d4f7; "
+                    + "-fx-text-fill: #6a1b9a; "
+                    + "-fx-padding: 3 7 3 7; "
+                    + "-fx-background-radius: 35; "
+                    + "-fx-border-color: #ba68c8; "
+                    + "-fx-border-width: 1.25; "
+                    + "-fx-border-radius: 20; "
+                    + "-fx-font-size: 12px; "
+                    + "-fx-font-weight: bold; "
+                    + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
             members.getChildren().add(memberLabel);
         }
     }
