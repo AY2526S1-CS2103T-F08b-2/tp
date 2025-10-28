@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -70,15 +71,18 @@ public class PersonCard extends UiPart<Region> {
         telegram.setText(person.getTelegram().value);
         github.setText(person.getGitHub().value);
 
-        // Load and set icons
-        Image emailImage = new Image(getClass().getResourceAsStream("/images/Email.png"));
+        // Load and set icons with white color effect
+        Image emailImage = new Image(getClass().getResourceAsStream("/images/mail.png"));
         emailIcon.setImage(emailImage);
+        applyWhiteColorEffect(emailIcon);
 
-        Image telegramImage = new Image(getClass().getResourceAsStream("/images/Telegram.png"));
+        Image telegramImage = new Image(getClass().getResourceAsStream("/images/at-sign.png"));
         telegramIcon.setImage(telegramImage);
+        applyWhiteColorEffect(telegramIcon);
 
-        Image githubImage = new Image(getClass().getResourceAsStream("/images/Github.png"));
+        Image githubImage = new Image(getClass().getResourceAsStream("/images/github.png"));
         githubIcon.setImage(githubImage);
+        applyWhiteColorEffect(githubIcon);
 
         // Set spacing for skills FlowPane
         skills.setHgap(5);
@@ -91,12 +95,18 @@ public class PersonCard extends UiPart<Region> {
                     Label skillLabel = new Label(skill.skillName);
                     skillLabel.getStyleClass().add("skill-label");
 
-                    // Set background color based on experience level
-                    String backgroundColor = getColorForExperienceLevel(skill.getExperienceLevel());
-                    skillLabel.setStyle("-fx-background-color: " + backgroundColor + "; "
+                    // Set styling based on experience level
+                    String[] colors = getColorsForExperienceLevel(skill.getExperienceLevel());
+                    skillLabel.setStyle("-fx-background-color: " + colors[0] + "; "
+                            + "-fx-text-fill: " + colors[1] + "; "
                             + "-fx-padding: 3 7 3 7; "
-                            + "-fx-background-radius: 3; "
-                            + "-fx-text-fill: #000000;");
+                            + "-fx-background-radius: 35; "
+                            + "-fx-border-color: " + colors[2] + "; "
+                            + "-fx-border-width: 1.25; "
+                            + "-fx-border-radius: 20; "
+                            + "-fx-font-size: 12px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
 
                     skills.getChildren().add(skillLabel);
                 });
@@ -116,10 +126,16 @@ public class PersonCard extends UiPart<Region> {
                     .sorted(Comparator.comparing(hackathon -> hackathon.value))
                     .forEach(hackathon -> {
                         Label hackathonLabel = new Label(hackathon.value);
-                        hackathonLabel.setStyle("-fx-background-color: #d4e6f1; "
+                        hackathonLabel.setStyle("-fx-background-color: #dbeafe; "
+                                + "-fx-text-fill: #1e40af; "
                                 + "-fx-padding: 3 7 3 7; "
-                                + "-fx-background-radius: 3; "
-                                + "-fx-text-fill: #1565C0;");
+                                + "-fx-background-radius: 35; "
+                                + "-fx-border-color: #60a5fa; "
+                                + "-fx-border-width: 1.25; "
+                                + "-fx-border-radius: 20; "
+                                + "-fx-font-size: 12px; "
+                                + "-fx-font-weight: bold; "
+                                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
                         hackathons.getChildren().add(hackathonLabel);
                     });
         }
@@ -138,28 +154,48 @@ public class PersonCard extends UiPart<Region> {
                     .sorted(Comparator.comparing(hackathon -> hackathon.value))
                     .forEach(hackathon -> {
                         Label hackathonLabel = new Label(hackathon.value);
-                        hackathonLabel.setStyle("-fx-background-color: #ffe4b3; "
+                        hackathonLabel.setStyle("-fx-background-color: #fed7aa; "
+                                + "-fx-text-fill: #c2410c; "
                                 + "-fx-padding: 3 7 3 7; "
-                                + "-fx-background-radius: 3; "
-                                + "-fx-text-fill: #E65100;");
+                                + "-fx-background-radius: 35; "
+                                + "-fx-border-color: #fb923c; "
+                                + "-fx-border-width: 1.25; "
+                                + "-fx-border-radius: 20; "
+                                + "-fx-font-size: 12px; "
+                                + "-fx-font-weight: bold; "
+                                + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
                         participatingHackathons.getChildren().add(hackathonLabel);
                     });
         }
     }
 
     /**
-     * Returns the background color for a skill based on its experience level.
+     * Returns the background color, text color, and border color for a skill based on its experience level.
+     * Returns array: [backgroundColor, textColor, borderColor]
      */
-    private String getColorForExperienceLevel(ExperienceLevel level) {
+    private String[] getColorsForExperienceLevel(ExperienceLevel level) {
         switch (level) {
         case BEGINNER:
-            return "#b8f5b8"; // Light green
+            // Soft green theme - calm and fresh
+            return new String[]{"#d4f4dd", "#1e7a3e", "#7bc96f"};
         case INTERMEDIATE:
-            return "#fff4b8"; // Light yellow
+            // Vibrant blue theme - confident and professional
+            return new String[]{"#d4e6f9", "#1565C0", "#64b5f6"};
         case ADVANCED:
-            return "#ffb8b8"; // Light red
+            // Bold purple theme - expert and premium
+            return new String[]{"#e8d4f7", "#6a1b9a", "#ba68c8"};
         default:
-            return "#e0e0e0"; // Default gray
+            // Neutral gray
+            return new String[]{"#e8e8e8", "#424242", "#9e9e9e"};
         }
+    }
+
+    /**
+     * Applies a white color effect to the given ImageView.
+     */
+    private void applyWhiteColorEffect(ImageView imageView) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(1.0);
+        imageView.setEffect(colorAdjust);
     }
 }
