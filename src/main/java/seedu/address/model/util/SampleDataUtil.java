@@ -27,7 +27,7 @@ public class SampleDataUtil {
 
         // Create all persons with both interested and participating hackathons
         Person alex = new Person(new Name("Alex Yeoh"), new Email("alexyeoh@example.com"),
-                new Telegram("alexyeoh"), new GitHub("alexyeoh"), 
+                new Telegram("alexyeoh"), new GitHub("alexyeoh"),
                 getSkillSet(new Skill("java", ExperienceLevel.INTERMEDIATE),
                             new Skill("python", ExperienceLevel.BEGINNER),
                             new Skill("git", ExperienceLevel.INTERMEDIATE),
@@ -44,8 +44,8 @@ public class SampleDataUtil {
                 getHackathonSet());
 
         Person bernice = new Person(new Name("Bernice Yu"), new Email("berniceyu@example.com"),
-                new Telegram("bernicey"), new GitHub("berniceyu"), 
-                getSkillSet(new Skill("python", ExperienceLevel.ADVANCED), 
+                new Telegram("bernicey"), new GitHub("berniceyu"),
+                getSkillSet(new Skill("python", ExperienceLevel.ADVANCED),
                             new Skill("javascript", ExperienceLevel.ADVANCED),
                             new Skill("django", ExperienceLevel.INTERMEDIATE),
                             new Skill("postgresql", ExperienceLevel.INTERMEDIATE),
@@ -64,7 +64,7 @@ public class SampleDataUtil {
                 getHackathonSet());
 
         Person charlotte = new Person(new Name("Charlotte Oliveiro"), new Email("charlotte@example.com"),
-                new Telegram("charoliveiro"), new GitHub("charlotteoliveiro"), 
+                new Telegram("charoliveiro"), new GitHub("charlotteoliveiro"),
                 getSkillSet(new Skill("react", ExperienceLevel.ADVANCED),
                             new Skill("typescript", ExperienceLevel.ADVANCED),
                             new Skill("nodejs", ExperienceLevel.INTERMEDIATE),
@@ -84,7 +84,7 @@ public class SampleDataUtil {
                 getHackathonSet());
 
         Person david = new Person(new Name("David Li"), new Email("lidavid@example.com"),
-                new Telegram("davidli"), new GitHub("davidli"), 
+                new Telegram("davidli"), new GitHub("davidli"),
                 getSkillSet(new Skill("c++", ExperienceLevel.INTERMEDIATE),
                             new Skill("c", ExperienceLevel.ADVANCED),
                             new Skill("rust", ExperienceLevel.BEGINNER),
@@ -101,7 +101,7 @@ public class SampleDataUtil {
                 getHackathonSet());
 
         Person irfan = new Person(new Name("Irfan Ibrahim"), new Email("irfan@example.com"),
-                new Telegram("irfanib"), new GitHub("irfanibrahim"), 
+                new Telegram("irfanib"), new GitHub("irfanibrahim"),
                 getSkillSet(new Skill("nodejs", ExperienceLevel.ADVANCED),
                             new Skill("javascript", ExperienceLevel.ADVANCED),
                             new Skill("express", ExperienceLevel.INTERMEDIATE),
@@ -121,7 +121,7 @@ public class SampleDataUtil {
                 getHackathonSet());
 
         Person roy = new Person(new Name("Roy Balakrishnan"), new Email("royb@example.com"),
-                new Telegram("roybala"), new GitHub("roybalakrishnan"), 
+                new Telegram("roybala"), new GitHub("roybalakrishnan"),
                 getSkillSet(new Skill("swift", ExperienceLevel.ADVANCED),
                             new Skill("kotlin", ExperienceLevel.INTERMEDIATE),
                             new Skill("ios", ExperienceLevel.ADVANCED),
