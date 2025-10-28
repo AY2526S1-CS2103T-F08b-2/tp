@@ -1,7 +1,9 @@
 package seedu.address.storage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -59,17 +61,20 @@ class JsonSerializableAddressBook {
         AddressBook addressBook = new AddressBook();
 
         // Load persons first
+        // Also build a map from name -> Person so teams can resolve member references
+        Map<String, Person> personByName = new HashMap<>();
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
             if (addressBook.hasPerson(person)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
             }
             addressBook.addPerson(person);
+            personByName.put(person.getName().fullName, person);
         }
 
         // Load teams after persons (since teams reference persons)
         for (JsonAdaptedTeam jsonAdaptedTeam : teams) {
-            Team team = jsonAdaptedTeam.toModelType();
+            Team team = jsonAdaptedTeam.toModelType(personByName);
             if (addressBook.hasTeam(team)) {
                 throw new IllegalValueException(MESSAGE_DUPLICATE_TEAM);
             }

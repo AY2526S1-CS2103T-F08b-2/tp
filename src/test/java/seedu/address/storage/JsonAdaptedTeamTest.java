@@ -7,8 +7,10 @@ import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -25,7 +27,7 @@ public class JsonAdaptedTeamTest {
 
     private static final String VALID_TEAM_NAME = "Alpha Team";
     private static final String VALID_HACKATHON_NAME = "Tech Innovation 2024";
-    private static final List<JsonAdaptedPerson> VALID_MEMBERS;
+    private static final List<String> VALID_MEMBERS;
     private static final Team VALID_TEAM;
 
     static {
@@ -34,8 +36,8 @@ public class JsonAdaptedTeamTest {
         members.add(BENSON);
 
         VALID_MEMBERS = new ArrayList<>();
-        VALID_MEMBERS.add(new JsonAdaptedPerson(ALICE));
-        VALID_MEMBERS.add(new JsonAdaptedPerson(BENSON));
+        VALID_MEMBERS.add(ALICE.getName().fullName);
+        VALID_MEMBERS.add(BENSON.getName().fullName);
 
         VALID_TEAM = new Team(new TeamName(VALID_TEAM_NAME),
                              new HackathonName(VALID_HACKATHON_NAME),
@@ -45,7 +47,10 @@ public class JsonAdaptedTeamTest {
     @Test
     public void toModelType_validTeamDetails_returnsTeam() throws Exception {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM);
-        assertEquals(VALID_TEAM, team.toModelType());
+        Map<String, Person> nameMap = new HashMap<>();
+        nameMap.put(ALICE.getName().fullName, ALICE);
+        nameMap.put(BENSON.getName().fullName, BENSON);
+        assertEquals(VALID_TEAM, team.toModelType(nameMap));
     }
 
     @Test
@@ -56,7 +61,10 @@ public class JsonAdaptedTeamTest {
         Team teamWithoutHackathon = new Team(new TeamName(VALID_TEAM_NAME), members);
 
         JsonAdaptedTeam jsonTeam = new JsonAdaptedTeam(teamWithoutHackathon);
-        assertEquals(teamWithoutHackathon, jsonTeam.toModelType());
+        Map<String, Person> nameMap = new HashMap<>();
+        nameMap.put(ALICE.getName().fullName, ALICE);
+        nameMap.put(BENSON.getName().fullName, BENSON);
+        assertEquals(teamWithoutHackathon, jsonTeam.toModelType(nameMap));
     }
 
     @Test
@@ -66,34 +74,43 @@ public class JsonAdaptedTeamTest {
                                           new HashSet<>());
 
         JsonAdaptedTeam jsonTeam = new JsonAdaptedTeam(teamWithoutMembers);
-        assertEquals(teamWithoutMembers, jsonTeam.toModelType());
+        Map<String, Person> nameMap = new HashMap<>();
+        Team modelTeam = jsonTeam.toModelType(nameMap);
+
+        assertEquals(teamWithoutMembers, modelTeam);
     }
 
     @Test
     public void toModelType_invalidTeamName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam(INVALID_TEAM_NAME, VALID_HACKATHON_NAME, VALID_MEMBERS);
         String expectedMessage = TeamName.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
     public void toModelType_nullTeamName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam(null, VALID_HACKATHON_NAME, VALID_MEMBERS);
         String expectedMessage = String.format(MISSING_FIELD_MESSAGE_FORMAT, TeamName.class.getSimpleName());
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
     public void toModelType_invalidHackathonName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, INVALID_HACKATHON_NAME, VALID_MEMBERS);
         String expectedMessage = HackathonName.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
     public void toModelType_nullHackathonName_returnsTeamWithoutHackathon() throws Exception {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, null, VALID_MEMBERS);
-        Team modelTeam = team.toModelType();
+        Map<String, Person> nameMap = new HashMap<>();
+        nameMap.put(ALICE.getName().fullName, ALICE);
+        nameMap.put(BENSON.getName().fullName, BENSON);
+        Team modelTeam = team.toModelType(nameMap);
 
         assertEquals(new TeamName(VALID_TEAM_NAME), modelTeam.getTeamName());
         assertEquals(null, modelTeam.getHackathonName());
@@ -103,7 +120,8 @@ public class JsonAdaptedTeamTest {
     @Test
     public void toModelType_nullMembers_returnsTeamWithEmptyMembers() throws Exception {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, VALID_HACKATHON_NAME, null);
-        Team modelTeam = team.toModelType();
+        Map<String, Person> nameMap = new HashMap<>();
+        Team modelTeam = team.toModelType(nameMap);
 
         assertEquals(new TeamName(VALID_TEAM_NAME), modelTeam.getTeamName());
         assertEquals(new HackathonName(VALID_HACKATHON_NAME), modelTeam.getHackathonName());
@@ -113,7 +131,8 @@ public class JsonAdaptedTeamTest {
     @Test
     public void toModelType_emptyMembers_returnsTeamWithEmptyMembers() throws Exception {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, VALID_HACKATHON_NAME, new ArrayList<>());
-        Team modelTeam = team.toModelType();
+        Map<String, Person> nameMap = new HashMap<>();
+        Team modelTeam = team.toModelType(nameMap);
 
         assertEquals(new TeamName(VALID_TEAM_NAME), modelTeam.getTeamName());
         assertEquals(new HackathonName(VALID_HACKATHON_NAME), modelTeam.getHackathonName());
@@ -122,19 +141,16 @@ public class JsonAdaptedTeamTest {
 
     @Test
     public void toModelType_invalidMember_throwsIllegalValueException() {
-        List<JsonAdaptedPerson> invalidMembers = new ArrayList<>(VALID_MEMBERS);
-        // Add an invalid person (null name will cause IllegalValueException)
-        invalidMembers.add(new JsonAdaptedPerson(null,
-                "test@email.com",
-                "testTelegram",
-                "testGitHub",
-                new ArrayList<>(),
-                null,
-                new ArrayList<>(),
-                new ArrayList<>()));
+        List<String> invalidMembers = new ArrayList<>(VALID_MEMBERS);
+        // Add a name that does not exist in the person map
+        invalidMembers.add("Nonexistent Person");
 
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, VALID_HACKATHON_NAME, invalidMembers);
-        assertThrows(IllegalValueException.class, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        nameMap.put(ALICE.getName().fullName, ALICE);
+        nameMap.put(BENSON.getName().fullName, BENSON);
+
+        assertThrows(IllegalValueException.class, () -> team.toModelType(nameMap));
     }
 
     @Test
@@ -158,28 +174,32 @@ public class JsonAdaptedTeamTest {
     public void toModelType_edgeCaseEmptyTeamName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam("", VALID_HACKATHON_NAME, VALID_MEMBERS);
         String expectedMessage = TeamName.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
     public void toModelType_edgeCaseWhitespaceOnlyTeamName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam("   ", VALID_HACKATHON_NAME, VALID_MEMBERS);
         String expectedMessage = TeamName.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
     public void toModelType_edgeCaseEmptyHackathonName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, "", VALID_MEMBERS);
         String expectedMessage = HackathonName.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
     public void toModelType_edgeCaseWhitespaceOnlyHackathonName_throwsIllegalValueException() {
         JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, "   ", VALID_MEMBERS);
         String expectedMessage = HackathonName.MESSAGE_CONSTRAINTS;
-        assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+        Map<String, Person> nameMap = new HashMap<>();
+        assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
     }
 
     @Test
@@ -189,7 +209,8 @@ public class JsonAdaptedTeamTest {
         for (String invalidName : invalidNames) {
             JsonAdaptedTeam team = new JsonAdaptedTeam(invalidName, VALID_HACKATHON_NAME, VALID_MEMBERS);
             String expectedMessage = TeamName.MESSAGE_CONSTRAINTS;
-            assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+            Map<String, Person> nameMap = new HashMap<>();
+            assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
         }
     }
 
@@ -200,7 +221,8 @@ public class JsonAdaptedTeamTest {
         for (String invalidName : invalidNames) {
             JsonAdaptedTeam team = new JsonAdaptedTeam(VALID_TEAM_NAME, invalidName, VALID_MEMBERS);
             String expectedMessage = HackathonName.MESSAGE_CONSTRAINTS;
-            assertThrows(IllegalValueException.class, expectedMessage, team::toModelType);
+            Map<String, Person> nameMap = new HashMap<>();
+            assertThrows(IllegalValueException.class, expectedMessage, () -> team.toModelType(nameMap));
         }
     }
 }
