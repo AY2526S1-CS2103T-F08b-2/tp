@@ -91,12 +91,18 @@ public class PersonCard extends UiPart<Region> {
                     Label skillLabel = new Label(skill.skillName);
                     skillLabel.getStyleClass().add("skill-label");
 
-                    // Set background color based on experience level
-                    String backgroundColor = getColorForExperienceLevel(skill.getExperienceLevel());
-                    skillLabel.setStyle("-fx-background-color: " + backgroundColor + "; "
-                            + "-fx-padding: 3 7 3 7; "
-                            + "-fx-background-radius: 3; "
-                            + "-fx-text-fill: #000000;");
+                    // Set styling based on experience level
+                    String[] colors = getColorsForExperienceLevel(skill.getExperienceLevel());
+                    skillLabel.setStyle("-fx-background-color: " + colors[0] + "; "
+                            + "-fx-text-fill: " + colors[1] + "; "
+                            + "-fx-padding: 5 12 5 12; "
+                            + "-fx-background-radius: 45; "
+                            + "-fx-border-color: " + colors[2] + "; "
+                            + "-fx-border-width: 1.5; "
+                            + "-fx-border-radius: 20; "
+                            + "-fx-font-size: 11px; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
 
                     skills.getChildren().add(skillLabel);
                 });
@@ -148,18 +154,23 @@ public class PersonCard extends UiPart<Region> {
     }
 
     /**
-     * Returns the background color for a skill based on its experience level.
+     * Returns the background color, text color, and border color for a skill based on its experience level.
+     * Returns array: [backgroundColor, textColor, borderColor]
      */
-    private String getColorForExperienceLevel(ExperienceLevel level) {
+    private String[] getColorsForExperienceLevel(ExperienceLevel level) {
         switch (level) {
         case BEGINNER:
-            return "#b8f5b8"; // Light green
+            // Soft green theme - calm and fresh
+            return new String[]{"#d4f4dd", "#1e7a3e", "#7bc96f"};
         case INTERMEDIATE:
-            return "#fff4b8"; // Light yellow
+            // Vibrant blue theme - confident and professional
+            return new String[]{"#d4e6f9", "#1565C0", "#64b5f6"};
         case ADVANCED:
-            return "#ffb8b8"; // Light red
+            // Bold purple theme - expert and premium
+            return new String[]{"#e8d4f7", "#6a1b9a", "#ba68c8"};
         default:
-            return "#e0e0e0"; // Default gray
+            // Neutral gray
+            return new String[]{"#e8e8e8", "#424242", "#9e9e9e"};
         }
     }
 }
