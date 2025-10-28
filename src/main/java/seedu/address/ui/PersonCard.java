@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
@@ -70,15 +71,18 @@ public class PersonCard extends UiPart<Region> {
         telegram.setText(person.getTelegram().value);
         github.setText(person.getGitHub().value);
 
-        // Load and set icons
-        Image emailImage = new Image(getClass().getResourceAsStream("/images/Email.png"));
+        // Load and set icons with white color effect
+        Image emailImage = new Image(getClass().getResourceAsStream("/images/mail.png"));
         emailIcon.setImage(emailImage);
+        applyWhiteColorEffect(emailIcon);
 
-        Image telegramImage = new Image(getClass().getResourceAsStream("/images/Telegram.png"));
+        Image telegramImage = new Image(getClass().getResourceAsStream("/images/at-sign.png"));
         telegramIcon.setImage(telegramImage);
+        applyWhiteColorEffect(telegramIcon);
 
-        Image githubImage = new Image(getClass().getResourceAsStream("/images/Github.png"));
+        Image githubImage = new Image(getClass().getResourceAsStream("/images/github.png"));
         githubIcon.setImage(githubImage);
+        applyWhiteColorEffect(githubIcon);
 
         // Set spacing for skills FlowPane
         skills.setHgap(5);
@@ -184,5 +188,14 @@ public class PersonCard extends UiPart<Region> {
             // Neutral gray
             return new String[]{"#e8e8e8", "#424242", "#9e9e9e"};
         }
+    }
+
+    /**
+     * Applies a white color effect to the given ImageView.
+     */
+    private void applyWhiteColorEffect(ImageView imageView) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(1.0);
+        imageView.setEffect(colorAdjust);
     }
 }
