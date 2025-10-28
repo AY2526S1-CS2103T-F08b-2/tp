@@ -72,7 +72,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `TeamListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
@@ -81,7 +81,7 @@ The `UI` component,
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component, as it displays `Person` object and Team object residing in the `Model`.
 
 ### Logic component
 
@@ -114,12 +114,6 @@ How the parsing works:
 * When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
 * All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
-### Filter sequence diagram
-
-The sequence diagram below illustrates the interactions involved when a user issues a filter-related command (for example, filtering by skill or proficiency). It complements the other sequence diagrams and helps developers understand how the `Logic`, `Parser`, and `Model` components interact specifically for the filtering feature.
-
-<img src="images/filtersequencediagram.png" width="574" />
-
 ### Model component
 **API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
@@ -128,7 +122,7 @@ The sequence diagram below illustrates the interactions involved when a user iss
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Team` objects (which are contained in a `UniqueTeamList` object) in an `AddressBook` object.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -150,10 +144,6 @@ The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
-
-### Remove Skill Sequence Diagram
-
-<img src="images/RemoveSkillSequence.png" width="550" />
 
 ### Common classes
 
@@ -258,6 +248,50 @@ The `CreateTeamCommand` handles several error cases:
 * **Alternative 2:** Store only person IDs/indices in the team.
     * Pros: Reduces coupling between `Team` and `Person`. Simpler to handle person updates.
     * Cons: Requires additional lookups to retrieve full person information. More complex to display team details.
+
+### Remove Skill feature
+
+#### Implementation
+
+The Remove Skill feature allows users to remove a specific skill from a person's profile. This is useful when a person's skill set changes or when a skill was added by mistake. The feature is implemented through the `RemoveSkillCommand` class and its associated parser `RemoveSkillCommandParser`.
+
+**Key Components:**
+
+* `RemoveSkillCommand` — Removes a specified skill from a person at a given index.
+* `RemoveSkillCommandParser` — Parses user input to extract the person's index and the skill name to be removed.
+
+**Command Format:**
+```
+removeSkill INDEX SKILL_NAME
+```
+
+**How the Remove Skill feature works:**
+
+The sequence diagram below illustrates the interactions within the system when a user executes a remove skill command:
+
+<img src="images/RemoveSkillSequence.png" width="550" />
+
+1. The user enters a `removeSkill` command with the person's index and the skill name to remove.
+2. `AddressBookParser` recognizes the `removeSkill` command word and delegates parsing to `RemoveSkillCommandParser`.
+3. `RemoveSkillCommandParser` extracts the index and skill name from the input.
+4. A `RemoveSkillCommand` object is created with the parsed information.
+5. When executed, `RemoveSkillCommand` performs the following:
+    * Validates the person index against the current filtered person list.
+    * Retrieves the person at the specified index.
+    * Checks if the person has the specified skill.
+    * Creates a new `Person` object with the skill removed.
+    * Updates the person in the model.
+6. A `CommandResult` is returned with a success message.
+
+**Parser Integration:**
+- The command word `removeSkill` is recognized in `AddressBookParser`.
+- Arguments are parsed by `RemoveSkillCommandParser`, which expects an index and a skill name separated by a space.
+
+**Error Handling:**
+- If the index is invalid, an error message is shown.
+- If the skill does not exist for the person, an error message is shown.
+
+This design ensures that the Remove Skill feature is robust and user-friendly.
 
 ### \[Proposed\] Undo/redo feature
 
