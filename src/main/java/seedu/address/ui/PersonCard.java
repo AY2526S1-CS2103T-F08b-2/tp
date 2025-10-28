@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 import seedu.address.model.skill.ExperienceLevel;
+import seedu.address.model.skill.Skill;
 
 /**
  * A UI component that displays information of a {@code Person}.
@@ -84,9 +85,11 @@ public class PersonCard extends UiPart<Region> {
         skills.setHgap(5);
         skills.setVgap(5);
 
-        // Display skills
+        // Display skills sorted by experience level (Advanced -> Intermediate -> Beginner)
         person.getSkills().stream()
-                .sorted(Comparator.comparing(skill -> skill.skillName))
+                .sorted(Comparator.comparing(Skill::getExperienceLevel)
+                        .reversed()
+                        .thenComparing(skill -> skill.skillName))
                 .forEach(skill -> {
                     Label skillLabel = new Label(skill.skillName);
                     skillLabel.getStyleClass().add("skill-label");
