@@ -50,6 +50,12 @@ public class DeleteTeamCommand extends Command {
             if (person.getTeams().stream().anyMatch(team -> team.isSameTeam(teamToDelete))) {
                 // Create a new person with the team removed from their teams set
                 Person updatedPerson = person.removeTeam(teamToDelete);
+
+                // Also remove the associated hackathon from participating hackathons if it exists
+                if (teamToDelete.getHackathonName() != null) {
+                    updatedPerson = updatedPerson.removeParticipatingHackathon(teamToDelete.getHackathonName());
+                }
+
                 model.setPerson(person, updatedPerson);
             }
         }

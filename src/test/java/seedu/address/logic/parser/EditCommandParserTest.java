@@ -3,6 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.HACKATHON_FILTER_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_SKILL_DESC;
@@ -10,6 +11,7 @@ import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.SKILL_DESC_JAVA;
 import static seedu.address.logic.commands.CommandTestUtil.SKILL_DESC_PYTHON;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_HACKATHON_NAME_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_JAVA;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_PYTHON;
@@ -137,7 +139,6 @@ public class EditCommandParserTest {
     public void parse_multipleRepeatedFields_failure() {
         // More extensive testing of duplicate parameter detections is done in
         // AddCommandParserTest#parse_repeatedNonSkillValue_failure()
-
         // mulltiple valid fields repeated
         Index targetIndex = INDEX_FIRST_PERSON;
         String userInput = targetIndex.getOneBased() + EMAIL_DESC_AMY
@@ -164,5 +165,29 @@ public class EditCommandParserTest {
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_duplicateSkills_failure() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        // duplicate skills with same name
+        String userInput = targetIndex.getOneBased() + SKILL_DESC_JAVA + SKILL_DESC_JAVA;
+        assertParseFailure(parser, userInput,
+                "Duplicate skill detected: java. Each skill can only be added once.");
+        // duplicate skills with different experience levels
+        userInput = targetIndex.getOneBased() + " s/java:beginner s/java:intermediate";
+        assertParseFailure(parser, userInput,
+                "Duplicate skill detected: java. Each skill can only be added once.");
+    }
+
+    @Test
+    public void parse_duplicateHackathons_failure() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+
+        // duplicate hackathon names
+        String userInput = targetIndex.getOneBased() + HACKATHON_FILTER_DESC_TECH + HACKATHON_FILTER_DESC_TECH;
+        assertParseFailure(parser, userInput,
+                "Duplicate hackathon detected: " + VALID_HACKATHON_NAME_TECH
+                + ". Each hackathon can only be added once.");
     }
 }
