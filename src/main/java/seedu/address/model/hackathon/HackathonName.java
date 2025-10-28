@@ -55,11 +55,11 @@ public class HackathonName {
         }
 
         HackathonName otherHackathonName = (HackathonName) other;
-        return value.equals(otherHackathonName.value);
+        return value.equalsIgnoreCase(otherHackathonName.value);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase().hashCode();
     }
 }

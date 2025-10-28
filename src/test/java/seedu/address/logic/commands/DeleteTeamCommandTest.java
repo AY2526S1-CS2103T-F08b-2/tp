@@ -278,6 +278,68 @@ public class DeleteTeamCommandTest {
     }
 
     @Test
+    public void execute_deleteTeam_hackathonNotAddedToInterested() {
+        // Create a person with no interested hackathons initially
+        Person person = new PersonBuilder()
+                .withName("Test Person")
+                .withEmail("test@test.com")
+                .withTelegram("testperson")
+                .withGitHub("testperson")
+                .build();
+
+        // Create team with hackathon and add the person to it
+        Team team = new TeamBuilder()
+                .withTeamName("Test Team")
+                .withHackathonName("Test Hackathon")
+                .withMembers(person)
+                .build();
+
+        // Create person with team (will have hackathon in participating)
+        Person personWithTeam = new PersonBuilder(person)
+                .withTeam(team)
+                .withParticipatingHackathons("Test Hackathon")
+                .build();
+
+        // Build model
+        AddressBook addressBook = new AddressBook();
+        addressBook.addPerson(personWithTeam);
+        addressBook.addTeam(team);
+        Model model = new ModelManager(addressBook, new UserPrefs());
+
+        // Store the size of interested hackathons before deletion
+        int interestedHackathonsSizeBefore = personWithTeam.getInterestedHackathons().size();
+
+        // Execute delete team
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+
+        try {
+            deleteTeamCommand.execute(model);
+
+            // Get updated person from model
+            Person updatedPerson = model.getAddressBook().getPersonList().get(0);
+
+            // Verify the person has no team
+            assertTrue(updatedPerson.getTeams().isEmpty(),
+                    "Person should have no team after team deletion");
+
+            // Verify the hackathon is NOT in participating hackathons
+            assertEquals(0, updatedPerson.getParticipatingHackathons().size(),
+                    "Person should have no participating hackathons after team deletion");
+
+            // Verify the hackathon is NOT added to interested hackathons
+            assertEquals(interestedHackathonsSizeBefore, updatedPerson.getInterestedHackathons().size(),
+                    "Interested hackathons size should remain the same");
+
+            assertFalse(updatedPerson.getInterestedHackathons().stream()
+                    .anyMatch(h -> h.value.equals("Test Hackathon")),
+                    "Test Hackathon should NOT be added to interested hackathons");
+
+        } catch (Exception e) {
+            throw new AssertionError("Execution should not fail", e);
+        }
+    }
+
+    @Test
     public void equals() {
         DeleteTeamCommand deleteFirstCommand = new DeleteTeamCommand(INDEX_FIRST_PERSON);
         DeleteTeamCommand deleteSecondCommand = new DeleteTeamCommand(INDEX_SECOND_PERSON);

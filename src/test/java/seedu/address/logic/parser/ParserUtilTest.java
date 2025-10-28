@@ -220,6 +220,12 @@ public class ParserUtilTest {
     public void parseHackathonNames_collectionWithDuplicateHackathonsCaseInsensitive_throwsParseException() {
         // Test duplicate hackathon names with different cases
         assertThrows(ParseException.class, () ->
-            ParserUtil.parseHackathonNames(Arrays.asList("NUSHack", "NUSHack")));
+            ParserUtil.parseHackathonNames(Arrays.asList("NUSHack", "nushack")));
+
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList("TechChallenge", "TECHCHALLENGE")));
+
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList("AI Contest", "ai contest", "AI CONTEST")));
     }
 }

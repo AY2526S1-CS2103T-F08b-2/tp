@@ -221,13 +221,14 @@ public class ParserUtil {
         for (String hackathonName : hackathonNames) {
             HackathonName parsedHackathon = parseHackathonName(hackathonName);
 
-            // Check for duplicate hackathon names
-            if (hackathonNameStrings.contains(parsedHackathon.value)) {
+            // Check for duplicate hackathon names (case-insensitive)
+            String lowerCaseName = parsedHackathon.value.toLowerCase();
+            if (hackathonNameStrings.contains(lowerCaseName)) {
                 throw new ParseException("Duplicate hackathon detected: " + parsedHackathon.value
                     + ". Each hackathon can only be added once.");
             }
 
-            hackathonNameStrings.add(parsedHackathon.value);
+            hackathonNameStrings.add(lowerCaseName);
             hackathonSet.add(parsedHackathon);
         }
         return hackathonSet;

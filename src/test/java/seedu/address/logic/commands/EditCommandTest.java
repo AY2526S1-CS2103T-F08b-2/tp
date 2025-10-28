@@ -350,4 +350,56 @@ public class EditCommandTest {
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
+    @Test
+    public void execute_interestedHackathonConflictCaseInsensitive_failure() {
+        // Create a person who is participating in "NUSHack"
+        Person personWithParticipatingHackathon = new PersonBuilder()
+                .withName("David Lee")
+                .withEmail("david@example.com")
+                .withTelegram("davidlee_tg")
+                .withGitHub("davidlee-github")
+                .withParticipatingHackathons("NUSHack")
+                .build();
+
+        model.addPerson(personWithParticipatingHackathon);
+        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+
+        // Try to add "nushack" (different case) to interested hackathons - should fail
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withInterestedHackathons("nushack")
+                .build();
+        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
+
+        String expectedMessage = "Cannot add hackathon 'nushack' to interested list. "
+                + "You are already participating in this hackathon.";
+
+        assertCommandFailure(editCommand, model, expectedMessage);
+    }
+
+    @Test
+    public void execute_interestedHackathonConflictMultipleCases_failure() {
+        // Create a person who is participating in "TechChallenge"
+        Person personWithParticipatingHackathon = new PersonBuilder()
+                .withName("Emma Wilson")
+                .withEmail("emma@example.com")
+                .withTelegram("emmawilson_tg")
+                .withGitHub("emmawilson-github")
+                .withParticipatingHackathons("TechChallenge")
+                .build();
+
+        model.addPerson(personWithParticipatingHackathon);
+        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
+
+        // Try to add "TECHCHALLENGE" (uppercase) to interested hackathons - should fail
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withInterestedHackathons("TECHCHALLENGE")
+                .build();
+        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
+
+        String expectedMessage = "Cannot add hackathon 'TECHCHALLENGE' to interested list. "
+                + "You are already participating in this hackathon.";
+
+        assertCommandFailure(editCommand, model, expectedMessage);
+    }
+
 }
