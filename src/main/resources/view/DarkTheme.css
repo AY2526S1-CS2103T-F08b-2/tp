@@ -124,12 +124,19 @@
     -fx-font-family: "Segoe UI Semibold";
     -fx-font-size: 16px;
     -fx-text-fill: #010504;
+    -fx-font-weight: bold;
 }
 
 .cell_small_label {
     -fx-font-family: "Segoe UI";
     -fx-font-size: 13px;
     -fx-text-fill: #010504;
+}
+
+.separator {
+    -fx-min-height: 1px;
+    -fx-max-height: 1px;
+    -fx-background-color: rgba(255, 255, 255, 0.15);
 }
 
 .stack-pane {
@@ -338,15 +345,39 @@
 }
 
 #skills {
-    -fx-hgap: 7;
-    -fx-vgap: 3;
+    -fx-hgap: 6;
+    -fx-vgap: 6;
 }
 
 #skills .label {
-    -fx-text-fill: white;
-    -fx-background-color: #3e7b91;
-    -fx-padding: 1 3 1 3;
-    -fx-border-radius: 2;
-    -fx-background-radius: 2;
-    -fx-font-size: 11;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-cursor: hand;
+}
+
+#skills .label:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+#hackathons .label, #participatingHackathons .label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-cursor: hand;
+}
+
+#hackathons .label:hover, #participatingHackathons .label:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+#members .label {
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-cursor: hand;
+}
+
+#members .label:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
 }

@@ -28,12 +28,10 @@
         </Label>
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
       </HBox>
-      <FlowPane fx:id="skills">
-        <padding>
-          <Insets bottom="5" />
-        </padding>
-      </FlowPane>
       <HBox spacing="5" alignment="CENTER_LEFT">
+        <padding>
+          <Insets top="3" />
+        </padding>
         <ImageView fx:id="emailIcon" fitHeight="20" fitWidth="20" />
         <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
       </HBox>
@@ -45,7 +43,20 @@
         <ImageView fx:id="githubIcon" fitHeight="20" fitWidth="20" />
         <Label fx:id="github" styleClass="cell_small_label" text="\$github" />
       </HBox>
+      <FlowPane fx:id="skills">
+        <padding>
+          <Insets top="12" bottom="10" />
+        </padding>
+      </FlowPane>
+      <Region styleClass="separator">
+        <padding>
+          <Insets top="8" bottom="8" />
+        </padding>
+      </Region>
       <HBox fx:id="interestedHackathonsContainer" spacing="5" alignment="CENTER_LEFT">
+        <padding>
+          <Insets top="5" />
+        </padding>
         <Label text="Interested:" styleClass="cell_small_label" />
         <FlowPane fx:id="hackathons">
           <padding>
