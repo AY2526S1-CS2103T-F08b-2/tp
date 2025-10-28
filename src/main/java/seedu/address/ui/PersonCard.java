@@ -95,12 +95,12 @@ public class PersonCard extends UiPart<Region> {
                     String[] colors = getColorsForExperienceLevel(skill.getExperienceLevel());
                     skillLabel.setStyle("-fx-background-color: " + colors[0] + "; "
                             + "-fx-text-fill: " + colors[1] + "; "
-                            + "-fx-padding: 5 12 5 12; "
-                            + "-fx-background-radius: 45; "
+                            + "-fx-padding: 3 7 3 7; "
+                            + "-fx-background-radius: 35; "
                             + "-fx-border-color: " + colors[2] + "; "
-                            + "-fx-border-width: 1.5; "
+                            + "-fx-border-width: 1.25; "
                             + "-fx-border-radius: 20; "
-                            + "-fx-font-size: 11px; "
+                            + "-fx-font-size: 12px; "
                             + "-fx-font-weight: bold; "
                             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
 
