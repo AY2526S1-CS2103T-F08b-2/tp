@@ -45,7 +45,7 @@
       </HBox>
       <FlowPane fx:id="skills">
         <padding>
-          <Insets top="5" bottom="10" />
+          <Insets top="12" bottom="10" />
         </padding>
       </FlowPane>
       <Region styleClass="separator">
