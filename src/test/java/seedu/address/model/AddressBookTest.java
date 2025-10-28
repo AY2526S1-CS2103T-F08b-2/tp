@@ -40,7 +40,7 @@ public class AddressBookTest {
     public void resetData_withValidReadOnlyAddressBook_replacesData() {
         AddressBook newData = getTypicalAddressBook();
         addressBook.resetData(newData);
-        assert false;
+        assertEquals(newData, addressBook);
     }
 
     @Test

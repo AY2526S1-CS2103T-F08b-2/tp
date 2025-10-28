@@ -48,7 +48,26 @@ class JsonSerializableAddressBook {
      * @param source future changes to this will not affect the created {@code JsonSerializableAddressBook}.
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
-        persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        // Collect all persons from both the person list and team members to ensure no data loss
+        java.util.Set<String> knownPersonNames = new java.util.HashSet<>();
+
+        // Add top-level persons first
+        for (Person person : source.getPersonList()) {
+            persons.add(new JsonAdaptedPerson(person));
+            knownPersonNames.add(person.getName().fullName);
+        }
+
+        // Add any persons who are only in teams but not in the top-level person list
+        for (Team team : source.getTeamList()) {
+            for (Person member : team.getMembers()) {
+                if (!knownPersonNames.contains(member.getName().fullName)) {
+                    persons.add(new JsonAdaptedPerson(member));
+                    knownPersonNames.add(member.getName().fullName);
+                }
+            }
+        }
+
+        // Serialize teams (members will be represented by names)
         teams.addAll(source.getTeamList().stream().map(JsonAdaptedTeam::new).collect(Collectors.toList()));
     }
 

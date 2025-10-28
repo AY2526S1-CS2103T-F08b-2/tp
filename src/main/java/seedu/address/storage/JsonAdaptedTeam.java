@@ -29,15 +29,29 @@ class JsonAdaptedTeam {
 
     /**
      * Constructs a {@code JsonAdaptedTeam} with the given team details.
+     * Members can be either strings (person names) or objects (embedded person data for backward compatibility).
      */
     @JsonCreator
     public JsonAdaptedTeam(@JsonProperty("teamName") String teamName,
                            @JsonProperty("hackathonName") String hackathonName,
-                           @JsonProperty("members") List<String> members) {
+                           @JsonProperty("members") List<?> members) {
         this.teamName = teamName;
         this.hackathonName = hackathonName;
         if (members != null) {
-            this.memberNames.addAll(members);
+            for (Object member : members) {
+                if (member instanceof String) {
+                    // New format: member is a name string
+                    this.memberNames.add((String) member);
+                } else if (member instanceof java.util.Map) {
+                    // Old format: member is an embedded person object (deserialized as Map)
+                    @SuppressWarnings("unchecked")
+                    java.util.Map<String, Object> personMap = (java.util.Map<String, Object>) member;
+                    Object nameObj = personMap.get("name");
+                    if (nameObj instanceof String) {
+                        this.memberNames.add((String) nameObj);
+                    }
+                }
+            }
         }
     }
 
