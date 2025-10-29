@@ -249,6 +249,23 @@ The `CreateTeamCommand` handles several error cases:
     * Pros: Reduces coupling between `Team` and `Person`. Simpler to handle person updates.
     * Cons: Requires additional lookups to retrieve full person information. More complex to display team details.
 
+### List Teams feature
+
+#### Implementation
+
+The List Teams feature allows users to view all teams created in the address book. This feature is implemented through the `ListTeamsCommand` class.
+
+Step 1. The user enters a `listTeams` command.
+Step 2. `AddressBookParser` recognizes the `listTeams` command word and creates a `ListTeamsCommand` object.
+Step 3. When executed, `ListTeamsCommand` performs the following:
+* Retrieves the list of all teams from the model.
+* Updates the filtered team list in the model to show all teams.
+Step 4. A `CommandResult` is returned with a message indicating that all teams are being listed.
+
+The following sequence diagram illustrates the interactions within the system when a user executes a list teams command:
+
+<img src="images/ListTeamSequenceDiagram.png" width="550" />
+
 ### Remove Skill feature
 
 #### Implementation
@@ -411,21 +428,22 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                                                         | So that I can…​                                          |
-|----------|---------|----------------------------------------------------------------------|----------------------------------------------------------|
-| `* * *`  | student | search for peers by programming language                             | quickly find potential teammates with matching skills.   |
-| `* * *`  | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
-| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them.
-|
-| `* * *`  | student | search for multiple skills at once                                   | find students with overlapping technical expertise       |
-| `* * *`  | student | search for people by email                                         | directly connect with someone I already know             |
-| `* * *`  | student | add my own skills to my profile                                                  | let others discover me for team formation                |
-
-*{More to be added}*
+| Priority | As a …​ | I want to …​                                                          | So that I can…​                                          |
+|-----|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
+| `* * *` | student | search for peers by programming language                              | quickly find potential teammates with matching skills.   |
+| `* * *` | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
+| `* * *` | student | view color-coded skill tags                                           | quickly assess a person's proficiency level              |
+| `* * *` | student | search for multiple skills at once                                    | find students with overlapping technical expertise       |
+| `* * *` | student | add my own skills to my profile                                       | let others discover me for team formation                |
+| `* *` | student | save profiles as facorites                                            |  easily revisit promising teammates later                  |
+| `*` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
+| `*` | student | search for people by email                                            | directly connect with someone I already know             |
 
 ### Use cases
 
 (For all use cases below, the **System** is `Mate` and the **Actor** is the `user`, unless specified otherwise)
+
+
 
 **Use case: Delete a person**
 
@@ -494,56 +512,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-**Use case: Import Contacts from CSV**
-
-**MSS**
-
-1.  Student requests to import contacts.
-2.  Mate requests the file path.
-3.  Student enters the file path.
-4.  Mate validates the CSV format and parses entries.
-5.  Mate imports and displays the number of successful entries.
-
-    Use case ends.
-
-**Extensions**
-
-* 3a. File not found or inaccessible.
-    * 3a1. Mate highlights the error and requests a valid file path.
-    * 3a2. Student re-enters the file path.
-
-      Use case resumes at step 3.
-
-* 4b. CSV contains invalid or missing fields.
-    * 4b1. Mate highlights errors and requests a corrected file.
-    * 4b2. Student fixes and re-uploads.
-
-      Use case resumes at step 4.
-
-* 5a. Duplicate contacts detected.
-    * 5a1. Mate asks whether to merge or skip duplicates.
-    * 5a2. Student chooses.
-
-      Use case ends.
-
-**Use case: Export a Team to CSV**
-
-**MSS**
-
-1.  Student requests to export a team.
-2.  Mate generates and saves the CSV file.
-3.  Mate confirms successful export.
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. No existing team matches the input.
-    * 2a1. Mate prompts retry.
-    * 2a2. Student retries.
-
-      Use case resumes at step 2.
-
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
@@ -580,16 +548,14 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
-
-1. _{ more test cases …​ }_
+   2. Re-launch the app by double-clicking the jar file.<br>
+      Expected: The most recent window size and location is retained.
 
 ### Deleting a person
 
@@ -597,34 +563,65 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
+   2. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
+   3. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+2. Deleting a person after a find command
 
-### Saving data
+    1. Prerequisites: `find java`
+    
+    2. Test case: `delete 1`<br>
+       Expected: First person in the filtered list is deleted from the address book. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    
+    3. Test case: `delete 0`<br>
+       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+    
+    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the filtered list size)<br>
+       Expected: Similar to previous.
 
-1. Dealing with missing/corrupted data files
+### Creating a team
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+1. Creating a team from selected persons in the list
 
-1. _{ more test cases …​ }_
+   1. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/1 p/2`<br>
+      Expected: Team "Alpha Team" for "Hackathon 2024" is created with persons at index 1 and 2 as members. Details of the created team shown in the status message. Timestamp in the status bar is updated.
 
-### RemoveSkillCommand
+   2. Test case: `createTeam tn/Beta Team hn/Hackathon 2024 p/0 p/x` (where x is larger than the list size) <br>
+      Expected: No team is created. Error details shown in the status message. Status bar remains the same.
 
-The `RemoveSkillCommand` allows users to remove a skill from a person by specifying the person's index and the skill name.
+2. Creating a team with duplicate name
 
-**Parser Integration:**
-- The command word `removeSkill` is recognized in `AddressBookParser`.
-- Arguments are parsed by `RemoveSkillCommandParser`, which expects an index and a skill name separated by a space.
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
 
-**Design Notes:**
-- The command checks if the person has the skill before removing it.
-- If successful, the skill is removed and a success message is shown.
-- If the skill is not found or the index is invalid, an error message is displayed.
+   2. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/3 p/4`<br>
+      Expected: No team is created. Error details shown in the status message indicating that the team already exists. Status bar remains the same.
+
+   3. Test case: `createTeam tn/Alpha Team hn/Hackathon 2025 p/3 p/4`<br>
+      Expected: Team "Alpha Team" for "Hackathon 2025" is created with persons at index 3 and 4 as members. Same team name different hackathon allowed. Details of the created team shown in the status message. Timestamp in the status bar is updated.
+
+3. Creating a team for a hackathon with person already participating in hackathon
+
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+
+   2. Test case: `createTeam tn/Gamma Team hn/Hackathon 2024 p/2 p/3`<br>
+      Expected: No team is created. Error details shown in the status message indicating that person at index 2 is already participating in "Hackathon 2024". Status bar remains the same.
+
+
+
+### Removing a person from a team
+
+1. Removing a person from a team
+
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+
+   2. Test case: `removePersonFromTeam tn/Alpha Team p/1`<br>
+      Expected: Person at index 1 is removed from team "Alpha Team". Details of the updated team shown in the status message. Timestamp in the status bar is updated.
+
+   3. Test case : `removePersonFromTeam tn/Alpha Team p/3`<br>
+      Expected: No person is removed. Error details shown in the status message indicating that person at index 3 is not a member of team "Alpha Team". Status bar remains the same.
