@@ -14,6 +14,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.skill.Skill;
@@ -22,11 +23,14 @@ public class ParserUtilTest {
     private static final String INVALID_NAME = "R@chel";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_SKILL = "#friend";
+    private static final String INVALID_HACKATHON = ""; // Empty hackathon name
 
     private static final String VALID_NAME = "Rachel Walker";
     private static final String VALID_EMAIL = "rachel@example.com";
     private static final String VALID_SKILL_1 = "coding";
     private static final String VALID_SKILL_2 = "testing";
+    private static final String VALID_HACKATHON_1 = "NUSHack";
+    private static final String VALID_HACKATHON_2 = "HackForGood";
 
     private static final String WHITESPACE = " \t\r\n";
 
@@ -141,5 +145,87 @@ public class ParserUtilTest {
                 new Skill(VALID_SKILL_1), new Skill(VALID_SKILL_2)));
 
         assertEquals(expectedSkillSet, actualSkillSet);
+    }
+
+    @Test
+    public void parseSkills_collectionWithDuplicateSkills_throwsParseException() {
+        // Test duplicate skill names
+        assertThrows(ParseException.class, () -> ParserUtil.parseSkills(Arrays.asList(VALID_SKILL_1, VALID_SKILL_1)));
+    }
+
+    @Test
+    public void parseSkills_collectionWithDuplicateSkillsWithDifferentLevels_throwsParseException() {
+        // Test duplicate skill names with different experience levels
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseSkills(Arrays.asList("java:beginner", "java:intermediate")));
+    }
+
+    @Test
+    public void parseHackathonName_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseHackathonName(null));
+    }
+
+    @Test
+    public void parseHackathonName_invalidValue_throwsParseException() {
+        assertThrows(ParseException.class, () -> ParserUtil.parseHackathonName(INVALID_HACKATHON));
+    }
+
+    @Test
+    public void parseHackathonName_validValueWithoutWhitespace_returnsHackathonName() throws Exception {
+        HackathonName expectedHackathon = new HackathonName(VALID_HACKATHON_1);
+        assertEquals(expectedHackathon, ParserUtil.parseHackathonName(VALID_HACKATHON_1));
+    }
+
+    @Test
+    public void parseHackathonName_validValueWithWhitespace_returnsTrimmedHackathonName() throws Exception {
+        String hackathonWithWhitespace = WHITESPACE + VALID_HACKATHON_1 + WHITESPACE;
+        HackathonName expectedHackathon = new HackathonName(VALID_HACKATHON_1);
+        assertEquals(expectedHackathon, ParserUtil.parseHackathonName(hackathonWithWhitespace));
+    }
+
+    @Test
+    public void parseHackathonNames_null_throwsNullPointerException() {
+        assertThrows(NullPointerException.class, () -> ParserUtil.parseHackathonNames(null));
+    }
+
+    @Test
+    public void parseHackathonNames_collectionWithInvalidHackathons_throwsParseException() {
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList(VALID_HACKATHON_1, INVALID_HACKATHON)));
+    }
+
+    @Test
+    public void parseHackathonNames_emptyCollection_returnsEmptySet() throws Exception {
+        assertTrue(ParserUtil.parseHackathonNames(Collections.emptyList()).isEmpty());
+    }
+
+    @Test
+    public void parseHackathonNames_collectionWithValidHackathons_returnsHackathonSet() throws Exception {
+        Set<HackathonName> actualHackathonSet = ParserUtil.parseHackathonNames(
+            Arrays.asList(VALID_HACKATHON_1, VALID_HACKATHON_2));
+        Set<HackathonName> expectedHackathonSet = new HashSet<>(Arrays.asList(
+            new HackathonName(VALID_HACKATHON_1), new HackathonName(VALID_HACKATHON_2)));
+
+        assertEquals(expectedHackathonSet, actualHackathonSet);
+    }
+
+    @Test
+    public void parseHackathonNames_collectionWithDuplicateHackathons_throwsParseException() {
+        // Test duplicate hackathon names
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList(VALID_HACKATHON_1, VALID_HACKATHON_1)));
+    }
+
+    @Test
+    public void parseHackathonNames_collectionWithDuplicateHackathonsCaseInsensitive_throwsParseException() {
+        // Test duplicate hackathon names with different cases
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList("NUSHack", "nushack")));
+
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList("TechChallenge", "TECHCHALLENGE")));
+
+        assertThrows(ParseException.class, () ->
+            ParserUtil.parseHackathonNames(Arrays.asList("AI Contest", "ai contest", "AI CONTEST")));
     }
 }

@@ -76,6 +76,23 @@ public class TypicalTeams {
         for (Team team : getTypicalTeams()) {
             ab.addTeam(team);
         }
+
+        // Ensure all persons referenced in teams are in the address book
+        // This prevents data loss during serialization/deserialization
+        java.util.Set<String> knownPersonNames = new java.util.HashSet<>();
+        for (Person person : ab.getPersonList()) {
+            knownPersonNames.add(person.getName().fullName);
+        }
+
+        for (Team team : ab.getTeamList()) {
+            for (Person member : team.getMembers()) {
+                if (!knownPersonNames.contains(member.getName().fullName)) {
+                    ab.addPerson(member);
+                    knownPersonNames.add(member.getName().fullName);
+                }
+            }
+        }
+
         return ab;
     }
 

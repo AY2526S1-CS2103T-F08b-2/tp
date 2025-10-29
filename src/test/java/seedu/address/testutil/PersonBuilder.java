@@ -11,7 +11,6 @@ import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
 import seedu.address.model.skill.Skill;
 import seedu.address.model.team.Team;
-import seedu.address.model.util.SampleDataUtil;
 
 /**
  * A utility class to help with building Person objects.
@@ -72,7 +71,10 @@ public class PersonBuilder {
      * Parses the {@code skills} into a {@code Set<Skill>} and set it to the {@code Person} that we are building.
      */
     public PersonBuilder withSkills(String ... skills) {
-        this.skills = SampleDataUtil.getSkillSet(skills);
+        this.skills = new HashSet<>();
+        for (String skill : skills) {
+            this.skills.add(new Skill(skill));
+        }
         return this;
     }
 

@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -48,14 +47,11 @@ public class EditCommand extends Command {
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_GITHUB + "GITHUB] "
             + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
-            + "[" + PREFIX_LOOKING + "BOOLEAN] "
             + "[" + PREFIX_HACKATHON_FILTER + "HACKATHON]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
-            + "BOOLEAN must be: true or false\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
-            + PREFIX_SKILL + "Java:Advanced "
-            + PREFIX_LOOKING + "true "
+            + PREFIX_SKILL + "java:Advanced "
             + PREFIX_HACKATHON_FILTER + "NUSHack";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
@@ -102,7 +98,8 @@ public class EditCommand extends Command {
      * Creates and returns a {@code Person} with the details of {@code personToEdit}
      * edited with {@code editPersonDescriptor}.
      */
-    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor) {
+    private static Person createEditedPerson(Person personToEdit, EditPersonDescriptor editPersonDescriptor)
+            throws CommandException {
         assert personToEdit != null;
 
         Name updatedName = editPersonDescriptor.getName().orElse(personToEdit.getName());
@@ -124,15 +121,27 @@ public class EditCommand extends Command {
                 ? editPersonDescriptor.getTeams().get()
                 : new HashSet<>(personToEdit.getTeams());
 
+        // Preserve participating hackathons - they should not be affected by edit command
+        Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(personToEdit.getParticipatingHackathons());
+
         Set<HackathonName> updatedInterestedHackathons;
         if (editPersonDescriptor.getInterestedHackathons().isPresent()) {
             updatedInterestedHackathons = editPersonDescriptor.getInterestedHackathons().get();
+
+            // Check if any interested hackathon is already in participating hackathons
+            for (HackathonName hackathon : updatedInterestedHackathons) {
+                if (updatedParticipatingHackathons.contains(hackathon)) {
+                    throw new CommandException("Cannot add hackathon '" + hackathon.value
+                            + "' to interested list. You are already participating in this hackathon.");
+                }
+            }
         } else {
             updatedInterestedHackathons = new HashSet<>(personToEdit.getInterestedHackathons());
         }
 
+
         return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills,
-                updatedTeams, updatedInterestedHackathons);
+                updatedTeams, updatedInterestedHackathons, updatedParticipatingHackathons);
     }
 
     @Override

@@ -79,7 +79,7 @@ public class Team {
      */
     public boolean hasMember(Person person) {
         requireNonNull(person);
-        return members.contains(person);
+        return members.stream().anyMatch(member -> member.isSamePerson(person));
     }
 
     /**
@@ -92,7 +92,8 @@ public class Team {
         }
 
         return otherTeam != null
-                && otherTeam.getTeamName().equals(getTeamName());
+                && otherTeam.getTeamName().equals(getTeamName())
+                && otherTeam.getHackathonName().equals(getHackathonName());
     }
 
     /**
@@ -133,3 +134,6 @@ public class Team {
         return builder.toString();
     }
 }
+
+
+

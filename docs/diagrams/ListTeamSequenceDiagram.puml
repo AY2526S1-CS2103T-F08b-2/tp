@@ -1,0 +1,53 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
+participant "l:ListTeamCommand" as ListTeamCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+[-> LogicManager : execute("listTeam")
+activate LogicManager
+
+LogicManager -> AddressBookParser : parseCommand("listTeam")
+activate AddressBookParser
+
+create ListTeamCommand
+AddressBookParser -> ListTeamCommand
+activate ListTeamCommand
+
+ListTeamCommand --> AddressBookParser
+deactivate ListTeamCommand
+
+AddressBookParser --> LogicManager : l
+deactivate AddressBookParser
+
+LogicManager -> ListTeamCommand : execute(m)
+activate ListTeamCommand
+
+ListTeamCommand -> Model : updateFilteredTeamList(PREDICATE_SHOW_ALL_TEAMS)
+activate Model
+
+Model --> ListTeamCommand
+deactivate Model
+
+create CommandResult
+ListTeamCommand -> CommandResult
+activate CommandResult
+
+CommandResult --> ListTeamCommand
+deactivate CommandResult
+
+ListTeamCommand --> LogicManager : r
+deactivate ListTeamCommand
+
+[<--LogicManager
+deactivate LogicManager
+@enduml

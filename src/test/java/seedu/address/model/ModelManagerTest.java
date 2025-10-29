@@ -198,7 +198,7 @@ public class ModelManagerTest {
                 .get();
         // Remove person from team using the updated team reference
         modelManager.removePersonFromTeam(updatedTeam, personAfterAdd);
-        // After removing from team: hackathon should be back in interested, NOT in participating
+        // After removing from team: hackathon should be added back to interested, NOT in participating
         seedu.address.model.person.Person updatedPerson = modelManager.getFilteredPersonList().stream()
                 .filter(p -> p.isSamePerson(person))
                 .findFirst()

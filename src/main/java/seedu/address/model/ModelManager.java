@@ -181,6 +181,40 @@ public class ModelManager implements Model {
     //=========== Team-Person Relationship Management ========================================================
 
     /**
+     * Checks if a person is already in a team for the given hackathon.
+     */
+    @Override
+    public boolean isPersonInHackathon(Person person, HackathonName hackathonName) {
+        requireAllNonNull(person, hackathonName);
+        ObservableList<Team> teams = addressBook.getTeamList();
+
+        // Log the person and hackathon name being checked
+        logger.info("Checking if person " + person.getName() + " is in hackathon " + hackathonName);
+
+        // Log the list of teams
+        logger.info("Teams in address book: " + addressBook.getTeamList());
+
+        for (Team team : teams) {
+            String teamNameStr = String.valueOf(team.getTeamName());
+            HackathonName teamHackathon = team.getHackathonName();
+            boolean hasMember = team.hasMember(person);
+            boolean hackathonMatches = java.util.Objects.equals(teamHackathon, hackathonName);
+
+            logger.info("Team: " + teamNameStr
+                    + " | Hackathon: " + teamHackathon
+                    + " | hasMember: " + hasMember
+                    + " | hackathonMatches: " + hackathonMatches);
+
+            if (hasMember && hackathonMatches) {
+                logger.info("Found matching team: " + teamNameStr + " for hackathon: " + hackathonName);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Adds a person to a team, maintaining bidirectional relationship.
      * Updates both the team's member list and the person's team list.
      * Also updates the person's participatingHackathons to include the team's
@@ -190,6 +224,7 @@ public class ModelManager implements Model {
      * @param person The person to add to the team
      * @return Updated team with the new member
      */
+    @Override
     public Team addPersonToTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
@@ -235,15 +270,15 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Removes a person from a team, maintaining bidirectional relationship.
-     * Updates both the team's member list and the person's team list.
-     * Also removes the team's hackathon from the person's participatingHackathons
-     * and adds it back to interestedHackathons.
+     * Removes a person from a team. Updates both the team's member list and the person's team list.
+     * If the team has an associated hackathon, removes it from the person's participating hackathons
+     * and adds it back to interested hackathons.
      *
      * @param team The team to remove the person from
      * @param person The person to remove from the team
      * @return Updated team without the person
      */
+    @Override
     public Team removePersonFromTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
@@ -262,14 +297,14 @@ public class ModelManager implements Model {
         // remove team by identity (isSameTeam) to handle different instances
         updatedTeams.removeIf(t -> t.isSameTeam(team));
 
-        // Update person's hackathons - always remove the team's hackathon from participating
+        // Update person's hackathons - remove from participating and add back to interested
         Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(person.getParticipatingHackathons());
         Set<HackathonName> updatedInterestedHackathons = new HashSet<>(person.getInterestedHackathons());
 
         if (team.getHackathonName() != null) {
-            // Always remove the team's hackathon from participating hackathons
+            // Remove the team's hackathon from participating hackathons
             updatedParticipatingHackathons.remove(team.getHackathonName());
-            // Add back to interested hackathons (they were interested before joining)
+            // Add it back to interested hackathons (they were participating, so they must have been interested)
             updatedInterestedHackathons.add(team.getHackathonName());
         }
 
