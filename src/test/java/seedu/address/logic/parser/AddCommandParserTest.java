@@ -5,7 +5,7 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.GITHUB_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.GITHUB_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.HACKATHON_FILTER_DESC_TECH;
+import static seedu.address.logic.commands.CommandTestUtil.HACKATHON_NAME_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_GITHUB_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
@@ -198,7 +198,7 @@ public class AddCommandParserTest {
     public void parse_duplicateHackathons_failure() {
         // duplicate hackathon names
         String duplicateHackathonCommand = NAME_DESC_BOB + EMAIL_DESC_BOB
-                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + HACKATHON_FILTER_DESC_TECH + HACKATHON_FILTER_DESC_TECH;
+                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + HACKATHON_NAME_DESC_TECH + HACKATHON_NAME_DESC_TECH;
         assertParseFailure(parser, duplicateHackathonCommand,
                 "Duplicate hackathon detected: " + VALID_HACKATHON_NAME_TECH
                 + ". Each hackathon can only be added once.");

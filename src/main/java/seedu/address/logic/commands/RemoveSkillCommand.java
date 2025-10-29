@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 
 import java.util.List;
 
@@ -19,8 +21,9 @@ public class RemoveSkillCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes the specified skill from the person"
             + " identified by the index number in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) SKILL\n"
-            + "Example: " + COMMAND_WORD + " 1 java";
+            + "Parameters: " + PREFIX_PERSON + "INDEX (must be a positive integer) "
+            + PREFIX_SKILL + "SKILL\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1 " + PREFIX_SKILL + "java";
     public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Removed skill '%1$s' from Person: %2$s";
     public static final String MESSAGE_SKILL_NOT_FOUND = "Skill '%1$s' not found for Person: %2$s";
     private final Index targetIndex;

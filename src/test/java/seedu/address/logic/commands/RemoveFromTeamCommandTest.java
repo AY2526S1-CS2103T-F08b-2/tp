@@ -110,7 +110,7 @@ public class RemoveFromTeamCommandTest {
 
         // Add person to the team
         Person personToModify = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         addCommand.execute(model);
 
         // Verify the person is now participating in the hackathon
@@ -125,7 +125,7 @@ public class RemoveFromTeamCommandTest {
         int interestedHackathonsSizeBefore = personAfterAdd.getInterestedHackathons().size();
 
         // Remove the person from the team
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
         removeCommand.execute(model);
 
         // Verify the hackathon is removed from participating hackathons

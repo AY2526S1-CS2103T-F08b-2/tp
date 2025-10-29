@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 
@@ -41,21 +42,25 @@ public class EditCommandParser implements Parser<EditCommand> {
         logger.info("Raw arguments: " + args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
-                        PREFIX_NAME, PREFIX_EMAIL,
+                        PREFIX_PERSON, PREFIX_NAME, PREFIX_EMAIL,
                         PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON);
+
+        if (!argMultimap.getValue(PREFIX_PERSON).isPresent() || !argMultimap.getPreamble().isEmpty()) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE));
+        }
 
         Index index;
 
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).get());
             logger.fine("Successfully parsed index: " + index.getOneBased());
         } catch (ParseException pe) {
-            logger.warning("Failed to parse index from preamble: " + argMultimap.getPreamble());
+            logger.warning("Failed to parse index from p/ prefix: " + argMultimap.getValue(PREFIX_PERSON).get());
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(
-                PREFIX_NAME, PREFIX_EMAIL,
+                PREFIX_PERSON, PREFIX_NAME, PREFIX_EMAIL,
                 PREFIX_TELEGRAM, PREFIX_GITHUB);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();

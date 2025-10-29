@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -29,7 +28,6 @@ public class AddCommand extends Command {
             + PREFIX_TELEGRAM + "TELEGRAM "
             + PREFIX_GITHUB + "GITHUB "
             + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
-            + "[" + PREFIX_LOOKING + "BOOLEAN] "
             + "[" + PREFIX_HACKATHON + "HACKATHON]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " "
@@ -39,7 +37,6 @@ public class AddCommand extends Command {
             + PREFIX_GITHUB + "johndoe123 "
             + PREFIX_SKILL + "java:Advanced "
             + PREFIX_SKILL + "python:Intermediate "
-            + PREFIX_LOOKING + "true "
             + PREFIX_HACKATHON + "NUSHack "
             + PREFIX_HACKATHON + "iNTUition";
 
