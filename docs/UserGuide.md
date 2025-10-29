@@ -136,39 +136,23 @@ Examples:
 
 ### Locating persons : `find`
 
-Finds persons whose name, skills, Telegram username, or GitHub username contain any of the given keywords.
+Finds persons whose name, email, Telegram username, GitHub username, skills, or hackathons contain all of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find k/KEYWORD [k/MORE_KEYWORDS]...`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Searches across multiple fields: name, skills, Telegram username, and GitHub username
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword in any of the searchable fields will be returned (i.e. `OR` search).
-  e.g. `find John Python` will return persons with name `John`, or skill `Python`, or Telegram username `John`, or GitHub username `Python`
-
-Examples:
-* `find John` returns persons with name `john` or `John Doe`, or Telegram `john123`, or GitHub `johnny`
-* `find Java` returns persons who have `Java` as a skill
-* `find alex david` returns `Alex Yeoh`, `David Li`, or anyone with Telegram username `alex` or GitHub username `david`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
-### Filtering persons : `filter`
-
-Filters persons based on their team-looking status and/or interested hackathons.
-
-Format: `filter [h/HACKATHON [MORE_HACKATHONS]...]`
-
-* At least one of the optional parameters must be provided.
-* `h/HACKATHON` filters for persons interested in the specified hackathon(s).
-* The hackathon search is case-insensitive. e.g. `nushack` will match `NUSHack`
-* As long Hackathon contains the parameter, it will be included e.g. `filter h/AI` will match `Dev AI` and `Tech AI`
-* Only full words will be matched e.g. `NUS` will not match `NUSHack`
-* Persons matching at least one hackathon keyword will be returned (i.e. `OR` search for hackathons).
+* The search is case-insensitive. e.g `k/hans` will match `Hans`
+* The order of the keywords does not matter. e.g. `find k/Hans k/Bo` will match persons with both `Bo` and `Hans`
+* Searches across multiple fields: name, email, Telegram username, GitHub username, skills, interested hackathons, and participating hackathons
+* Partial matching is supported e.g. `k/NUS` will match `NUSHack`
+* Keywords can contain spaces e.g. `k/AI Hackathon 2024` is a single keyword
+* Persons must match ALL keywords to be returned (i.e. `AND` search).
+  e.g. `find k/John k/Python` will return persons that have both `John` AND `Python` somewhere in their fields
 
 Examples:
-* `filter h/NUSHack` returns all persons interested in NUSHack
-* `filter h/NUSHack iNTUition` returns all persons interested in NUSHack or iNTUition
+* `find k/John` returns persons with name `john` or `John Doe`, or email `john@example.com`, or Telegram `john123`
+* `find k/Java` returns persons who have `Java` or `JavaScript` as a skill
+* `find k/alice k/python` returns persons that have both `alice` AND `python` in their fields (e.g., Alice with Python skill)
+* `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
 
 ### Deleting a person : `delete`
 
@@ -359,8 +343,7 @@ _Details coming soon ..._
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
 | **Delete Team** | `deleteTeam INDEX`<br> e.g., `deleteTeam 1` |
 | **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate h/NUSHack` |
-| **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack`, `filter h/NUSHack` |
-| **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
+| **Find** | `find k/KEYWORD [k/MORE_KEYWORDS]...`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024` |
 | **List** | `list` |
 | **List Team** | `listTeam` |
 | **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
