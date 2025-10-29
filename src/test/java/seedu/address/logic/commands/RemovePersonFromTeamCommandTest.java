@@ -39,10 +39,10 @@ public class RemovePersonFromTeamCommandTest {
         addCommand.execute(model);
 
         // Now remove the person using RemovePersonFromTeamCommand
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
         CommandResult result = removeCommand.execute(model);
 
-        String expectedMessage = String.format(RemovePersonFromTeamCommand.MESSAGE_SUCCESS,
+        String expectedMessage = String.format(RemoveFromTeamCommand.MESSAGE_SUCCESS,
                 Messages.format(personToModify), Messages.format(team));
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
@@ -73,10 +73,10 @@ public class RemovePersonFromTeamCommandTest {
         model.addTeam(team);
 
         // Person is not in the team yet, removing should throw
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(removeCommand, model,
-                String.format(RemovePersonFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
+                String.format(RemoveFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
                         Messages.format(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased())),
                         teamName));
     }
@@ -85,25 +85,25 @@ public class RemovePersonFromTeamCommandTest {
     public void execute_invalidPersonIndex_throwsCommandException() {
         TeamName teamName = new TeamName("Test Team");
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        RemovePersonFromTeamCommand command = new RemovePersonFromTeamCommand(teamName, outOfBoundIndex);
+        RemoveFromTeamCommand command = new RemoveFromTeamCommand(teamName, outOfBoundIndex);
 
-        assertCommandFailure(command, model, RemovePersonFromTeamCommand.MESSAGE_INVALID_PERSON_INDEX);
+        assertCommandFailure(command, model, RemoveFromTeamCommand.MESSAGE_INVALID_PERSON_INDEX);
     }
 
     @Test
     public void execute_teamNotFound_throwsCommandException() {
         TeamName nonExistentTeamName = new TeamName("Non Existent Team");
-        RemovePersonFromTeamCommand command = new RemovePersonFromTeamCommand(nonExistentTeamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand command = new RemoveFromTeamCommand(nonExistentTeamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(command, model,
-                String.format(RemovePersonFromTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
+                String.format(RemoveFromTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
     }
 
     @Test
     public void equals() {
         TeamName teamName = new TeamName("Team A");
-        RemovePersonFromTeamCommand firstCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
-        RemovePersonFromTeamCommand secondCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand firstCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand secondCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         // same object -> returns true
         assertEquals(firstCommand, firstCommand);

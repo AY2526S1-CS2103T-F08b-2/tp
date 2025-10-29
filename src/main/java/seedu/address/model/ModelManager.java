@@ -244,7 +244,7 @@ public class ModelManager implements Model {
      * @param person The person to remove from the team
      * @return Updated team without the person
      */
-    public Team removePersonFromTeam(Team team, Person person) {
+    public Team removeFromTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
         // Create updated team without the person

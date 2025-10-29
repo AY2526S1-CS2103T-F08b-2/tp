@@ -138,6 +138,6 @@ public interface Model {
      * @param person The person to remove from the team
      * @return Updated team without the person
      */
-    Team removePersonFromTeam(Team team, Person person);
+    Team removeFromTeam(Team team, Person person);
 
 }

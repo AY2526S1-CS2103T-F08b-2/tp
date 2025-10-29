@@ -7,28 +7,28 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 import java.util.stream.Stream;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.RemovePersonFromTeamCommand;
+import seedu.address.logic.commands.RemoveFromTeamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.team.TeamName;
 
 /**
- * Parses input arguments and creates a new RemovePersonFromTeamCommand object
+ * Parses input arguments and creates a new RemoveFromTeamCommand object
  */
-public class RemovePersonFromTeamCommandParser implements Parser<RemovePersonFromTeamCommand> {
+public class RemoveFromTeamCommandParser implements Parser<RemoveFromTeamCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the RemovePersonFromTeamCommand
-     * and returns a RemovePersonFromTeamCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the RemoveFromTeamCommand
+     * and returns a RemoveFromTeamCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
-    public RemovePersonFromTeamCommand parse(String args) throws ParseException {
+    public RemoveFromTeamCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME, PREFIX_PERSON);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME, PREFIX_PERSON)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                    RemovePersonFromTeamCommand.MESSAGE_USAGE));
+                    RemoveFromTeamCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TEAM_NAME, PREFIX_PERSON);
@@ -36,7 +36,7 @@ public class RemovePersonFromTeamCommandParser implements Parser<RemovePersonFro
         TeamName teamName = ParserUtil.parseTeamName(argMultimap.getValue(PREFIX_TEAM_NAME).get());
         Index personIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).get());
 
-        return new RemovePersonFromTeamCommand(teamName, personIndex);
+        return new RemoveFromTeamCommand(teamName, personIndex);
     }
 
     /**
