@@ -256,7 +256,7 @@ Format: `removePersonFromTeam tn/TEAM_NAME p/INDEX`
 * If the person is not a member of the specified team, an error message will be shown.
 * **Hackathon Management**: When a person is removed from a team:
   * The team's hackathon is automatically removed from the person's **participating hackathons**
-  * The hackathon is **NOT** added back to the person's **interested hackathons**
+  * The hackathon is automatically **added back** to the person's **interested hackathons** (since they were participating, they must have been interested)
 * After successfully removing a person from a team, the person's record and the team's membership are both updated, and the teams list will be displayed automatically.
 
 Examples:

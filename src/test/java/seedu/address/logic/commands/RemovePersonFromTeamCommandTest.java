@@ -100,7 +100,7 @@ public class RemovePersonFromTeamCommandTest {
     }
 
     @Test
-    public void execute_removePersonFromTeam_hackathonNotAddedToInterested() throws Exception {
+    public void execute_removePersonFromTeam_hackathonAddedBackToInterested() throws Exception {
         // Create a team with a hackathon
         TeamName teamName = new TeamName("Test Team");
         HackathonName hackathonName = new HackathonName("Test Hackathon");
@@ -137,11 +137,11 @@ public class RemovePersonFromTeamCommandTest {
         // The hackathon should NOT be in participating hackathons
         assertEquals(false, personAfterRemove.getParticipatingHackathons().contains(hackathonName));
 
-        // The hackathon should NOT be added back to interested hackathons
-        assertEquals(false, personAfterRemove.getInterestedHackathons().contains(hackathonName));
+        // The hackathon SHOULD be added back to interested hackathons
+        assertEquals(true, personAfterRemove.getInterestedHackathons().contains(hackathonName));
 
-        // The size of interested hackathons should remain the same
-        assertEquals(interestedHackathonsSizeBefore, personAfterRemove.getInterestedHackathons().size());
+        // The size of interested hackathons should increase by 1
+        assertEquals(interestedHackathonsSizeBefore + 1, personAfterRemove.getInterestedHackathons().size());
     }
 
     @Test

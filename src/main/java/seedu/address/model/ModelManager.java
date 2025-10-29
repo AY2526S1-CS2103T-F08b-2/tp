@@ -236,8 +236,8 @@ public class ModelManager implements Model {
 
     /**
      * Removes a person from a team. Updates both the team's member list and the person's team list.
-     * If the team has an associated hackathon, removes it from the person's participating hackathons.
-     * Does NOT add the hackathon back to interested hackathons.
+     * If the team has an associated hackathon, removes it from the person's participating hackathons
+     * and adds it back to interested hackathons.
      *
      * @param team The team to remove the person from
      * @param person The person to remove from the team
@@ -261,14 +261,15 @@ public class ModelManager implements Model {
         // remove team by identity (isSameTeam) to handle different instances
         updatedTeams.removeIf(t -> t.isSameTeam(team));
 
-        // Update person's hackathons - remove the team's hackathon from participating
+        // Update person's hackathons - remove from participating and add back to interested
         Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(person.getParticipatingHackathons());
         Set<HackathonName> updatedInterestedHackathons = new HashSet<>(person.getInterestedHackathons());
 
         if (team.getHackathonName() != null) {
             // Remove the team's hackathon from participating hackathons
-            // Do NOT add it back to interested hackathons
             updatedParticipatingHackathons.remove(team.getHackathonName());
+            // Add it back to interested hackathons (they were participating, so they must have been interested)
+            updatedInterestedHackathons.add(team.getHackathonName());
         }
 
         Person updatedPerson = new Person(

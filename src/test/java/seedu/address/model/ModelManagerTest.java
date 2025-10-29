@@ -173,7 +173,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void removePersonFromTeam_hackathonInParticipating_removedFromParticipating() {
+    public void removePersonFromTeam_hackathonInParticipating_movesToInterested() {
         // Setup: Create a person with participating hackathon
         seedu.address.model.person.Person person = new seedu.address.testutil.PersonBuilder()
                 .withName("Test Person")
@@ -198,14 +198,14 @@ public class ModelManagerTest {
                 .get();
         // Remove person from team using the updated team reference
         modelManager.removePersonFromTeam(updatedTeam, personAfterAdd);
-        // After removing from team: hackathon should be removed from participating, NOT added to interested
+        // After removing from team: hackathon should be added back to interested, NOT in participating
         seedu.address.model.person.Person updatedPerson = modelManager.getFilteredPersonList().stream()
                 .filter(p -> p.isSamePerson(person))
                 .findFirst()
                 .get();
-        assertFalse(updatedPerson.getInterestedHackathons().stream()
+        assertTrue(updatedPerson.getInterestedHackathons().stream()
                 .anyMatch(h -> h.value.equals("AI Challenge 2024")),
-                "Hackathon should NOT be added back to interestedHackathons");
+                "Hackathon should be added back to interestedHackathons");
         assertFalse(updatedPerson.getParticipatingHackathons().stream()
                 .anyMatch(h -> h.value.equals("AI Challenge 2024")),
                 "Hackathon should be removed from participatingHackathons");
