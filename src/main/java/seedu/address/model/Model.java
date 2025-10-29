@@ -128,7 +128,7 @@ public interface Model {
      * @param person The person to add to the team
      * @return Updated team with the new member
      */
-    Team addPersonToTeam(Team team, Person person);
+    Team addToTeam(Team team, Person person);
 
     /**
      * Removes a person from a team, maintaining bidirectional relationship.

@@ -190,7 +190,7 @@ public class ModelManager implements Model {
      * @param person The person to add to the team
      * @return Updated team with the new member
      */
-    public Team addPersonToTeam(Team team, Person person) {
+    public Team addToTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
         // Create updated team with new member

@@ -91,7 +91,7 @@ public class CreateTeamCommand extends Command {
         // Use the model's relationship management methods to add each member
         // This automatically handles all bidirectional relationship updates
         for (Person member : members) {
-            toCreate = model.addPersonToTeam(toCreate, member);
+            toCreate = model.addToTeam(toCreate, member);
         }
 
         // Update the filtered team list to show all teams
