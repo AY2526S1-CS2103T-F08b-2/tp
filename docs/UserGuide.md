@@ -127,48 +127,62 @@ Examples:
 
 Adds one or more skills to an existing person in the address book.
 
-Format: `addSkill INDEX SKILL[:LEVEL] [MORE_SKILLS[:LEVEL]]…​`
+Format: `addSkill p/INDEX s/SKILL[:LEVEL] [s/MORE_SKILLS[:LEVEL]]…​`
 
-* Adds skills to the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one skill must be provided.
-* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-sensitive)
+* **Command is case-insensitive**: `addSkill`, `addskill`, `ADDSKILL` all work the same way
+* Adds skills to the person at the specified `INDEX` using the `p/` prefix
+* The index refers to the index number shown in the displayed person list
+* The index **must be a positive integer** 1, 2, 3, …​
+* At least one skill must be provided using the `s/` prefix
+* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
 * If no level is specified for a skill, it defaults to `Beginner`
-* **Smart skill upgrade**: If you add a skill that already exists with a **higher** experience level, the skill will be automatically upgraded to the higher level.
-* If you add a skill with the **same or lower** level than what already exists, the existing skill level is kept (no downgrade).
-* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols, but cannot start with '#'
+* **Smart skill upgrade**: If you add a skill that already exists with a **higher** experience level, the skill will be automatically upgraded to the higher level
+* If you add a skill with the **same or lower** level than what already exists, the existing skill level is kept (no downgrade)
+* **Skill names are case-insensitive**: `Java`, `java`, and `JAVA` are all treated as the same skill and will be stored as lowercase
+* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols, but cannot start with '#' and must be at least 1 character long
+* **Duplicate skills are not allowed** - each skill can only be added once per command
 
 Examples:
-*  `addSkill 1 java:Advanced` Adds the Java skill with Advanced level to the 1st person. If Java already exists at Beginner or Intermediate, it will be upgraded to Advanced.
-*  `addSkill 2 python:Intermediate docker` Adds Python at Intermediate level and Docker at Beginner level (default) to the 2nd person.
-*  `addSkill 3 c++ react.js` Adds C++ and React.js skills at Beginner level to the 3rd person.
-*  `addSkill 1 python:Advanced` If person 1 has Python at Beginner level, it will be upgraded to Advanced. If already at Advanced, no change occurs.
+*  `addSkill p/1 s/java:Advanced` Adds the Java skill with Advanced level to the 1st person. If Java already exists at Beginner or Intermediate, it will be upgraded to Advanced.
+*  `addSkill p/2 s/python:Intermediate s/docker` Adds Python at Intermediate level and Docker at Beginner level (default) to the 2nd person.
+*  `addSkill p/3 s/c++ s/react.js` Adds C++ and React.js skills at Beginner level to the 3rd person.
+*  `ADDSKILL p/1 s/Python:Advanced` Case-insensitive command - if person 1 has python at Beginner level, it will be upgraded to Advanced.
 
 ### Adding interested hackathons to a person : `addHackathon`
 
 Adds one or more interested hackathons to an existing person in the address book.
 
-Format: `addHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​`
+Format: `addHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​`
 
-* Adds interested hackathons to the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one hackathon must be provided.
+* **Command is case-insensitive**: `addHackathon`, `addhackathon`, `ADDHACKATHON` all work the same way
+* Adds interested hackathons to the person at the specified `INDEX` using the `p/` prefix
+* The index refers to the index number shown in the displayed person list
+* The index **must be a positive integer** 1, 2, 3, …​
+* At least one hackathon must be provided using the `h/` prefix
+* Multiple hackathons can be added at once by specifying multiple `h/` prefixes
 * **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
 * **Cannot add if already participating**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). An error will be shown if you try to do this.
 * **Ignores duplicates**: If you try to add a hackathon that is already in the interested list, it will be silently ignored (no error).
+* **Duplicate hackathons are not allowed** - each hackathon can only be added once per command
 * Interested hackathons are displayed in light blue boxes in the UI under the "Interested" label.
 
 Examples:
-*  `addHackathon 1 hn/NUSHack` Adds NUSHack to the 1st person's interested hackathons list.
-*  `addHackathon 2 hn/iNTUition hn/HackNRoll` Adds iNTUition and HackNRoll to the 2nd person's interested hackathons.
-*  `addHackathon 3 hn/TechChallenge` Adds TechChallenge to the 3rd person's interested hackathons.
+*  `addHackathon p/1 h/NUSHack` Adds NUSHack to the 1st person's interested hackathons list.
+*  `addHackathon p/2 h/iNTUition h/HackNRoll` Adds iNTUition and HackNRoll to the 2nd person's interested hackathons.
+*  `ADDHACKATHON p/3 h/TechChallenge` Case-insensitive command - adds TechChallenge to the 3rd person's interested hackathons.
 
 ### Removing interested hackathons from a person : `removeHackathon`
 
 Removes one or more interested hackathons from an existing person in the address book.
 
-Format: `removeHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​`
+Format: `removeHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​`
 
-* Removes interested hackathons from the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one hackathon must be provided.
+* **Command is case-insensitive**: `removeHackathon`, `removehackathon`, `REMOVEHACKATHON` all work the same way
+* Removes interested hackathons from the person at the specified `INDEX` using the `p/` prefix
+* The index refers to the index number shown in the displayed person list
+* The index **must be a positive integer** 1, 2, 3, …​
+* At least one hackathon must be provided using the `h/` prefix
+* Multiple hackathons can be removed at once by specifying multiple `h/` prefixes
 * **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
 * **Cannot remove if participating**: You cannot remove a hackathon from the interested list if the person is currently participating in that hackathon (as part of a team). You must first use `removePersonFromTeam` or `deleteTeam` to stop participating. An error will be shown if you try to remove a participating hackathon.
 * If the hackathon is not in the interested list, an error message will be shown.
@@ -178,9 +192,9 @@ Only hackathons in the "Interested" list (shown in light blue boxes) can be remo
 </div>
 
 Examples:
-*  `removeHackathon 1 hn/NUSHack` Removes NUSHack from the 1st person's interested hackathons list.
-*  `removeHackathon 2 hn/iNTUition hn/HackNRoll` Removes iNTUition and HackNRoll from the 2nd person's interested hackathons.
-*  `removeHackathon 3 hn/TechChallenge` Removes TechChallenge from the 3rd person's interested hackathons.
+*  `removeHackathon p/1 h/NUSHack` Removes NUSHack from the 1st person's interested hackathons list.
+*  `removeHackathon p/2 h/iNTUition h/HackNRoll` Removes iNTUition and HackNRoll from the 2nd person's interested hackathons.
+*  `REMOVEHACKATHON p/3 h/TechChallenge` Case-insensitive command - removes TechChallenge from the 3rd person's interested hackathons.
 
 ### Locating persons : `find`
 
@@ -338,19 +352,22 @@ Examples:
 
 Removes one or more skills from a person in the address book.
 
-Format: `removeSkill INDEX SKILL [MORE_SKILLS]...`
+Format: `removeSkill p/INDEX s/SKILL [s/MORE_SKILLS]...`
 
-* Removes the specified `SKILL(S)` from the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
+* **Command is case-insensitive**: `removeSkill`, `removeskill`, `REMOVESKILL` all work the same way
+* Removes the specified skill(s) from the person at the specified `INDEX` using the `p/` prefix
+* The index refers to the index number shown in the displayed person list
 * The index **must be a positive integer** 1, 2, 3, …
-* Multiple skills can be removed at once by separating them with spaces.
-* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols.
-* If the person does not have any of the specified skills, an error message will be shown.
+* At least one skill must be provided using the `s/` prefix
+* Multiple skills can be removed at once by specifying multiple `s/` prefixes
+* **Skill names are case-insensitive**: `Java`, `java`, and `JAVA` are all treated as the same skill
+* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols
+* If the person does not have any of the specified skills, an error message will be shown
 
 Examples:
-* `removeSkill 2 java` removes the skill "java" from the 2nd person in the displayed list.
-* `removeSkill 1 python docker` removes the skills "python" and "docker" from the 1st person in the displayed list.
-* `removeSkill 3 java python c++` removes the skills "java", "python", and "c++" from the 3rd person in the displayed list.
+* `removeSkill p/2 s/java` removes the skill "java" from the 2nd person in the displayed list.
+* `removeSkill p/1 s/python s/docker` removes the skills "python" and "docker" from the 1st person in the displayed list.
+* `REMOVESKILL p/3 s/java s/python s/c++` removes the skills "java", "python", and "c++" from the 3rd person in the displayed list.
 
 ### Clearing all entries : `clear`
 
@@ -402,20 +419,20 @@ _Details coming soon ..._
 | Action | Format, Examples |
 |--------|------------------|
 | **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
-| **Add Hackathon** | `addHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​` <br> e.g., `addHackathon 1 hn/NUSHack hn/iNTUition` |
+| **Add Hackathon** | `addHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​` <br> e.g., `addHackathon p/1 h/NUSHack h/iNTUition` |
 | **Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
-| **Add Skill** | `addSkill INDEX SKILL[:LEVEL] [MORE_SKILLS[:LEVEL]]…​` <br> e.g., `addSkill 1 java:Advanced python:Intermediate` |
+| **Add Skill** | `addSkill p/INDEX s/SKILL[:LEVEL] [s/MORE_SKILLS[:LEVEL]]…​` <br> e.g., `addSkill p/1 s/java:Advanced s/python:Intermediate` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
 | **Delete Team** | `deleteTeam INDEX`<br> e.g., `deleteTeam 1` |
 | **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME]`<br> e.g.,`edit 2 n/James Lee e/james@example.com` |
-| **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack`, `filter h/NUSHack` |
+| **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack` |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
 | **List** | `list` |
 | **List Team** | `listTeam` |
-| **Remove Hackathon** | `removeHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​` <br> e.g., `removeHackathon 1 hn/NUSHack hn/iNTUition` |
+| **Remove Hackathon** | `removeHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​` <br> e.g., `removeHackathon p/1 h/NUSHack h/iNTUition` |
 | **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
-| **Remove Skill** | `removeSkill INDEX SKILL [MORE_SKILLS]...`<br> e.g., `removeSkill 2 java python` |
+| **Remove Skill** | `removeSkill p/INDEX s/SKILL [s/MORE_SKILLS]...`<br> e.g., `removeSkill p/2 s/java s/python` |
 | **Help** | `help` |
 | **Exit** | `exit` |
