@@ -86,6 +86,33 @@ public class AddToTeamCommandTest {
     }
 
     @Test
+    public void execute_personAlreadyInDifferentTeamSameHackathon_throwsCommandException() throws Exception {
+        // Create the first team and add a person to it
+        TeamName teamName1 = new TeamName("Team Alpha");
+        HackathonName hackathonName = new HackathonName("Test Hackathon");
+        Team team1 = new Team(teamName1, hackathonName, new HashSet<>());
+        model.addTeam(team1);
+
+        // Add the person to the first team
+        AddToTeamCommand command1 = new AddToTeamCommand(teamName1, INDEX_FIRST_PERSON);
+        command1.execute(model);
+
+        // Create a second team with the same hackathon
+        TeamName teamName2 = new TeamName("Team Beta");
+        Team team2 = new Team(teamName2, hackathonName, new HashSet<>());
+        model.addTeam(team2);
+
+        // Try to add the same person to the second team -
+        // should fail because they're already in a team for this hackathon
+        AddToTeamCommand command2 = new AddToTeamCommand(teamName2, INDEX_FIRST_PERSON);
+
+        Person person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        assertCommandFailure(command2, model,
+                String.format(AddToTeamCommand.MESSAGE_PERSON_ALREADY_IN_TEAM,
+                        Messages.format(person), hackathonName));
+    }
+
+    @Test
     public void execute_invalidPersonIndex_throwsCommandException() {
         TeamName teamName = new TeamName("Test Team");
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
@@ -101,6 +128,61 @@ public class AddToTeamCommandTest {
 
         assertCommandFailure(command, model,
                 String.format(AddToTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
+    }
+
+    @Test
+    public void execute_teamNameDifferentCase_success() throws Exception {
+        // Create a team with original casing
+        TeamName teamName = new TeamName("Test Team");
+        HackathonName hackathonName = new HackathonName("Test Hackathon");
+        Set<Person> initialMembers = new HashSet<>();
+        Team team = new Team(teamName, hackathonName, initialMembers);
+        model.addTeam(team);
+
+        // Get a person to add
+        Person personToAdd = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+
+        // Use different casing for team name - should still find the team
+        TeamName differentCaseTeamName = new TeamName("TEST TEAM");
+        AddToTeamCommand command = new AddToTeamCommand(differentCaseTeamName, INDEX_FIRST_PERSON);
+
+        // Execute the command - should succeed
+        CommandResult result = command.execute(model);
+
+        String expectedMessage = String.format(AddToTeamCommand.MESSAGE_SUCCESS,
+                Messages.format(personToAdd), Messages.format(team));
+
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+
+        // Verify that the team now contains the person
+        Team updatedTeam = model.getFilteredTeamList().stream()
+                .filter(t -> t.getTeamName().equals(teamName))
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(true, updatedTeam.hasMember(personToAdd));
+    }
+
+    @Test
+    public void execute_personAlreadyInSameTeamDifferentCase_throwsCommandException() throws Exception {
+        // Create an empty team with original casing
+        TeamName teamName = new TeamName("Test Team");
+        HackathonName hackathonName = new HackathonName("Test Hackathon");
+        Team team = new Team(teamName, hackathonName, new HashSet<>());
+        model.addTeam(team);
+
+        // First, add the person to the team successfully
+        AddToTeamCommand command1 = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        command1.execute(model);
+
+        // Try to add the same person to the same team using different case - should still throw exception
+        TeamName differentCaseTeamName = new TeamName("test team");
+        AddToTeamCommand command2 = new AddToTeamCommand(differentCaseTeamName, INDEX_FIRST_PERSON);
+
+        assertCommandFailure(command2, model,
+                String.format(AddToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
+                        Messages.format(model.getFilteredPersonList()
+                                .get(INDEX_FIRST_PERSON.getZeroBased())), differentCaseTeamName));
     }
 
     @Test

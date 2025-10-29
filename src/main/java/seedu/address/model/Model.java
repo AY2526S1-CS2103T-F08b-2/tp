@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.core.GuiSettings;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 
@@ -140,4 +141,8 @@ public interface Model {
      */
     Team removeFromTeam(Team team, Person person);
 
+    /**
+     * Returns true if the person is already in a team for the given hackathon.
+     */
+    boolean isPersonInHackathon(Person person, HackathonName hackathonName);
 }

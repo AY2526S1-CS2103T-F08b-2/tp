@@ -5,12 +5,14 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
@@ -32,10 +34,11 @@ public class AddToTeamCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Person %1$s added to team: %2$s";
     public static final String MESSAGE_TEAM_NOT_FOUND = "Team with name '%1$s' does not exist";
-    public static final String MESSAGE_PERSON_ALREADY_IN_TEAM = "Person %1$s is already in a team";
+    public static final String MESSAGE_PERSON_ALREADY_IN_TEAM = "Person %1$s is already in a team for hackathon %2$s";
     public static final String MESSAGE_PERSON_ALREADY_IN_THIS_TEAM = "Person %1$s is already in team %2$s";
     public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
 
+    private static final Logger logger = Logger.getLogger(AddToTeamCommand.class.getName());
     private final TeamName teamName;
     private final Index personIndex;
 
@@ -79,6 +82,14 @@ public class AddToTeamCommand extends Command {
             throw new CommandException(
                     String.format(MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
                             Messages.format(personToAdd), teamName));
+        }
+
+        // Check if person is already in any team for the same hackathon
+        HackathonName hackathonName = targetTeam.getHackathonName();
+
+        if (model.isPersonInHackathon(personToAdd, hackathonName)) {
+            throw new CommandException(String.format(MESSAGE_PERSON_ALREADY_IN_TEAM,
+                    Messages.format(personToAdd), hackathonName));
         }
 
         // Use the model's relationship management to add person to team

@@ -85,6 +85,26 @@ public class CreateTeamCommandTest {
     }
 
     @Test
+    public void execute_duplicateTeamDifferentCase_throwsCommandException() {
+        // Create a team with "Alpha Team" and "Tech Challenge 2024"
+        Team validTeam = new TeamBuilder()
+                .withTeamName("Alpha Team")
+                .withHackathonName("Tech Challenge 2024")
+                .withMembers(ALICE)
+                .build();
+
+        // Try to create a team with different casing - should be considered duplicate
+        TeamName differentCaseTeamName = new TeamName("ALPHA TEAM");
+        HackathonName differentCaseHackathonName = new HackathonName("tech challenge 2024");
+        CreateTeamCommand createTeamCommand = new CreateTeamCommand(differentCaseTeamName,
+                differentCaseHackathonName, Set.of(Index.fromOneBased(1)));
+        ModelStub modelStub = new ModelStubWithTeam(validTeam);
+
+        assertThrows(CommandException.class, CreateTeamCommand.MESSAGE_DUPLICATE_TEAM, () ->
+            createTeamCommand.execute(modelStub));
+    }
+
+    @Test
     public void execute_invalidPersonIndex_throwsCommandException() {
         CreateTeamCommand createTeamCommand = new CreateTeamCommand(validTeamName, validHackathonName,
                 Set.of(Index.fromOneBased(10))); // Index out of bounds
@@ -120,6 +140,21 @@ public class CreateTeamCommandTest {
         assertEquals(1, modelStub.teamsAdded.size());
         Team createdTeam = modelStub.teamsAdded.get(0);
         assertEquals(0, createdTeam.getSize());
+    }
+
+    @Test
+    public void execute_personAlreadyInSameHackathon_throwsCommandException() throws Exception {
+        // Create a model stub that simulates person already in a team for the same hackathon
+        ModelStubWithPersonInHackathon modelStub = new ModelStubWithPersonInHackathon();
+
+        // Try to create a new team with the same person in the same hackathon
+        Set<Index> indices = Set.of(Index.fromOneBased(1));
+        CreateTeamCommand createTeamCommand = new CreateTeamCommand(validTeamName, validHackathonName, indices);
+
+        assertThrows(CommandException.class,
+                String.format("Person %s is already in a team for hackathon %s",
+                        ALICE.getName(), validHackathonName), () ->
+            createTeamCommand.execute(modelStub));
     }
 
     @Test
@@ -285,6 +320,11 @@ public class CreateTeamCommandTest {
         public Team removeFromTeam(Team team, Person person) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean isPersonInHackathon(Person person, HackathonName hackathonName) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -307,6 +347,29 @@ public class CreateTeamCommandTest {
         @Override
         public ObservableList<Person> getFilteredPersonList() {
             return TypicalPersons.getTypicalAddressBook().getPersonList();
+        }
+    }
+
+    /**
+     * A Model stub that simulates a person already being in a team for a specific hackathon.
+     */
+    private class ModelStubWithPersonInHackathon extends ModelStub {
+        @Override
+        public boolean hasTeam(Team team) {
+            return false;
+        }
+
+        @Override
+        public ObservableList<Person> getFilteredPersonList() {
+            return TypicalPersons.getTypicalAddressBook().getPersonList();
+        }
+
+        @Override
+        public boolean isPersonInHackathon(Person person, HackathonName hackathonName) {
+            requireNonNull(person);
+            requireNonNull(hackathonName);
+            // Simulate that ALICE is already in a team for the test hackathon
+            return person.equals(ALICE) && hackathonName.equals(validHackathonName);
         }
     }
 
@@ -393,6 +456,14 @@ public class CreateTeamCommandTest {
         @Override
         public ReadOnlyAddressBook getAddressBook() {
             return new AddressBook();
+        }
+
+        @Override
+        public boolean isPersonInHackathon(Person person, HackathonName hackathonName) {
+            requireNonNull(person);
+            requireNonNull(hackathonName);
+            // For testing purposes, return false to allow team creation
+            return false;
         }
     }
 }

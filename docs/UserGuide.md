@@ -354,8 +354,8 @@ _Details coming soon ..._
 | Action | Format, Examples |
 |--------|------------------|
 | **Add** | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/John g/John s/Python:Beginner h/NUSHack` |
-| **Add Person to Team** | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
-| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
+| **Add Person to Team** | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3` |
+| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete p/INDEX`<br> e.g., `delete p/3` |
