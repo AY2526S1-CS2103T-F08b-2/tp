@@ -195,6 +195,30 @@ public class ParserUtil {
     }
 
     /**
+     * Parses an array of skill strings into a {@code Set<Skill>}.
+     * @throws ParseException if duplicate skill names are detected.
+     */
+    public static Set<Skill> parseSkillsFromArray(String[] skillStrings) throws ParseException {
+        requireNonNull(skillStrings);
+        final Set<Skill> skillSet = new HashSet<>();
+        final Set<String> skillNames = new HashSet<>();
+
+        for (String skillString : skillStrings) {
+            Skill skill = parseSkill(skillString);
+
+            // Check for duplicate skill names
+            if (skillNames.contains(skill.skillName)) {
+                throw new ParseException("Duplicate skill detected: " + skill.skillName
+                    + ". Each skill can only be added once.");
+            }
+
+            skillNames.add(skill.skillName);
+            skillSet.add(skill);
+        }
+        return skillSet;
+    }
+
+    /**
      * Parses a {@code String hackathonName} into a {@code HackathonName}.
      * Leading and trailing whitespaces will be trimmed.
      *

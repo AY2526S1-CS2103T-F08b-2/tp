@@ -5,7 +5,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -46,12 +45,9 @@ public class EditCommand extends Command {
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
             + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
             + "[" + PREFIX_HACKATHON_FILTER + "HACKATHON]...\n"
-            + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
-            + PREFIX_SKILL + "java:Advanced "
             + PREFIX_HACKATHON_FILTER + "NUSHack";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
@@ -106,16 +102,10 @@ public class EditCommand extends Command {
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
+
+        // Skills are not affected by edit command - preserve existing skills
         Set<Skill> updatedSkills = new HashSet<>(personToEdit.getSkills());
 
-        // Remove existing skills with the same name and add new ones with updated levels
-        if (editPersonDescriptor.getSkills().isPresent()) {
-            Set<Skill> newSkills = editPersonDescriptor.getSkills().get();
-            // Remove old skills that have the same name as new skills
-            updatedSkills.removeAll(newSkills);
-            // Add all new skills with their updated experience levels
-            updatedSkills.addAll(newSkills);
-        }
 
         Set<Team> updatedTeams = editPersonDescriptor.getTeams().isPresent()
                 ? editPersonDescriptor.getTeams().get()
@@ -177,7 +167,6 @@ public class EditCommand extends Command {
         private Email email;
         private Telegram telegram;
         private GitHub github;
-        private Set<Skill> skills;
         private Set<Team> teams;
         private Set<HackathonName> interestedHackathons;
 
@@ -185,14 +174,13 @@ public class EditCommand extends Command {
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code skills} and {@code teams} is used internally.
+         * A defensive copy of {@code teams} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             setName(toCopy.name);
             setEmail(toCopy.email);
             setTelegram(toCopy.telegram);
             setGitHub(toCopy.github);
-            setSkills(toCopy.skills);
             setTeams(toCopy.teams);
             setInterestedHackathons(toCopy.interestedHackathons);
         }
@@ -201,7 +189,7 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, teams,
+            return CollectionUtil.isAnyNonNull(name, email, telegram, github, teams,
                     interestedHackathons);
         }
 
@@ -237,22 +225,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(github);
         }
 
-        /**
-         * Sets {@code skills} to this object's {@code skills}.
-         * A defensive copy of {@code skills} is used internally.
-         */
-        public void setSkills(Set<Skill> skills) {
-            this.skills = (skills != null) ? new HashSet<>(skills) : null;
-        }
-
-        /**
-         * Returns an unmodifiable skill set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code skills} is null.
-         */
-        public Optional<Set<Skill>> getSkills() {
-            return (skills != null) ? Optional.of(Collections.unmodifiableSet(skills)) : Optional.empty();
-        }
 
         /**
          * Sets {@code teams} to this object's {@code teams}.
@@ -307,7 +279,6 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(telegram, otherEditPersonDescriptor.telegram)
                     && Objects.equals(github, otherEditPersonDescriptor.github)
-                    && Objects.equals(skills, otherEditPersonDescriptor.skills)
                     && Objects.equals(teams, otherEditPersonDescriptor.teams)
                     && Objects.equals(interestedHackathons, otherEditPersonDescriptor.interestedHackathons);
         }
@@ -317,7 +288,6 @@ public class EditCommand extends Command {
             return new ToStringBuilder(this)
                     .add("name", name)
                     .add("email", email)
-                    .add("skills", skills)
                     .add("interestedHackathons", interestedHackathons)
                     .toString();
         }

@@ -39,7 +39,7 @@ public class EditCommandTest {
         Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder().build();
 
-        // With the new appending behavior, skills from original person should be preserved
+        // Edit command no longer affects skills - skills from original person are preserved
         Person expectedPerson = new PersonBuilder(editedPerson)
                 .withSkills(originalPerson.getSkills().stream()
                         .map(skill -> skill.skillName)
@@ -64,19 +64,10 @@ public class EditCommandTest {
         Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(lastPerson);
-        // With appending behavior, we need to include existing skills plus the new Java skill
-        String[] existingSkills = lastPerson.getSkills().stream()
-                .map(skill -> skill.skillName)
-                .toArray(String[]::new);
-        String[] allSkills = new String[existingSkills.length + 1];
-        System.arraycopy(existingSkills, 0, allSkills, 0, existingSkills.length);
-        allSkills[existingSkills.length] = VALID_SKILL_JAVA;
+        // Edit command no longer affects skills - existing skills are preserved
+        Person editedPerson = personInList.withName(VALID_NAME_BOB).build();
 
-        Person editedPerson = personInList.withName(VALID_NAME_BOB)
-                .withSkills(allSkills).build();
-
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withSkills(VALID_SKILL_JAVA).build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));

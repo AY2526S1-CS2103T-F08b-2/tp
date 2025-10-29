@@ -11,7 +11,6 @@ import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
-import seedu.address.model.skill.Skill;
 
 /**
  * A utility class to help with building EditPersonDescriptor objects.
@@ -37,7 +36,6 @@ public class EditPersonDescriptorBuilder {
         descriptor.setEmail(person.getEmail());
         descriptor.setTelegram(person.getTelegram());
         descriptor.setGitHub(person.getGitHub());
-        descriptor.setSkills(person.getSkills());
         descriptor.setInterestedHackathons(person.getInterestedHackathons());
     }
 
@@ -70,16 +68,6 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withGitHub(String github) {
         descriptor.setGitHub(new GitHub(github));
-        return this;
-    }
-
-    /**
-     * Parses the {@code skills} into a {@code Set<Skill>} and set it to the {@code EditPersonDescriptor}
-     * that we are building.
-     */
-    public EditPersonDescriptorBuilder withSkills(String... skills) {
-        Set<Skill> skillSet = Stream.of(skills).map(Skill::new).collect(Collectors.toSet());
-        descriptor.setSkills(skillSet);
         return this;
     }
 

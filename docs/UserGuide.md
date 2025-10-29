@@ -112,27 +112,43 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [h/HACKATHON]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* When editing skills, new skills are added to the existing skills (i.e., adding of skills is cumulative).
-* If you edit a skill that already exists (same skill name), the experience level will be updated to the new level specified.
-* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
-* If no level is specified for a skill, it defaults to `Beginner`
+* **Skills are not affected by the edit command** - use `addSkill` or `removeSkill` commands to modify skills.
 * `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all interested hackathons.
-* **Duplicate skills or hackathons are not allowed** - each skill/hackathon can only be added once
+* **Duplicate hackathons are not allowed** - each hackathon can only be added once
 * **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
 * **Important**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). An error will be shown if you try to do this.
 * **Participating hackathons are preserved** - editing other fields will not affect hackathons the person is currently participating in through their teams
 
 Examples:
 *  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
-*  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
-*  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
+*  `edit 2 n/Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
 *  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
 *  `edit 4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
+
+### Adding skills to a person : `addSkill`
+
+Adds one or more skills to an existing person in the address book.
+
+Format: `addSkill INDEX SKILL[:LEVEL] [MORE_SKILLS[:LEVEL]]…​`
+
+* Adds skills to the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* At least one skill must be provided.
+* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-sensitive)
+* If no level is specified for a skill, it defaults to `Beginner`
+* **Smart skill upgrade**: If you add a skill that already exists with a **higher** experience level, the skill will be automatically upgraded to the higher level.
+* If you add a skill with the **same or lower** level than what already exists, the existing skill level is kept (no downgrade).
+* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols, but cannot start with '#'
+
+Examples:
+*  `addSkill 1 java:Advanced` Adds the Java skill with Advanced level to the 1st person. If Java already exists at Beginner or Intermediate, it will be upgraded to Advanced.
+*  `addSkill 2 python:Intermediate docker` Adds Python at Intermediate level and Docker at Beginner level (default) to the 2nd person.
+*  `addSkill 3 c++ react.js` Adds C++ and React.js skills at Beginner level to the 3rd person.
+*  `addSkill 1 python:Advanced` If person 1 has Python at Beginner level, it will be upgraded to Advanced. If already at Advanced, no change occurs.
 
 ### Locating persons : `find`
 
