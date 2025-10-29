@@ -21,8 +21,6 @@ import seedu.address.model.team.TeamName;
  * Adds a person to an existing team in the address book.
  */
 public class AddPersonToTeamCommand extends Command {
-    private static final Logger logger = Logger.getLogger(AddPersonToTeamCommand.class.getName());
-
     public static final String COMMAND_WORD = "addPersonToTeam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to an existing team. "
@@ -38,6 +36,8 @@ public class AddPersonToTeamCommand extends Command {
     public static final String MESSAGE_PERSON_ALREADY_IN_TEAM = "Person %1$s is already in a team";
     public static final String MESSAGE_PERSON_ALREADY_IN_THIS_TEAM = "Person %1$s is already in team %2$s";
     public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
+
+    private static final Logger logger = Logger.getLogger(AddPersonToTeamCommand.class.getName());
 
     private final TeamName teamName;
     private final Index personIndex;

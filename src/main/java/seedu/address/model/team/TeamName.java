@@ -55,6 +55,6 @@ public class TeamName {
 
     @Override
     public int hashCode() {
-        return fullTeamName.hashCode();
+        return fullTeamName.toLowerCase().hashCode();
     }
 }

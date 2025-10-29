@@ -60,6 +60,6 @@ public class HackathonName {
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase().hashCode();
     }
 }
