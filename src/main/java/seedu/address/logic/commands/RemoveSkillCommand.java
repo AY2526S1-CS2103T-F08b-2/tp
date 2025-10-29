@@ -23,7 +23,6 @@ public class RemoveSkillCommand extends Command {
             + "Example: " + COMMAND_WORD + " 1 java";
     public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Removed skill '%1$s' from Person: %2$s";
     public static final String MESSAGE_SKILL_NOT_FOUND = "Skill '%1$s' not found for Person: %2$s";
-
     private final Index targetIndex;
     private final String skillName;
 
@@ -45,6 +44,12 @@ public class RemoveSkillCommand extends Command {
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
+
+        // Validate skill name format
+        if (!Skill.isValidSkillName(skillName)) {
+            throw new CommandException(Skill.MESSAGE_CONSTRAINTS);
+        }
+
         Person personToEdit = lastShownList.get(targetIndex.getZeroBased());
         Skill skillToRemove = new Skill(skillName);
         if (!personToEdit.getSkills().contains(skillToRemove)) {

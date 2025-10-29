@@ -32,7 +32,6 @@ public class AddCommand extends Command {
             + "[" + PREFIX_LOOKING + "BOOLEAN] "
             + "[" + PREFIX_HACKATHON + "HACKATHON]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
-            + "BOOLEAN must be: true or false (default: false)\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_NAME + "John Doe "
             + PREFIX_EMAIL + "johnd@example.com "

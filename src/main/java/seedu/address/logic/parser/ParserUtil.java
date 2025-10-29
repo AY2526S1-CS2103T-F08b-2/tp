@@ -172,12 +172,24 @@ public class ParserUtil {
 
     /**
      * Parses {@code Collection<String> skills} into a {@code Set<Skill>}.
+     * @throws ParseException if duplicate skill names are detected.
      */
     public static Set<Skill> parseSkills(Collection<String> skills) throws ParseException {
         requireNonNull(skills);
         final Set<Skill> skillSet = new HashSet<>();
+        final Set<String> skillNames = new HashSet<>();
+
         for (String skillName : skills) {
-            skillSet.add(parseSkill(skillName));
+            Skill skill = parseSkill(skillName);
+
+            // Check for duplicate skill names
+            if (skillNames.contains(skill.skillName)) {
+                throw new ParseException("Duplicate skill detected: " + skill.skillName
+                    + ". Each skill can only be added once.");
+            }
+
+            skillNames.add(skill.skillName);
+            skillSet.add(skill);
         }
         return skillSet;
     }
@@ -199,12 +211,25 @@ public class ParserUtil {
 
     /**
      * Parses {@code Collection<String> hackathonNames} into a {@code Set<HackathonName>}.
+     * @throws ParseException if duplicate hackathon names are detected.
      */
     public static Set<HackathonName> parseHackathonNames(Collection<String> hackathonNames) throws ParseException {
         requireNonNull(hackathonNames);
         final Set<HackathonName> hackathonSet = new HashSet<>();
+        final Set<String> hackathonNameStrings = new HashSet<>();
+
         for (String hackathonName : hackathonNames) {
-            hackathonSet.add(parseHackathonName(hackathonName));
+            HackathonName parsedHackathon = parseHackathonName(hackathonName);
+
+            // Check for duplicate hackathon names (case-insensitive)
+            String lowerCaseName = parsedHackathon.value.toLowerCase();
+            if (hackathonNameStrings.contains(lowerCaseName)) {
+                throw new ParseException("Duplicate hackathon detected: " + parsedHackathon.value
+                    + ". Each hackathon can only be added once.");
+            }
+
+            hackathonNameStrings.add(lowerCaseName);
+            hackathonSet.add(parsedHackathon);
         }
         return hackathonSet;
     }

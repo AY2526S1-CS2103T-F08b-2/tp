@@ -24,19 +24,34 @@ class JsonAdaptedTeam {
 
     private final String teamName;
     private final String hackathonName;
-    private final List<JsonAdaptedPerson> members = new ArrayList<>();
+    // store members as references (person full names) instead of embedding full person objects
+    private final List<String> memberNames = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedTeam} with the given team details.
+     * Members can be either strings (person names) or objects (embedded person data for backward compatibility).
      */
     @JsonCreator
     public JsonAdaptedTeam(@JsonProperty("teamName") String teamName,
                            @JsonProperty("hackathonName") String hackathonName,
-                           @JsonProperty("members") List<JsonAdaptedPerson> members) {
+                           @JsonProperty("members") List<?> members) {
         this.teamName = teamName;
         this.hackathonName = hackathonName;
         if (members != null) {
-            this.members.addAll(members);
+            for (Object member : members) {
+                if (member instanceof String) {
+                    // New format: member is a name string
+                    this.memberNames.add((String) member);
+                } else if (member instanceof java.util.Map) {
+                    // Old format: member is an embedded person object (deserialized as Map)
+                    @SuppressWarnings("unchecked")
+                    java.util.Map<String, Object> personMap = (java.util.Map<String, Object>) member;
+                    Object nameObj = personMap.get("name");
+                    if (nameObj instanceof String) {
+                        this.memberNames.add((String) nameObj);
+                    }
+                }
+            }
         }
     }
 
@@ -46,17 +61,22 @@ class JsonAdaptedTeam {
     public JsonAdaptedTeam(Team source) {
         teamName = source.getTeamName().fullTeamName;
         hackathonName = source.getHackathonName() != null ? source.getHackathonName().value : null;
-        members.addAll(source.getMembers().stream()
-                .map(JsonAdaptedPerson::new)
+        // serialize members as their full name values to avoid duplicating full Person objects
+        memberNames.addAll(source.getMembers().stream()
+                .map(person -> person.getName().fullName)
                 .collect(Collectors.toList()));
     }
 
     /**
      * Converts this Jackson-friendly adapted team object into the model's {@code Team} object.
      *
-     * @throws IllegalValueException if there were any data constraints violated in the adapted team.
+     * Members are resolved against the provided mapping from name -> Person (populated from the
+     * the top-level persons list).
+     *
+     * @throws IllegalValueException if there were any data constraints violated in the adapted team,
+     *         or if a referenced member name cannot be found in the provided person map.
      */
-    public Team toModelType() throws IllegalValueException {
+    public Team toModelType(java.util.Map<String, Person> personByName) throws IllegalValueException {
         if (teamName == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
                     TeamName.class.getSimpleName()));
@@ -77,8 +97,13 @@ class JsonAdaptedTeam {
         }
 
         final Set<Person> modelMembers = new HashSet<>();
-        for (JsonAdaptedPerson member : members) {
-            modelMembers.add(member.toModelType());
+        for (String name : memberNames) {
+            Person member = personByName.get(name);
+            if (member == null) {
+                // Member reference not found in top-level persons -> treat as invalid data
+                throw new IllegalValueException("Team member with name '" + name + "' not found in persons list.");
+            }
+            modelMembers.add(member);
         }
 
         if (modelHackathonName != null) {

@@ -12,6 +12,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.person.Person;
 import seedu.address.model.skill.ExperienceLevel;
+import seedu.address.model.skill.Skill;
 
 /**
  * A UI component that displays information of a {@code Person}.
@@ -76,7 +77,7 @@ public class PersonCard extends UiPart<Region> {
         emailIcon.setImage(emailImage);
         applyWhiteColorEffect(emailIcon);
 
-        Image telegramImage = new Image(getClass().getResourceAsStream("/images/at-sign.png"));
+        Image telegramImage = new Image(getClass().getResourceAsStream("/images/send.png"));
         telegramIcon.setImage(telegramImage);
         applyWhiteColorEffect(telegramIcon);
 
@@ -88,9 +89,11 @@ public class PersonCard extends UiPart<Region> {
         skills.setHgap(5);
         skills.setVgap(5);
 
-        // Display skills
+        // Display skills sorted by experience level (Advanced -> Intermediate -> Beginner)
         person.getSkills().stream()
-                .sorted(Comparator.comparing(skill -> skill.skillName))
+                .sorted(Comparator.comparing(Skill::getExperienceLevel)
+                        .reversed()
+                        .thenComparing(skill -> skill.skillName))
                 .forEach(skill -> {
                     Label skillLabel = new Label(skill.skillName);
                     skillLabel.getStyleClass().add("skill-label");
@@ -104,8 +107,9 @@ public class PersonCard extends UiPart<Region> {
                             + "-fx-border-color: " + colors[2] + "; "
                             + "-fx-border-width: 1.25; "
                             + "-fx-border-radius: 20; "
-                            + "-fx-font-size: 12px; "
+                            + "-fx-font-size: 14px; "
                             + "-fx-font-weight: bold; "
+                            + "-fx-opacity: 0.65; "
                             + "-fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 0, 1);");
 
                     skills.getChildren().add(skillLabel);
@@ -176,17 +180,17 @@ public class PersonCard extends UiPart<Region> {
     private String[] getColorsForExperienceLevel(ExperienceLevel level) {
         switch (level) {
         case BEGINNER:
-            // Soft green theme - calm and fresh
-            return new String[]{"#d4f4dd", "#1e7a3e", "#7bc96f"};
+            // Soft green theme - calm and fresh (dark mode friendly)
+            return new String[]{"#1a3a2a", "#d1fae5", "#4ade80"};
         case INTERMEDIATE:
-            // Vibrant blue theme - confident and professional
-            return new String[]{"#d4e6f9", "#1565C0", "#64b5f6"};
+            // Vibrant blue theme - confident and professional (dark mode friendly)
+            return new String[]{"#1e2a3a", "#dbeafe", "#60a5fa"};
         case ADVANCED:
-            // Bold purple theme - expert and premium
-            return new String[]{"#e8d4f7", "#6a1b9a", "#ba68c8"};
+            // Bold purple theme - expert and premium (dark mode friendly)
+            return new String[]{"#2a1a3a", "#f3e8ff", "#c084fc"};
         default:
-            // Neutral gray
-            return new String[]{"#e8e8e8", "#424242", "#9e9e9e"};
+            // Neutral gray (dark mode friendly)
+            return new String[]{"#2a2a2a", "#f5f5f5", "#a1a1aa"};
         }
     }
 

@@ -5,6 +5,7 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.GITHUB_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.GITHUB_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.HACKATHON_FILTER_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_GITHUB_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
@@ -19,6 +20,7 @@ import static seedu.address.logic.commands.CommandTestUtil.SKILL_DESC_PYTHON;
 import static seedu.address.logic.commands.CommandTestUtil.TELEGRAM_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.TELEGRAM_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_HACKATHON_NAME_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_PYTHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
@@ -175,5 +177,30 @@ public class AddCommandParserTest {
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + EMAIL_DESC_BOB
                 + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + SKILL_DESC_JAVA + SKILL_DESC_PYTHON,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_duplicateSkills_failure() {
+        // duplicate skills with same name
+        String duplicateSkillCommand = NAME_DESC_BOB + EMAIL_DESC_BOB
+                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + SKILL_DESC_JAVA + SKILL_DESC_JAVA;
+        assertParseFailure(parser, duplicateSkillCommand,
+                "Duplicate skill detected: java. Each skill can only be added once.");
+
+        // duplicate skills with different experience levels
+        String duplicateSkillDifferentLevels = NAME_DESC_BOB + EMAIL_DESC_BOB
+                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + " s/java:beginner s/java:intermediate";
+        assertParseFailure(parser, duplicateSkillDifferentLevels,
+                "Duplicate skill detected: java. Each skill can only be added once.");
+    }
+
+    @Test
+    public void parse_duplicateHackathons_failure() {
+        // duplicate hackathon names
+        String duplicateHackathonCommand = NAME_DESC_BOB + EMAIL_DESC_BOB
+                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + HACKATHON_FILTER_DESC_TECH + HACKATHON_FILTER_DESC_TECH;
+        assertParseFailure(parser, duplicateHackathonCommand,
+                "Duplicate hackathon detected: " + VALID_HACKATHON_NAME_TECH
+                + ". Each hackathon can only be added once.");
     }
 }
