@@ -308,8 +308,6 @@ The sequence diagram below illustrates the interactions within the system when a
 - If the index is invalid, an error message is shown.
 - If the skill does not exist for the person, an error message is shown.
 
-This design ensures that the Remove Skill feature is robust and user-friendly.
-
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -431,11 +429,14 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | Priority | As a …​ | I want to …​                                                          | So that I can…​                                          |
 |-----|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
 | `* * *` | student | search for peers by programming language                              | quickly find potential teammates with matching skills.   |
-| `* * *` | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
+| `* * *` | student | create a team from selected contacts                               | form balanced teams for hackathons                       |
+| `* * *` | student | edit members of an existing team                                        | adjust team composition as needed                        |
 | `* * *` | student | view color-coded skill tags                                           | quickly assess a person's proficiency level              |
 | `* * *` | student | search for multiple skills at once                                    | find students with overlapping technical expertise       |
 | `* * *` | student | add my own skills to my profile                                       | let others discover me for team formation                |
 | `* *` | student | save profiles as facorites                                            |  easily revisit promising teammates later                  |
+| `* *` | student | import contacts from CSV                                             | quickly build my network without manual entry            |
+| `* *` | student | export a team to CSV                                                 | easily share team details with teammates                 |
 | `*` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
 | `*` | student | search for people by email                                            | directly connect with someone I already know             |
 
@@ -511,6 +512,56 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * a2. Student confirms cancellation.
 
       Use case ends.
+
+**Use case: Import Contacts from CSV**
+
+**MSS**
+
+1.  Student requests to import contacts.
+2.  Mate requests the file path.
+3.  Student enters the file path.
+4.  Mate validates the CSV format and parses entries.
+5.  Mate imports and displays the number of successful entries.
+
+    Use case ends.
+
+**Extensions**
+
+* 3a. File not found or inaccessible.
+    * 3a1. Mate highlights the error and requests a valid file path.
+    * 3a2. Student re-enters the file path.
+
+      Use case resumes at step 3.
+
+* 4b. CSV contains invalid or missing fields.
+    * 4b1. Mate highlights errors and requests a corrected file.
+    * 4b2. Student fixes and re-uploads.
+
+      Use case resumes at step 4.
+
+* 5a. Duplicate contacts detected.
+    * 5a1. Mate asks whether to merge or skip duplicates.
+    * 5a2. Student chooses.
+
+      Use case ends.
+
+**Use case: Export a Team to CSV**
+
+**MSS**
+
+1.  Student requests to export a team.
+2.  Mate generates and saves the CSV file.
+3.  Mate confirms successful export.
+
+    Use case ends.
+
+**Extensions**
+
+* 2a. No existing team matches the input.
+    * 2a1. Mate prompts retry.
+    * 2a2. Student retries.
+
+      Use case resumes at step 2.
 
 ### Non-Functional Requirements
 
@@ -612,8 +663,6 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `createTeam tn/Gamma Team hn/Hackathon 2024 p/2 p/3`<br>
       Expected: No team is created. Error details shown in the status message indicating that person at index 2 is already participating in "Hackathon 2024". Status bar remains the same.
 
-
-
 ### Removing a person from a team
 
 1. Removing a person from a team
@@ -625,3 +674,12 @@ testers are expected to do more *exploratory* testing.
 
    3. Test case : `removePersonFromTeam tn/Alpha Team p/3`<br>
       Expected: No person is removed. Error details shown in the status message indicating that person at index 3 is not a member of team "Alpha Team". Status bar remains the same.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Effort**
+
+- While AB3 primarily deals with the person object in the model component, Mate extends this functionality by introducing a team object. The team object encapsulates a collection of person objects, allowing users to group individuals based on shared skills and hackathon participation. This extension required significant modifications to the model component to accommodate team management features, including creating, listing, and modifying teams.
+- Additionally, several of the new commands introduced like `addPersonToTeam` and `removePersonFromTeam` required careful handling of the relationships between persons and teams, as there was a bidirectional association that needed to be maintained.
+- Other commands like `createTeam` also required deliberation on what should be allowed, such as preventing duplicate team names for the same hackathon and ensuring that a person cannot be added to multiple teams for the same hackathon.
+
