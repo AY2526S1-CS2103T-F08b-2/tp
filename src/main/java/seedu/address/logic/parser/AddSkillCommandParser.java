@@ -2,6 +2,8 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 
 import java.util.Set;
 
@@ -22,36 +24,22 @@ public class AddSkillCommandParser implements Parser<AddSkillCommand> {
      */
     public AddSkillCommand parse(String args) throws ParseException {
         requireNonNull(args);
-        String trimmedArgs = args.trim();
-
-        if (trimmedArgs.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddSkillCommand.MESSAGE_USAGE));
-        }
-
-        String[] parts = trimmedArgs.split("\\s+", 2);
-
-        if (parts.length < 2) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddSkillCommand.MESSAGE_USAGE));
-        }
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PERSON, PREFIX_SKILL);
 
         Index index;
         try {
-            index = ParserUtil.parseIndex(parts[0]);
+            index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).orElse(""));
         } catch (ParseException pe) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddSkillCommand.MESSAGE_USAGE), pe);
         }
 
-        // Parse the skills from the remaining arguments
-        String[] skillStrings = parts[1].split("\\s+");
-        Set<Skill> skills;
-        try {
-            skills = ParserUtil.parseSkillsFromArray(skillStrings);
-        } catch (ParseException pe) {
-            throw new ParseException(pe.getMessage(), pe);
+        if (argMultimap.getValue(PREFIX_SKILL).isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddSkillCommand.MESSAGE_USAGE));
         }
+
+        Set<Skill> skills = ParserUtil.parseSkills(argMultimap.getAllValues(PREFIX_SKILL));
 
         if (skills.isEmpty()) {
             throw new ParseException(

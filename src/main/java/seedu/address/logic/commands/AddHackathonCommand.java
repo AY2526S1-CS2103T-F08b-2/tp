@@ -18,15 +18,14 @@ import seedu.address.model.person.Person;
  * Adds interested hackathons to a person identified by index.
  */
 public class AddHackathonCommand extends Command {
-    public static final String COMMAND_WORD = "addHackathon";
+    public static final String COMMAND_WORD = "addhackathon";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds interested hackathons to the person identified by the index number "
             + "in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_HACKATHON_NAME + "HACKATHON_NAME...\n"
-            + "Example: " + COMMAND_WORD + " 1 " + PREFIX_HACKATHON_NAME + "NUSHack "
-            + PREFIX_HACKATHON_NAME + "iNTUition";
+            + "Command is case-insensitive (addhackathon, addHackathon, ADDHACKATHON all work).\n"
+            + "Parameters: p/INDEX (must be a positive integer) h/HACKATHON_NAME...\n"
+            + "Example: " + COMMAND_WORD + " p/1 h/NUSHack h/iNTUition";
 
     public static final String MESSAGE_ADD_HACKATHON_SUCCESS = "Added interested hackathons to Person: %1$s";
     public static final String MESSAGE_ALREADY_PARTICIPATING = "Cannot add hackathon '%1$s' to interested list. "

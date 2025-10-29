@@ -58,7 +58,10 @@ public class AddressBookParser {
 
         logger.fine("Command word: " + commandWord + "; Arguments: " + arguments);
 
-        switch (commandWord) {
+        // Convert command word to lowercase for case-insensitive matching
+        final String commandWordLowerCase = commandWord.toLowerCase();
+
+        switch (commandWordLowerCase) {
 
         case AddCommand.COMMAND_WORD:
             return new AddCommandParser().parse(arguments);

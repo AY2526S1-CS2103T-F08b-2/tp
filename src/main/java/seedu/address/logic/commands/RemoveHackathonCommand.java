@@ -1,7 +1,6 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
 
 import java.util.List;
 import java.util.Set;
@@ -19,17 +18,14 @@ import seedu.address.model.person.Person;
  * Removes hackathons from a person's interested hackathon list identified by index.
  */
 public class RemoveHackathonCommand extends Command {
-    public static final String COMMAND_WORD = "removeHackathon";
+    public static final String COMMAND_WORD = "removehackathon";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes the specified hackathons from the person's interested hackathon list"
             + " identified by the index number in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) "
-            + PREFIX_HACKATHON_NAME + "HACKATHON_NAME "
-            + "[" + PREFIX_HACKATHON_NAME + "HACKATHON_NAME]...\n"
-            + "Example: " + COMMAND_WORD + " 1 "
-            + PREFIX_HACKATHON_NAME + "NUSHack "
-            + PREFIX_HACKATHON_NAME + "TechChallenge";
+            + "Command is case-insensitive (removehackathon, removeHackathon, REMOVEHACKATHON all work).\n"
+            + "Parameters: p/INDEX (must be a positive integer) h/HACKATHON_NAME [h/HACKATHON_NAME]...\n"
+            + "Example: " + COMMAND_WORD + " p/1 h/NUSHack h/TechChallenge";
 
     public static final String MESSAGE_DELETE_HACKATHON_SUCCESS = "Removed hackathon(s) from Person: %1$s";
     public static final String MESSAGE_HACKATHON_NOT_FOUND = "Hackathon '%1$s' not found in "

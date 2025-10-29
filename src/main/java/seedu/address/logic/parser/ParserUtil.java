@@ -88,16 +88,13 @@ public class ParserUtil {
 
         // Check if skill contains experience level (format: skillName:level)
         String[] parts = trimmedSkill.split(":", 2);
-        String skillName = parts[0].trim();
+        String skillName = parts[0].trim().toLowerCase(); // Convert to lowercase for case-insensitive handling
 
         if (!Skill.isValidSkillName(skillName)) {
             logger.warning("Invalid skill name detected: '" + skillName + "'");
             logger.warning("Skill validation failed. Reason: " + Skill.MESSAGE_CONSTRAINTS);
 
             // Additional detailed logging for common mistakes
-            if (skillName.matches(".*[A-Z].*")) {
-                logger.warning("Detected uppercase letters in skill name. Skill names must be lowercase.");
-            }
             if (skillName.startsWith("#")) {
                 logger.warning("Detected skill name starting with '#'. This is not allowed.");
             }

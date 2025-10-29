@@ -1,7 +1,8 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 
 import java.util.Set;
 import java.util.stream.Stream;
@@ -23,23 +24,23 @@ public class RemoveHackathonCommandParser implements Parser<RemoveHackathonComma
      */
     @Override
     public RemoveHackathonCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_HACKATHON_NAME);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PERSON, PREFIX_HACKATHON_FILTER);
 
         Index index;
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).orElse(""));
         } catch (ParseException pe) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     RemoveHackathonCommand.MESSAGE_USAGE), pe);
         }
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_HACKATHON_NAME)) {
+        if (!arePrefixesPresent(argMultimap, PREFIX_HACKATHON_FILTER)) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                     RemoveHackathonCommand.MESSAGE_USAGE));
         }
 
         Set<HackathonName> hackathonNames = ParserUtil.parseHackathonNames(
-                argMultimap.getAllValues(PREFIX_HACKATHON_NAME));
+                argMultimap.getAllValues(PREFIX_HACKATHON_FILTER));
 
         return new RemoveHackathonCommand(index, hackathonNames);
     }

@@ -17,13 +17,14 @@ import seedu.address.model.skill.Skill;
  * Adds skills to a person identified by index.
  */
 public class AddSkillCommand extends Command {
-    public static final String COMMAND_WORD = "addSkill";
+    public static final String COMMAND_WORD = "addskill";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds skills to the person identified by the index number in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) SKILL[:LEVEL]...\n"
+            + "Command is case-insensitive (addskill, addSkill, ADDSKILL all work).\n"
+            + "Parameters: p/INDEX (must be a positive integer) s/SKILL[:LEVEL]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
-            + "Example: " + COMMAND_WORD + " 1 java:Advanced python:Intermediate docker";
+            + "Example: " + COMMAND_WORD + " p/1 s/java:Advanced s/python:Intermediate s/docker";
 
     public static final String MESSAGE_ADD_SKILL_SUCCESS = "Added skills to Person: %1$s";
     public static final String MESSAGE_SKILL_UPGRADED = "Upgraded skill '%1$s' from %2$s to %3$s for Person: %4$s";

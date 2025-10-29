@@ -16,12 +16,13 @@ import seedu.address.model.skill.Skill;
  * Removes one or more skills from a person identified by index.
  */
 public class RemoveSkillCommand extends Command {
-    public static final String COMMAND_WORD = "removeSkill";
+    public static final String COMMAND_WORD = "removeskill";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes the specified skills from the person"
             + " identified by the index number in the displayed person list.\n"
-            + "Parameters: INDEX (must be a positive integer) SKILL [MORE_SKILLS]...\n"
-            + "Example: " + COMMAND_WORD + " 1 java python docker";
+            + "Command is case-insensitive (removeskill, removeSkill, REMOVESKILL all work).\n"
+            + "Parameters: p/INDEX (must be a positive integer) s/SKILL [s/MORE_SKILLS]...\n"
+            + "Example: " + COMMAND_WORD + " p/1 s/java s/python s/docker";
     public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Removed skills from Person: %1$s";
     public static final String MESSAGE_SKILL_NOT_FOUND = "Skill '%1$s' not found for Person: %2$s";
     private final Index targetIndex;

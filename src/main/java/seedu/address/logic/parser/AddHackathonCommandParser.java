@@ -2,7 +2,8 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 
 import java.util.Set;
 
@@ -24,25 +25,25 @@ public class AddHackathonCommandParser implements Parser<AddHackathonCommand> {
     public AddHackathonCommand parse(String args) throws ParseException {
         requireNonNull(args);
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_HACKATHON_NAME);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PERSON, PREFIX_HACKATHON_FILTER);
 
         Index index;
         try {
-            index = ParserUtil.parseIndex(argMultimap.getPreamble());
+            index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).orElse(""));
         } catch (ParseException pe) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE), pe);
         }
 
         // Check if hackathon names are provided
-        if (argMultimap.getAllValues(PREFIX_HACKATHON_NAME).isEmpty()) {
+        if (argMultimap.getAllValues(PREFIX_HACKATHON_FILTER).isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
         }
 
         Set<HackathonName> hackathonNames;
         try {
-            hackathonNames = ParserUtil.parseHackathonNames(argMultimap.getAllValues(PREFIX_HACKATHON_NAME));
+            hackathonNames = ParserUtil.parseHackathonNames(argMultimap.getAllValues(PREFIX_HACKATHON_FILTER));
         } catch (ParseException pe) {
             throw new ParseException(pe.getMessage(), pe);
         }
