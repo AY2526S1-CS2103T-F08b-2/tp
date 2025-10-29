@@ -3,7 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LOOKING;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
@@ -49,14 +49,14 @@ public class EditCommand extends Command {
             + "[" + PREFIX_GITHUB + "GITHUB] "
             + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
             + "[" + PREFIX_LOOKING + "BOOLEAN] "
-            + "[" + PREFIX_HACKATHON_FILTER + "HACKATHON]...\n"
+            + "[" + PREFIX_HACKATHON + "HACKATHON]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "BOOLEAN must be: true or false\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
             + PREFIX_SKILL + "Java:Advanced "
             + PREFIX_LOOKING + "true "
-            + PREFIX_HACKATHON_FILTER + "NUSHack";
+            + PREFIX_HACKATHON + "NUSHack";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";

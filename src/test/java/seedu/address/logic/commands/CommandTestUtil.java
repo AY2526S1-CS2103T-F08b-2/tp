@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
@@ -63,8 +63,8 @@ public class CommandTestUtil {
     // Team-related descriptors
     public static final String TEAM_NAME_DESC_ALPHA = " " + PREFIX_TEAM_NAME + VALID_TEAM_NAME_ALPHA;
     public static final String TEAM_NAME_DESC_BETA = " " + PREFIX_TEAM_NAME + VALID_TEAM_NAME_BETA;
-    public static final String HACKATHON_NAME_DESC_TECH = " " + PREFIX_HACKATHON_NAME + VALID_HACKATHON_NAME_TECH;
-    public static final String HACKATHON_NAME_DESC_AI = " " + PREFIX_HACKATHON_NAME + VALID_HACKATHON_NAME_AI;
+    public static final String HACKATHON_NAME_DESC_TECH = " " + PREFIX_HACKATHON + VALID_HACKATHON_NAME_TECH;
+    public static final String HACKATHON_NAME_DESC_AI = " " + PREFIX_HACKATHON + VALID_HACKATHON_NAME_AI;
     public static final String PERSON_INDEX_DESC_1 = " " + PREFIX_PERSON + VALID_PERSON_INDEX_1;
     public static final String PERSON_INDEX_DESC_2 = " " + PREFIX_PERSON + VALID_PERSON_INDEX_2;
 
@@ -77,7 +77,7 @@ public class CommandTestUtil {
     // Team-related invalid descriptors
     public static final String INVALID_TEAM_NAME_DESC = " " + PREFIX_TEAM_NAME + "Team@Alpha"; // '@' not allowed
     public static final String INVALID_HACKATHON_NAME_DESC = " "
-            + PREFIX_HACKATHON_NAME
+            + PREFIX_HACKATHON
             + "Hack@thon"; // '@' not allowed
     public static final String INVALID_PERSON_INDEX_DESC = " " + PREFIX_PERSON + "0"; // index must be positive
 

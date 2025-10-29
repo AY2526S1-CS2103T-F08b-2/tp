@@ -15,10 +15,10 @@ participant "m:Model" as Model MODEL_COLOR
 participant "t:Team" as Team MODEL_COLOR
 end box
 
-[-> LogicManager : execute("createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/1 p/2")
+[-> LogicManager : execute("createTeam tn/TEAM_NAME h/HACKATHON_NAME p/1 p/2")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/1 p/2")
+LogicManager -> AddressBookParser : parseCommand("createTeam tn/TEAM_NAME h/HACKATHON_NAME p/1 p/2")
 activate AddressBookParser
 
 create CreateTeamCommandParser
@@ -28,7 +28,7 @@ activate CreateTeamCommandParser
 CreateTeamCommandParser --> AddressBookParser
 deactivate CreateTeamCommandParser
 
-AddressBookParser -> CreateTeamCommandParser : parse("tn/TEAM_NAME hn/HACKATHON_NAME p/1 p/2")
+AddressBookParser -> CreateTeamCommandParser : parse("tn/TEAM_NAME h/HACKATHON_NAME p/1 p/2")
 activate CreateTeamCommandParser
 
 create CreateTeamCommand

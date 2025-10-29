@@ -28,13 +28,13 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe e/johnd@example.com tg/John gh/John` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe e/johnd@example.com t/John g/John` : Adds a contact named `John Doe` to the Address Book.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
    * `listTeam` : Lists all teams.
 
-   * `createTeam tn/Development Team hn/Hackathon 2024 p/1 p/2` : Creates a team with the first two contacts as members.
+   * `createTeam tn/Development Team h/Hackathon 2024 p/1 p/2` : Creates a team with the first two contacts as members.
 
    * `clear` : Deletes all contacts.
 
@@ -58,7 +58,7 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
   e.g. `[s/Skill]…​` can be used as ` ` (i.e. 0 times), `s/Python`, `s/C++ s/Java` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME tg/TELEGRAM`, `tg/TELEGRAM  n/NAME` is also acceptable.
+  e.g. if the command specifies `n/NAME t/TELEGRAM`, `t/TELEGRAM  n/NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
@@ -79,7 +79,7 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
+Format: `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
 
 * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
 * If no level is specified for a skill, it defaults to `Beginner`
@@ -98,10 +98,10 @@ A person can have any number of skills and hackathons (including 0).
 </div>
 
 Examples:
-* `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner`
-* `add n/Betsy Crowe e/betsycrowe@example.com tg/Betsy gh/Betsy03 s/C#:Intermediate s/Java:Advanced l/true h/NUSHack h/iNTUition`
-* `add n/Alice e/alice@example.com tg/alice_tg gh/alice123 s/Docker l/true` (person is looking for a team)
-* `add n/Bob e/bob@example.com tg/bobbygram gh/bobhub l/false h/HackNRoll` (person explicitly not looking for a team but interested in HackNRoll)
+* `add n/John Doe e/johnd@example.com t/John g/John s/Python:Beginner`
+* `add n/Betsy Crowe e/betsycrowe@example.com t/Betsy g/Betsy03 s/C#:Intermediate s/Java:Advanced l/true h/NUSHack h/iNTUition`
+* `add n/Alice e/alice@example.com t/alice_tg g/alice123 s/Docker l/true` (person is looking for a team)
+* `add n/Bob e/bob@example.com t/bobbygram g/bobhub l/false h/HackNRoll` (person explicitly not looking for a team but interested in HackNRoll)
 
 ### Listing all persons : `list`
 
@@ -113,7 +113,7 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [l/BOOLEAN] [h/HACKATHON]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -128,7 +128,7 @@ Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SK
 * `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all hackathons.
 
 Examples:
-*  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
+*  `edit 1 e/johndoe@example.com t/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
 *  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
 *  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
 *  `edit 1 l/true` Marks the 1st person as looking for a team.
@@ -190,7 +190,7 @@ Examples:
 
 Creates a new team in the address book with specified team members.
 
-Format: `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​`
+Format: `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​`
 
 * Creates a team with the specified `TEAM_NAME` and `HACKATHON_NAME`.
 * Team members are specified by their `INDEX` numbers from the displayed person list.
@@ -204,8 +204,8 @@ Make sure to use the `list` command first to see the current index numbers of pe
 </div>
 
 Examples:
-* `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` creates a team called "Development Team" for "Tech Innovation 2024" hackathon with the 1st and 3rd persons as members.
-* `createTeam tn/Alpha Squad hn/AI Challenge p/2 p/4 p/5` creates a team called "Alpha Squad" for "AI Challenge" hackathon with the 2nd, 4th, and 5th persons as members.
+* `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3` creates a team called "Development Team" for "Tech Innovation 2024" hackathon with the 1st and 3rd persons as members.
+* `createTeam tn/Alpha Squad h/AI Challenge p/2 p/4 p/5` creates a team called "Alpha Squad" for "AI Challenge" hackathon with the 2nd, 4th, and 5th persons as members.
 
 ### Listing all teams : `listTeam`
 
@@ -330,13 +330,13 @@ _Details coming soon ..._
 
 | Action | Format, Examples |
 |--------|------------------|
-| **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
+| **Add** | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/John g/John s/Python:Beginner h/NUSHack` |
 | **Add Person to Team** | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
 | **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
-| **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
+| **Create Team** | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
-| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​  [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack` |
+| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​  [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate l/true h/NUSHack` |
 | **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack`, `filter h/NUSHack` |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
 | **List** | `list` |

@@ -4,7 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -42,7 +42,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
                         PREFIX_NAME, PREFIX_EMAIL,
-                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON_FILTER);
+                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON);
 
         Index index;
 
@@ -82,7 +82,7 @@ public class EditCommandParser implements Parser<EditCommand> {
 
 
         // Parse interested hackathons
-        parseHackathonsForEdit(argMultimap.getAllValues(PREFIX_HACKATHON_FILTER))
+        parseHackathonsForEdit(argMultimap.getAllValues(PREFIX_HACKATHON))
                 .ifPresent(editPersonDescriptor::setInterestedHackathons);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {

@@ -2,7 +2,7 @@ package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -62,9 +62,9 @@ public class PersonUtil {
         if (descriptor.getInterestedHackathons().isPresent()) {
             Set<HackathonName> hackathons = descriptor.getInterestedHackathons().get();
             if (hackathons.isEmpty()) {
-                sb.append(PREFIX_HACKATHON_FILTER).append(" ");
+                sb.append(PREFIX_HACKATHON).append(" ");
             } else {
-                hackathons.forEach(h -> sb.append(PREFIX_HACKATHON_FILTER).append(h.value).append(" "));
+                hackathons.forEach(h -> sb.append(PREFIX_HACKATHON).append(h.value).append(" "));
             }
         }
         return sb.toString();

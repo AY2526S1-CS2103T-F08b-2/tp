@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -22,9 +22,9 @@ public class FilterCommandParser implements Parser<FilterCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FilterCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_HACKATHON_FILTER);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_HACKATHON);
 
-        boolean hasHackathonPrefix = argMultimap.getValue(PREFIX_HACKATHON_FILTER).isPresent();
+        boolean hasHackathonPrefix = argMultimap.getValue(PREFIX_HACKATHON).isPresent();
 
         if (!hasHackathonPrefix) {
             throw new ParseException(
@@ -35,7 +35,7 @@ public class FilterCommandParser implements Parser<FilterCommand> {
 
 
         if (hasHackathonPrefix) {
-            String hackathonArgs = argMultimap.getValue(PREFIX_HACKATHON_FILTER).get().trim();
+            String hackathonArgs = argMultimap.getValue(PREFIX_HACKATHON).get().trim();
             if (hackathonArgs.isEmpty()) {
                 throw new ParseException(
                         String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterCommand.MESSAGE_USAGE));

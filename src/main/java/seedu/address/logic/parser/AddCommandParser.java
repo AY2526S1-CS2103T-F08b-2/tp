@@ -3,7 +3,7 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
@@ -35,7 +35,7 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_EMAIL,
-                         PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON_FILTER);
+                         PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_EMAIL)
                 || !argMultimap.getPreamble().isEmpty()) {
@@ -50,7 +50,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         Telegram telegram = ParserUtil.parseTelegram(argMultimap.getValue(PREFIX_TELEGRAM).orElse(""));
         GitHub github = ParserUtil.parseGitHub(argMultimap.getValue(PREFIX_GITHUB).orElse(""));
         Set<HackathonName> interestedHackathons = ParserUtil.parseHackathonNames(
-                argMultimap.getAllValues(PREFIX_HACKATHON_FILTER));
+                argMultimap.getAllValues(PREFIX_HACKATHON));
 
         Person person = new Person(name, email, telegram, github, skillList,
                 new HashSet<>(), interestedHackathons);
