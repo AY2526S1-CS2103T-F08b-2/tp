@@ -270,10 +270,9 @@ public class ModelManager implements Model {
     }
 
     /**
-     * Removes a person from a team, maintaining bidirectional relationship.
-     * Updates both the team's member list and the person's team list.
-     * Also removes the team's hackathon from the person's participatingHackathons
-     * and adds it back to interestedHackathons.
+     * Removes a person from a team. Updates both the team's member list and the person's team list.
+     * If the team has an associated hackathon, removes it from the person's participating hackathons
+     * and adds it back to interested hackathons.
      *
      * @param team The team to remove the person from
      * @param person The person to remove from the team
@@ -295,29 +294,19 @@ public class ModelManager implements Model {
 
         // Update person's teams list
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
-
-        // Log the team name and hackathon name
-        logger.info("Team Name: " + team.getTeamName());
-        logger.info("Hackathon Name: " + team.getHackathonName());
-
+        // remove team by identity (isSameTeam) to handle different instances
         updatedTeams.removeIf(t -> t.isSameTeam(team));
 
-        logger.info("After removal - updatedTeams size: " + updatedTeams.size());
-        logger.info("After removal - updatedTeams: " + updatedTeams);
-
-        // Update person's hackathons - always remove the team's hackathon from participating
+        // Update person's hackathons - remove from participating and add back to interested
         Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(person.getParticipatingHackathons());
         Set<HackathonName> updatedInterestedHackathons = new HashSet<>(person.getInterestedHackathons());
 
         if (team.getHackathonName() != null) {
-            // Always remove the team's hackathon from participating hackathons
+            // Remove the team's hackathon from participating hackathons
             updatedParticipatingHackathons.remove(team.getHackathonName());
-            // Add back to interested hackathons (they were interested before joining)
+            // Add it back to interested hackathons (they were participating, so they must have been interested)
             updatedInterestedHackathons.add(team.getHackathonName());
         }
-
-        // Log the updated teams before creating the updated person
-        logger.info("Final updatedTeams before creating updatedPerson: " + updatedTeams);
 
         Person updatedPerson = new Person(
                 person.getName(),
