@@ -79,7 +79,7 @@ public class Team {
      */
     public boolean hasMember(Person person) {
         requireNonNull(person);
-        return members.contains(person);
+        return members.stream().anyMatch(member -> member.isSamePerson(person));
     }
 
     /**

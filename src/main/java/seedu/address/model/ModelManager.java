@@ -16,7 +16,6 @@ import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
-import seedu.address.model.team.UniqueTeamList;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -195,12 +194,24 @@ public class ModelManager implements Model {
         // Log the list of teams
         logger.info("Teams in address book: " + addressBook.getTeamList());
 
-        // Log the result of the anyMatch condition
-        boolean result = addressBook.getTeamList().stream()
-                .anyMatch(team -> team.hasMember(person) && team.getHackathonName().equals(hackathonName));
-        logger.info("Result of isPersonInHackathon check: " + result);
+        for (Team team : teams) {
+            String teamNameStr = String.valueOf(team.getTeamName());
+            HackathonName teamHackathon = team.getHackathonName();
+            boolean hasMember = team.hasMember(person);
+            boolean hackathonMatches = java.util.Objects.equals(teamHackathon, hackathonName);
 
-        return result;
+            logger.info("Team: " + teamNameStr
+                    + " | Hackathon: " + teamHackathon
+                    + " | hasMember: " + hasMember
+                    + " | hackathonMatches: " + hackathonMatches);
+
+            if (hasMember && hackathonMatches) {
+                logger.info("Found matching team: " + teamNameStr + " for hackathon: " + hackathonName);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -284,8 +295,15 @@ public class ModelManager implements Model {
 
         // Update person's teams list
         Set<Team> updatedTeams = new HashSet<>(person.getTeams());
-        // remove team by identity (isSameTeam) to handle different instances
+
+        // Log the team name and hackathon name
+        logger.info("Team Name: " + team.getTeamName());
+        logger.info("Hackathon Name: " + team.getHackathonName());
+
         updatedTeams.removeIf(t -> t.isSameTeam(team));
+
+        logger.info("After removal - updatedTeams size: " + updatedTeams.size());
+        logger.info("After removal - updatedTeams: " + updatedTeams);
 
         // Update person's hackathons - always remove the team's hackathon from participating
         Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(person.getParticipatingHackathons());
@@ -297,6 +315,9 @@ public class ModelManager implements Model {
             // Add back to interested hackathons (they were interested before joining)
             updatedInterestedHackathons.add(team.getHackathonName());
         }
+
+        // Log the updated teams before creating the updated person
+        logger.info("Final updatedTeams before creating updatedPerson: " + updatedTeams);
 
         Person updatedPerson = new Person(
                 person.getName(),
