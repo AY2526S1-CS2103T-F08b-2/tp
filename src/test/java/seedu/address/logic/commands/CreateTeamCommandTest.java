@@ -282,7 +282,7 @@ public class CreateTeamCommandTest {
         }
 
         @Override
-        public Team removePersonFromTeam(Team team, Person person) {
+        public Team removeFromTeam(Team team, Person person) {
             throw new AssertionError("This method should not be called.");
         }
     }

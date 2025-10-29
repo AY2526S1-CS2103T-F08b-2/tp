@@ -173,7 +173,7 @@ public class ModelManagerTest {
     }
 
     @Test
-    public void removePersonFromTeam_hackathonInParticipating_movesToInterested() {
+    public void removeFromTeam_hackathonInParticipating_movesToInterested() {
         // Setup: Create a person with participating hackathon
         seedu.address.model.person.Person person = new seedu.address.testutil.PersonBuilder()
                 .withName("Test Person")
@@ -197,7 +197,7 @@ public class ModelManagerTest {
                 .findFirst()
                 .get();
         // Remove person from team using the updated team reference
-        modelManager.removePersonFromTeam(updatedTeam, personAfterAdd);
+        modelManager.removeFromTeam(updatedTeam, personAfterAdd);
         // After removing from team: hackathon should be back in interested, NOT in participating
         seedu.address.model.person.Person updatedPerson = modelManager.getFilteredPersonList().stream()
                 .filter(p -> p.isSamePerson(person))

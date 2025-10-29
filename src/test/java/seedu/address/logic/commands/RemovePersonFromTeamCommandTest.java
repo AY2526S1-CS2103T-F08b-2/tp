@@ -20,7 +20,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
-public class RemovePersonFromTeamCommandTest {
+public class RemoveFromTeamCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -38,7 +38,7 @@ public class RemovePersonFromTeamCommandTest {
         AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         addCommand.execute(model);
 
-        // Now remove the person using RemovePersonFromTeamCommand
+        // Now remove the person using RemoveFromTeamCommand
         RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
         CommandResult result = removeCommand.execute(model);
 

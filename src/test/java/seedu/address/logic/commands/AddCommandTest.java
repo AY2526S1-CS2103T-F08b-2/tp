@@ -194,7 +194,7 @@ public class AddCommandTest {
         }
 
         @Override
-        public seedu.address.model.team.Team removePersonFromTeam(seedu.address.model.team.Team team, Person person) {
+        public seedu.address.model.team.Team removeFromTeam(seedu.address.model.team.Team team, Person person) {
             throw new AssertionError("This method should not be called.");
         }
     }
