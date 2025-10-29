@@ -117,7 +117,7 @@ Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME]`
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* **Skills and hackathons are not affected by the edit command** - use `addSkill`/`removeSkill` for skills and `addHackathon` for hackathons.
+* **Skills and hackathons are not affected by the edit command** - use `addSkill`/`removeSkill` for skills (both support multiple skills at once) and `addHackathon`/`removeHackathon` for hackathons.
 
 Examples:
 *  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
@@ -334,21 +334,23 @@ Examples:
 * `listTeam` followed by `deleteTeam 2` deletes the 2nd team in the team list.
 * `deleteTeam 1` deletes the 1st team in the displayed team list.
 
-### Removing a skill from a person : `removeSkill`
+### Removing skills from a person : `removeSkill`
 
-Removes a skill from a person in the address book.
+Removes one or more skills from a person in the address book.
 
-Format: `removeSkill INDEX SKILL`
+Format: `removeSkill INDEX SKILL [MORE_SKILLS]...`
 
-* Removes the specified `SKILL` from the person at the specified `INDEX`.
+* Removes the specified `SKILL(S)` from the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …
-* The skill name is case-sensitive and must match the skill name exactly.
-* If the person does not have the specified skill, an error message will be shown.
+* Multiple skills can be removed at once by separating them with spaces.
+* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols.
+* If the person does not have any of the specified skills, an error message will be shown.
 
 Examples:
-* `removeSkill 2 Java` removes the skill "Java" from the 2nd person in the displayed list.
-* `removeSkill 1 Python` removes the skill "Python" from the 1st person in the displayed list.
+* `removeSkill 2 java` removes the skill "java" from the 2nd person in the displayed list.
+* `removeSkill 1 python docker` removes the skills "python" and "docker" from the 1st person in the displayed list.
+* `removeSkill 3 java python c++` removes the skills "java", "python", and "c++" from the 3rd person in the displayed list.
 
 ### Clearing all entries : `clear`
 
@@ -414,6 +416,6 @@ _Details coming soon ..._
 | **List Team** | `listTeam` |
 | **Remove Hackathon** | `removeHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​` <br> e.g., `removeHackathon 1 hn/NUSHack hn/iNTUition` |
 | **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
-| **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
+| **Remove Skill** | `removeSkill INDEX SKILL [MORE_SKILLS]...`<br> e.g., `removeSkill 2 java python` |
 | **Help** | `help` |
 | **Exit** | `exit` |

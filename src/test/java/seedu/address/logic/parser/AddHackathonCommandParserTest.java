@@ -57,30 +57,37 @@ public class AddHackathonCommandParserTest {
     @Test
     public void parse_invalidIndex_throwsParseException() {
         // negative index
-        assertParseFailure(parser, "-1 " + PREFIX_HACKATHON_NAME + "NUSHack", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, "-1 " + PREFIX_HACKATHON_NAME + "NUSHack",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
 
         // zero index
-        assertParseFailure(parser, "0 " + PREFIX_HACKATHON_NAME + "NUSHack", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, "0 " + PREFIX_HACKATHON_NAME + "NUSHack",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
 
         // non-numeric index
-        assertParseFailure(parser, "a " + PREFIX_HACKATHON_NAME + "NUSHack", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, "a " + PREFIX_HACKATHON_NAME + "NUSHack",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_missingIndex_throwsParseException() {
-        assertParseFailure(parser, PREFIX_HACKATHON_NAME + "NUSHack", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, PREFIX_HACKATHON_NAME + "NUSHack",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_missingHackathon_throwsParseException() {
-        assertParseFailure(parser, "1", MESSAGE_INVALID_COMMAND_FORMAT);
-        assertParseFailure(parser, "1 ", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, "1",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "1 ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_invalidHackathonName_throwsParseException() {
-        // empty hackathon name
-        assertParseFailure(parser, "1 " + PREFIX_HACKATHON_NAME + "", MESSAGE_INVALID_COMMAND_FORMAT);
+        // empty hackathon name - throws HackathonName validation error
+        assertParseFailure(parser, "1 " + PREFIX_HACKATHON_NAME + "",
+                HackathonName.MESSAGE_CONSTRAINTS);
     }
 
     @Test
@@ -99,7 +106,8 @@ public class AddHackathonCommandParserTest {
 
     @Test
     public void parse_emptyArgs_throwsParseException() {
-        assertParseFailure(parser, "", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, "",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
@@ -109,24 +117,25 @@ public class AddHackathonCommandParserTest {
 
     @Test
     public void parse_whitespaceOnly_throwsParseException() {
-        assertParseFailure(parser, "   ", MESSAGE_INVALID_COMMAND_FORMAT);
+        assertParseFailure(parser, "   ",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_invalidPrefixBeforeIndex_throwsParseException() {
         assertParseFailure(parser, PREFIX_HACKATHON_NAME + "1 " + PREFIX_HACKATHON_NAME + "NUSHack",
-                MESSAGE_INVALID_COMMAND_FORMAT);
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
-    public void parse_multipleValidHackathonsWithSpecialCharacters_returnsAddHackathonCommand() {
+    public void parse_multipleValidHackathons_returnsAddHackathonCommand() {
         Set<HackathonName> expectedHackathons = new HashSet<>();
-        expectedHackathons.add(new HackathonName("Hack@MIT"));
+        expectedHackathons.add(new HackathonName("HackMIT"));
         expectedHackathons.add(new HackathonName("HackNYU2024"));
 
         AddHackathonCommand expectedCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, expectedHackathons);
 
-        assertParseSuccess(parser, "1 " + PREFIX_HACKATHON_NAME + "Hack@MIT "
+        assertParseSuccess(parser, "1 " + PREFIX_HACKATHON_NAME + "HackMIT "
                 + PREFIX_HACKATHON_NAME + "HackNYU2024", expectedCommand);
     }
 

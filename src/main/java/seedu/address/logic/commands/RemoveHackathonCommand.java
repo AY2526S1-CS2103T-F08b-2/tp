@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -33,8 +32,10 @@ public class RemoveHackathonCommand extends Command {
             + PREFIX_HACKATHON_NAME + "TechChallenge";
 
     public static final String MESSAGE_DELETE_HACKATHON_SUCCESS = "Removed hackathon(s) from Person: %1$s";
-    public static final String MESSAGE_HACKATHON_NOT_FOUND = "Hackathon '%1$s' not found in interested list for Person: %2$s";
-    public static final String MESSAGE_HACKATHON_IN_PARTICIPATING = "Cannot remove hackathon '%1$s' because you are currently participating in it. Use removePersonFromTeam or deleteTeam first.";
+    public static final String MESSAGE_HACKATHON_NOT_FOUND = "Hackathon '%1$s' not found in "
+            + "interested list for Person: %2$s";
+    public static final String MESSAGE_HACKATHON_IN_PARTICIPATING = "Cannot remove hackathon '%1$s' "
+           + "because you are currently participating in it. Use removePersonFromTeam or deleteTeam first.";
     public static final String MESSAGE_NO_HACKATHONS_PROVIDED = "At least one hackathon must be specified for removal.";
 
     private static final Logger logger = LogsCenter.getLogger(RemoveHackathonCommand.class);
