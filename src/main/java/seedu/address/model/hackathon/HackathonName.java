@@ -55,7 +55,7 @@ public class HackathonName {
         }
 
         HackathonName otherHackathonName = (HackathonName) other;
-        return value.equals(otherHackathonName.value);
+        return value.equalsIgnoreCase(otherHackathonName.value);
     }
 
     @Override
