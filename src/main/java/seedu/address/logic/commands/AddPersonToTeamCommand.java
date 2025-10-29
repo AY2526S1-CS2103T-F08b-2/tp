@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.hackathon.HackathonName;
@@ -68,9 +67,9 @@ public class AddPersonToTeamCommand extends Command {
         // Get the person to add
         Person personToAdd = lastShownPersonList.get(personIndex.getZeroBased());
 
-        // Find the target team
+        // Find the target team (case-insensitive match)
         Team targetTeam = teamList.stream()
-                .filter(team -> team.getTeamName().equals(teamName))
+                .filter(team -> team.getTeamName().toString().equalsIgnoreCase(teamName.toString()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException(
                         String.format(MESSAGE_TEAM_NOT_FOUND, teamName)));
@@ -79,7 +78,7 @@ public class AddPersonToTeamCommand extends Command {
 
         // Check if person is already in this specific team by checking the person's teams
         boolean isAlreadyInTeam = personToAdd.getTeams().stream()
-                .anyMatch(team -> team.getTeamName().equals(teamName));
+                .anyMatch(team -> team.getTeamName().toString().equalsIgnoreCase(teamName.toString()));
 
         if (isAlreadyInTeam) {
             throw new CommandException(

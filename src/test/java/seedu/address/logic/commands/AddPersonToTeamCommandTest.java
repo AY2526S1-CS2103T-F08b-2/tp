@@ -11,7 +11,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -149,7 +148,7 @@ public class AddPersonToTeamCommandTest {
         CommandResult result = command.execute(model);
 
         String expectedMessage = String.format(AddPersonToTeamCommand.MESSAGE_SUCCESS,
-                Messages.format(personToAdd), Messages.format(team));
+                personToAdd.getName(), team.getTeamName());
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
 
@@ -180,8 +179,8 @@ public class AddPersonToTeamCommandTest {
 
         assertCommandFailure(command2, model,
                 String.format(AddPersonToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
-                        Messages.format(model.getFilteredPersonList()
-                                .get(INDEX_FIRST_PERSON.getZeroBased())), differentCaseTeamName));
+                        model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getName(),
+                        differentCaseTeamName));
     }
 
     @Test

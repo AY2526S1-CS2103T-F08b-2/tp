@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -80,13 +79,13 @@ public class RemovePersonFromTeamCommand extends Command {
         logger.fine("Person to remove resolved: " + personToRemove.getName());
 
         Team targetTeam = teamList.stream()
-                .filter(team -> team.getTeamName().equals(teamName))
+                .filter(team -> team.getTeamName().toString().equalsIgnoreCase(teamName.toString()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException(
                         String.format(MESSAGE_TEAM_NOT_FOUND, teamName)));
 
         boolean isInTeam = personToRemove.getTeams().stream()
-                .anyMatch(team -> team.getTeamName().equals(teamName));
+                .anyMatch(team -> team.getTeamName().toString().equalsIgnoreCase(teamName.toString()));
 
         if (!isInTeam) {
             logger.log(Level.WARNING, "Person {0} is not in team {1}",
