@@ -42,7 +42,7 @@ public class AddPersonToTeamCommandTest {
         CommandResult result = command.execute(model);
 
         String expectedMessage = String.format(AddPersonToTeamCommand.MESSAGE_SUCCESS,
-                Messages.format(personToAdd), Messages.format(team));
+                personToAdd.getName(), team.getTeamName());
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
 
@@ -81,8 +81,7 @@ public class AddPersonToTeamCommandTest {
 
         assertCommandFailure(command2, model,
                 String.format(AddPersonToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
-                        Messages.format(model.getFilteredPersonList()
-                                .get(INDEX_FIRST_PERSON.getZeroBased())), teamName));
+                        model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getName(), teamName));
     }
 
     @Test

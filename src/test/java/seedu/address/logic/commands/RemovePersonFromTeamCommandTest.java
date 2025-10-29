@@ -43,7 +43,7 @@ public class RemovePersonFromTeamCommandTest {
         CommandResult result = removeCommand.execute(model);
 
         String expectedMessage = String.format(RemovePersonFromTeamCommand.MESSAGE_SUCCESS,
-                Messages.format(personToModify), Messages.format(team));
+                personToModify.getName(), team.getTeamName());
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
 
@@ -77,7 +77,7 @@ public class RemovePersonFromTeamCommandTest {
 
         assertCommandFailure(removeCommand, model,
                 String.format(RemovePersonFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
-                        Messages.format(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased())),
+                        model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getName(),
                         teamName));
     }
 
@@ -163,4 +163,3 @@ public class RemovePersonFromTeamCommandTest {
         assertEquals(false, firstCommand.equals(null));
     }
 }
-

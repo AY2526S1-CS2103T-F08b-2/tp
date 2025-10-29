@@ -78,7 +78,7 @@ public class AddPersonToTeamCommand extends Command {
         if (isAlreadyInTeam) {
             throw new CommandException(
                     String.format(MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
-                            Messages.format(personToAdd), teamName));
+                            personToAdd.getName(), teamName));
         }
 
         // Use the model's relationship management to add person to team
@@ -89,7 +89,7 @@ public class AddPersonToTeamCommand extends Command {
         model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS,
-                Messages.format(personToAdd), Messages.format(updatedTeam)),
+                personToAdd.getName(), updatedTeam.getTeamName()),
                 false, false, true); // showTeams = true to display teams list
     }
 

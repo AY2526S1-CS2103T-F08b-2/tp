@@ -77,7 +77,7 @@ public class RemovePersonFromTeamCommand extends Command {
         }
 
         Person personToRemove = lastShownPersonList.get(personIndex.getZeroBased());
-        logger.fine("Person to remove resolved: " + Messages.format(personToRemove));
+        logger.fine("Person to remove resolved: " + personToRemove.getName());
 
         Team targetTeam = teamList.stream()
                 .filter(team -> team.getTeamName().equals(teamName))
@@ -90,20 +90,20 @@ public class RemovePersonFromTeamCommand extends Command {
 
         if (!isInTeam) {
             logger.log(Level.WARNING, "Person {0} is not in team {1}",
-                    new Object[]{Messages.format(personToRemove), teamName});
+                    new Object[]{personToRemove.getName(), teamName});
             throw new CommandException(
                     String.format(MESSAGE_PERSON_NOT_IN_TEAM,
-                            Messages.format(personToRemove), teamName));
+                            personToRemove.getName(), teamName));
         }
 
         Team updatedTeam = model.removePersonFromTeam(targetTeam, personToRemove);
         model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
 
-        logger.info("Removed person " + Messages.format(personToRemove)
-                + " from team " + teamName + ". Updated team: " + Messages.format(updatedTeam));
+        logger.info("Removed person " + personToRemove.getName()
+                + " from team " + teamName + ". Updated team: " + updatedTeam.getTeamName());
 
         return new CommandResult(String.format(MESSAGE_SUCCESS,
-                Messages.format(personToRemove), Messages.format(updatedTeam)),
+                personToRemove.getName(), updatedTeam.getTeamName()),
                 false, false, true);
     }
 
