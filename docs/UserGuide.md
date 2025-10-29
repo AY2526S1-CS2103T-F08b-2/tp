@@ -161,6 +161,27 @@ Examples:
 *  `addHackathon 2 hn/iNTUition hn/HackNRoll` Adds iNTUition and HackNRoll to the 2nd person's interested hackathons.
 *  `addHackathon 3 hn/TechChallenge` Adds TechChallenge to the 3rd person's interested hackathons.
 
+### Removing interested hackathons from a person : `removeHackathon`
+
+Removes one or more interested hackathons from an existing person in the address book.
+
+Format: `removeHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​`
+
+* Removes interested hackathons from the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* At least one hackathon must be provided.
+* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
+* **Cannot remove if participating**: You cannot remove a hackathon from the interested list if the person is currently participating in that hackathon (as part of a team). You must first use `removePersonFromTeam` or `deleteTeam` to stop participating. An error will be shown if you try to remove a participating hackathon.
+* If the hackathon is not in the interested list, an error message will be shown.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Only hackathons in the "Interested" list (shown in light blue boxes) can be removed with this command. Participating hackathons (shown in light orange boxes) must be removed by leaving the team first.
+</div>
+
+Examples:
+*  `removeHackathon 1 hn/NUSHack` Removes NUSHack from the 1st person's interested hackathons list.
+*  `removeHackathon 2 hn/iNTUition hn/HackNRoll` Removes iNTUition and HackNRoll from the 2nd person's interested hackathons.
+*  `removeHackathon 3 hn/TechChallenge` Removes TechChallenge from the 3rd person's interested hackathons.
+
 ### Locating persons : `find`
 
 Finds persons whose name, skills, Telegram username, or GitHub username contain any of the given keywords.
@@ -391,6 +412,7 @@ _Details coming soon ..._
 | **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
 | **List** | `list` |
 | **List Team** | `listTeam` |
+| **Remove Hackathon** | `removeHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​` <br> e.g., `removeHackathon 1 hn/NUSHack hn/iNTUition` |
 | **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
 | **Help** | `help` |
