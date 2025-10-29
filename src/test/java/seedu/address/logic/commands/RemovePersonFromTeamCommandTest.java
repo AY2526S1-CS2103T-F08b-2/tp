@@ -145,6 +145,59 @@ public class RemovePersonFromTeamCommandTest {
     }
 
     @Test
+    public void execute_teamNameDifferentCase_success() throws Exception {
+        // Create a team and add a person into it
+        TeamName teamName = new TeamName("Test Team");
+        HackathonName hackathonName = new HackathonName("Test Hackathon");
+        Set<Person> initialMembers = new HashSet<>();
+        Team team = new Team(teamName, hackathonName, initialMembers);
+        model.addTeam(team);
+
+        // Add the person to the team using AddPersonToTeamCommand
+        Person personToModify = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        addCommand.execute(model);
+
+        // Remove the person using different case for team name - should still work
+        TeamName differentCaseTeamName = new TeamName("TEST TEAM");
+        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(
+                differentCaseTeamName, INDEX_FIRST_PERSON);
+        CommandResult result = removeCommand.execute(model);
+
+        String expectedMessage = String.format(RemovePersonFromTeamCommand.MESSAGE_SUCCESS,
+                Messages.format(personToModify), Messages.format(team));
+
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+
+        // Verify the team no longer has the person
+        Team updatedTeam = model.getFilteredTeamList().stream()
+                .filter(t -> t.getTeamName().equals(teamName))
+                .findFirst()
+                .orElseThrow();
+
+        assertEquals(false, updatedTeam.hasMember(personToModify));
+    }
+
+    @Test
+    public void execute_personNotInTeamDifferentCase_throwsCommandException() throws Exception {
+        // Create a team without adding any person to it
+        TeamName teamName = new TeamName("Test Team");
+        HackathonName hackathonName = new HackathonName("Test Hackathon");
+        Team team = new Team(teamName, hackathonName, new HashSet<>());
+        model.addTeam(team);
+
+        // Try to remove person using different case for team name - should still throw correct error
+        TeamName differentCaseTeamName = new TeamName("test team");
+        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(
+                differentCaseTeamName, INDEX_FIRST_PERSON);
+
+        assertCommandFailure(removeCommand, model,
+                String.format(RemovePersonFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
+                        Messages.format(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased())),
+                        differentCaseTeamName));
+    }
+
+    @Test
     public void equals() {
         TeamName teamName = new TeamName("Team A");
         RemovePersonFromTeamCommand firstCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);

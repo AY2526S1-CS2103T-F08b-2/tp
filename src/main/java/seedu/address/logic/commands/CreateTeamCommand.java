@@ -85,6 +85,14 @@ public class CreateTeamCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_TEAM);
         }
 
+        // Check if any person is already in a team for the same hackathon
+        for (Person person : members) {
+            if (model.isPersonInHackathon(person, hackathonName)) {
+                throw new CommandException(String.format("Person %s is already in a team for hackathon %s",
+                        person.getName(), hackathonName));
+            }
+        }
+
         // Add the empty team to the model first
         model.addTeam(toCreate);
 
