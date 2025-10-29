@@ -197,6 +197,11 @@ public class AddCommandTest {
         public seedu.address.model.team.Team removePersonFromTeam(seedu.address.model.team.Team team, Person person) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public boolean isPersonInHackathon(Person person, seedu.address.model.hackathon.HackathonName hackathonName) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**

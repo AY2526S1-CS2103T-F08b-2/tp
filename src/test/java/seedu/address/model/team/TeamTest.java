@@ -129,6 +129,7 @@ public class TeamTest {
     public void isSameTeam_sameObject_returnsTrue() {
         Team team = new TeamBuilder()
                 .withTeamName("Alpha Team")
+                .withHackathonName("Tech Challenge 2024")
                 .withMembers(ALICE, BENSON)
                 .build();
         assertTrue(team.isSameTeam(team));
@@ -143,7 +144,7 @@ public class TeamTest {
     }
 
     @Test
-    public void isSameTeam_sameTeamName_returnsTrue() {
+    public void isSameTeam_sameTeamNameDiffHackathon_returnsFalse() {
         Team team1 = new TeamBuilder()
                 .withTeamName("Alpha Team")
                 .withHackathonName("Tech Challenge 2024")
@@ -154,7 +155,7 @@ public class TeamTest {
                 .withHackathonName("Different Hackathon")
                 .withMembers(CARL)
                 .build();
-        assertTrue(team1.isSameTeam(team2));
+        assertFalse(team1.isSameTeam(team2));
     }
 
     @Test

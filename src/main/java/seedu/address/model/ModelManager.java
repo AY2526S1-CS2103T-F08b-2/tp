@@ -181,6 +181,40 @@ public class ModelManager implements Model {
     //=========== Team-Person Relationship Management ========================================================
 
     /**
+     * Checks if a person is already in a team for the given hackathon.
+     */
+    @Override
+    public boolean isPersonInHackathon(Person person, HackathonName hackathonName) {
+        requireAllNonNull(person, hackathonName);
+        ObservableList<Team> teams = addressBook.getTeamList();
+
+        // Log the person and hackathon name being checked
+        logger.info("Checking if person " + person.getName() + " is in hackathon " + hackathonName);
+
+        // Log the list of teams
+        logger.info("Teams in address book: " + addressBook.getTeamList());
+
+        for (Team team : teams) {
+            String teamNameStr = String.valueOf(team.getTeamName());
+            HackathonName teamHackathon = team.getHackathonName();
+            boolean hasMember = team.hasMember(person);
+            boolean hackathonMatches = java.util.Objects.equals(teamHackathon, hackathonName);
+
+            logger.info("Team: " + teamNameStr
+                    + " | Hackathon: " + teamHackathon
+                    + " | hasMember: " + hasMember
+                    + " | hackathonMatches: " + hackathonMatches);
+
+            if (hasMember && hackathonMatches) {
+                logger.info("Found matching team: " + teamNameStr + " for hackathon: " + hackathonName);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Adds a person to a team, maintaining bidirectional relationship.
      * Updates both the team's member list and the person's team list.
      * Also updates the person's participatingHackathons to include the team's
@@ -190,6 +224,7 @@ public class ModelManager implements Model {
      * @param person The person to add to the team
      * @return Updated team with the new member
      */
+    @Override
     public Team addPersonToTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
@@ -243,6 +278,7 @@ public class ModelManager implements Model {
      * @param person The person to remove from the team
      * @return Updated team without the person
      */
+    @Override
     public Team removePersonFromTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
