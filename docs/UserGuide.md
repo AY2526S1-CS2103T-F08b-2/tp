@@ -112,23 +112,16 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [h/HACKATHON]…​`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME]`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* **Skills are not affected by the edit command** - use `addSkill` or `removeSkill` commands to modify skills.
-* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all interested hackathons.
-* **Duplicate hackathons are not allowed** - each hackathon can only be added once
-* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
-* **Important**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). An error will be shown if you try to do this.
-* **Participating hackathons are preserved** - editing other fields will not affect hackathons the person is currently participating in through their teams
+* **Skills and hackathons are not affected by the edit command** - use `addSkill`/`removeSkill` for skills and `addHackathon` for hackathons.
 
 Examples:
 *  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
 *  `edit 2 n/Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
-*  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
-*  `edit 4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
 
 ### Adding skills to a person : `addSkill`
 
@@ -149,6 +142,24 @@ Examples:
 *  `addSkill 2 python:Intermediate docker` Adds Python at Intermediate level and Docker at Beginner level (default) to the 2nd person.
 *  `addSkill 3 c++ react.js` Adds C++ and React.js skills at Beginner level to the 3rd person.
 *  `addSkill 1 python:Advanced` If person 1 has Python at Beginner level, it will be upgraded to Advanced. If already at Advanced, no change occurs.
+
+### Adding interested hackathons to a person : `addHackathon`
+
+Adds one or more interested hackathons to an existing person in the address book.
+
+Format: `addHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​`
+
+* Adds interested hackathons to the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* At least one hackathon must be provided.
+* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
+* **Cannot add if already participating**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). An error will be shown if you try to do this.
+* **Ignores duplicates**: If you try to add a hackathon that is already in the interested list, it will be silently ignored (no error).
+* Interested hackathons are displayed in light blue boxes in the UI under the "Interested" label.
+
+Examples:
+*  `addHackathon 1 hn/NUSHack` Adds NUSHack to the 1st person's interested hackathons list.
+*  `addHackathon 2 hn/iNTUition hn/HackNRoll` Adds iNTUition and HackNRoll to the 2nd person's interested hackathons.
+*  `addHackathon 3 hn/TechChallenge` Adds TechChallenge to the 3rd person's interested hackathons.
 
 ### Locating persons : `find`
 
@@ -368,17 +379,19 @@ _Details coming soon ..._
 | Action | Format, Examples |
 |--------|------------------|
 | **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
+| **Add Hackathon** | `addHackathon INDEX hn/HACKATHON [hn/MORE_HACKATHONS]…​` <br> e.g., `addHackathon 1 hn/NUSHack hn/iNTUition` |
 | **Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
-| **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
+| **Add Skill** | `addSkill INDEX SKILL[:LEVEL] [MORE_SKILLS[:LEVEL]]…​` <br> e.g., `addSkill 1 java:Advanced python:Intermediate` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
 | **Delete Team** | `deleteTeam INDEX`<br> e.g., `deleteTeam 1` |
-| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate h/NUSHack` |
+| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME]`<br> e.g.,`edit 2 n/James Lee e/james@example.com` |
 | **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack`, `filter h/NUSHack` |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
 | **List** | `list` |
 | **List Team** | `listTeam` |
+| **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
 | **Help** | `help` |
 | **Exit** | `exit` |

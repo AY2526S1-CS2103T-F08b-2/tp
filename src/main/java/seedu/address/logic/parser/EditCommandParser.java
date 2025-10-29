@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 
@@ -19,7 +18,6 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.hackathon.HackathonName;
 
 /**
  * Parses input arguments and creates a new EditCommand object
@@ -40,7 +38,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args,
                         PREFIX_NAME, PREFIX_EMAIL,
-                        PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_HACKATHON_FILTER);
+                        PREFIX_TELEGRAM, PREFIX_GITHUB);
 
         Index index;
 
@@ -72,32 +70,10 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setGitHub(ParserUtil.parseGitHub(argMultimap.getValue(PREFIX_GITHUB).get()));
         }
 
-
-        // Parse interested hackathons
-        parseHackathonsForEdit(argMultimap.getAllValues(PREFIX_HACKATHON_FILTER))
-                .ifPresent(editPersonDescriptor::setInterestedHackathons);
-
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
 
         return new EditCommand(index, editPersonDescriptor);
-    }
-
-
-    /**
-     * Parses {@code Collection<String> hackathons} into {@code Set<HackathonName>} if {@code hackathons} is non-empty.
-     * If {@code hackathons} contain only one element which is an empty string, it will be parsed into a
-     * {@code Set<HackathonName>} containing zero hackathons.
-     */
-    private Optional<Set<HackathonName>> parseHackathonsForEdit(Collection<String> hackathons) throws ParseException {
-        assert hackathons != null;
-
-        if (hackathons.isEmpty()) {
-            return Optional.empty();
-        }
-        Collection<String> hackathonSet = hackathons.size() == 1 && hackathons.contains("")
-                ? Collections.emptySet() : hackathons;
-        return Optional.of(ParserUtil.parseHackathonNames(hackathonSet));
     }
 }
