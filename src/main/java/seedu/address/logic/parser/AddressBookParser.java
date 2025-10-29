@@ -24,6 +24,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTeamCommand;
+import seedu.address.logic.commands.RemoveHackathonCommand;
 import seedu.address.logic.commands.RemovePersonFromTeamCommand;
 import seedu.address.logic.commands.RemoveSkillCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -103,6 +104,9 @@ public class AddressBookParser {
 
         case AddHackathonCommand.COMMAND_WORD:
             return new AddHackathonCommandParser().parse(arguments);
+
+        case RemoveHackathonCommand.COMMAND_WORD:
+            return new RemoveHackathonCommandParser().parse(arguments);
 
         case AddPersonToTeamCommand.COMMAND_WORD:
             return new AddPersonToTeamCommandParser().parse(arguments);
