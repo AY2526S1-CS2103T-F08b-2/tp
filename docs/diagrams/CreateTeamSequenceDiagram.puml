@@ -76,7 +76,7 @@ Model --> CreateTeamCommand
 deactivate Model
 
 loop for each person index
-    CreateTeamCommand -> Model : addPersonToTeam(t, member)
+    CreateTeamCommand -> Model : addToTeam(t, member)
     activate Model
 
     Model --> CreateTeamCommand : updatedTeam

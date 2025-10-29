@@ -219,11 +219,11 @@ Format: `listTeam`
 Examples:
 * `listTeam` shows all teams currently stored in the address book.
 
-### Adding a person to a team : `addPersonToTeam`
+### Adding a person to a team : `addToTeam`
 
 Adds an existing person to an existing team in the address book.
 
-Format: `addPersonToTeam tn/TEAM_NAME p/INDEX`
+Format: `addToTeam tn/TEAM_NAME p/INDEX`
 
 * Adds the person at the specified `INDEX` to the team with the specified `TEAM_NAME`.
 * The index refers to the index number shown in the displayed person list.
@@ -242,8 +242,8 @@ Use the `listTeam` command first to see available teams, and `list` command to s
 </div>
 
 Examples:
-* `addPersonToTeam tn/Development Team p/3` adds the 3rd person in the displayed list to the "Development Team".
-* `addPersonToTeam tn/Alpha Squad p/1` adds the 1st person to the "Alpha Squad" team.
+* `addToTeam tn/Development Team p/3` adds the 3rd person in the displayed list to the "Development Team".
+* `addToTeam tn/Alpha Squad p/1` adds the 1st person to the "Alpha Squad" team.
 
 ### Removing a person from a team : `removePersonFromTeam`
 
@@ -331,7 +331,7 @@ _Details coming soon ..._
 | Action | Format, Examples |
 |--------|------------------|
 | **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
-| **Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
+| **Add Person to Team** | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
 | **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
