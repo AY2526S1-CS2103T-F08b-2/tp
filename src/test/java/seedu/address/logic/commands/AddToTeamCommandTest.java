@@ -20,7 +20,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
-public class AddPersonToTeamCommandTest {
+public class AddToTeamCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -36,12 +36,12 @@ public class AddPersonToTeamCommandTest {
         // Get a person to add
         Person personToAdd = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
-        AddPersonToTeamCommand command = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand command = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         // Execute the command and check the result message
         CommandResult result = command.execute(model);
 
-        String expectedMessage = String.format(AddPersonToTeamCommand.MESSAGE_SUCCESS,
+        String expectedMessage = String.format(AddToTeamCommand.MESSAGE_SUCCESS,
                 Messages.format(personToAdd), Messages.format(team));
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
@@ -73,14 +73,14 @@ public class AddPersonToTeamCommandTest {
         model.addTeam(team);
 
         // First, add the person to the team successfully
-        AddPersonToTeamCommand command1 = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand command1 = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         command1.execute(model);
 
         // Now try to add the same person to the same team again - this should throw an exception
-        AddPersonToTeamCommand command2 = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand command2 = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(command2, model,
-                String.format(AddPersonToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
+                String.format(AddToTeamCommand.MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
                         Messages.format(model.getFilteredPersonList()
                                 .get(INDEX_FIRST_PERSON.getZeroBased())), teamName));
     }
@@ -89,36 +89,36 @@ public class AddPersonToTeamCommandTest {
     public void execute_invalidPersonIndex_throwsCommandException() {
         TeamName teamName = new TeamName("Test Team");
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        AddPersonToTeamCommand command = new AddPersonToTeamCommand(teamName, outOfBoundIndex);
+        AddToTeamCommand command = new AddToTeamCommand(teamName, outOfBoundIndex);
 
-        assertCommandFailure(command, model, AddPersonToTeamCommand.MESSAGE_INVALID_PERSON_INDEX);
+        assertCommandFailure(command, model, AddToTeamCommand.MESSAGE_INVALID_PERSON_INDEX);
     }
 
     @Test
     public void execute_teamNotFound_throwsCommandException() {
         TeamName nonExistentTeamName = new TeamName("Non Existent Team");
-        AddPersonToTeamCommand command = new AddPersonToTeamCommand(nonExistentTeamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand command = new AddToTeamCommand(nonExistentTeamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(command, model,
-                String.format(AddPersonToTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
+                String.format(AddToTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
     }
 
     @Test
     public void equals() {
         TeamName teamName = new TeamName("Team A");
-        AddPersonToTeamCommand addPersonToTeamFirstCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
-        AddPersonToTeamCommand addPersonToTeamSecondCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addToTeamFirstCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addToTeamSecondCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         // same object -> returns true
-        assertEquals(addPersonToTeamFirstCommand, addPersonToTeamFirstCommand);
+        assertEquals(addToTeamFirstCommand, addToTeamFirstCommand);
 
         // same values -> returns true
-        assertEquals(addPersonToTeamFirstCommand, addPersonToTeamSecondCommand);
+        assertEquals(addToTeamFirstCommand, addToTeamSecondCommand);
 
         // different types -> returns false
-        assertEquals(false, addPersonToTeamFirstCommand.equals(1));
+        assertEquals(false, addToTeamFirstCommand.equals(1));
 
         // null -> returns false
-        assertEquals(false, addPersonToTeamFirstCommand.equals(null));
+        assertEquals(false, addToTeamFirstCommand.equals(null));
     }
 }

@@ -27,14 +27,14 @@ public class DuplicatePersonDetectionTest {
     }
 
     @Test
-    public void addPersonToTeam_addSamePersonTwice_throwsCommandException() throws CommandException {
+    public void addToTeam_addSamePersonTwice_throwsCommandException() throws CommandException {
         // First, add Alex (index 1) to Tech Innovators team - this should succeed
         TeamName techInnovatorsTeamName = new TeamName("Tech Innovators");
-        AddPersonToTeamCommand command1 = new AddPersonToTeamCommand(techInnovatorsTeamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand command1 = new AddToTeamCommand(techInnovatorsTeamName, INDEX_FIRST_PERSON);
         command1.execute(model); // This should work fine
 
         // Now try to add Alex to Tech Innovators again - this should throw an exception
-        AddPersonToTeamCommand command2 = new AddPersonToTeamCommand(techInnovatorsTeamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand command2 = new AddToTeamCommand(techInnovatorsTeamName, INDEX_FIRST_PERSON);
         assertThrows(CommandException.class, () -> command2.execute(model));
     }
 }

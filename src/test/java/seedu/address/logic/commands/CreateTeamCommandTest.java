@@ -277,7 +277,7 @@ public class CreateTeamCommandTest {
         }
 
         @Override
-        public Team addPersonToTeam(Team team, Person person) {
+        public Team addToTeam(Team team, Person person) {
             throw new AssertionError("This method should not be called.");
         }
 
@@ -350,7 +350,7 @@ public class CreateTeamCommandTest {
         }
 
         @Override
-        public Team addPersonToTeam(Team team, Person person) {
+        public Team addToTeam(Team team, Person person) {
             requireNonNull(team);
             requireNonNull(person);
 

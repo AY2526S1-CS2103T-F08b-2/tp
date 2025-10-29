@@ -33,9 +33,9 @@ public class RemovePersonFromTeamCommandTest {
         Team team = new Team(teamName, hackathonName, initialMembers);
         model.addTeam(team);
 
-        // Add the person to the team using AddPersonToTeamCommand
+        // Add the person to the team using AddToTeamCommand
         Person personToModify = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         addCommand.execute(model);
 
         // Now remove the person using RemovePersonFromTeamCommand

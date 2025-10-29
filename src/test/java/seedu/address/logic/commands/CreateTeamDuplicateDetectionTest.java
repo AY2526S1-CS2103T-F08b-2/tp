@@ -20,7 +20,7 @@ import seedu.address.model.team.TeamName;
 import seedu.address.model.util.SampleDataUtil;
 
 /**
- * Test to verify the fix for createTeam + addPersonToTeam duplicate detection
+ * Test to verify the fix for createTeam + addToTeam duplicate detection
  */
 public class CreateTeamDuplicateDetectionTest {
 
@@ -43,7 +43,7 @@ public class CreateTeamDuplicateDetectionTest {
         createCommand.execute(model); // This should succeed
 
         // Now try to add the same person (person 1) to the same team - this should fail IMMEDIATELY
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         assertThrows(CommandException.class, () -> addCommand.execute(model));
     }
 
@@ -59,7 +59,7 @@ public class CreateTeamDuplicateDetectionTest {
         createCommand.execute(model); // This should succeed
 
         // Now try to add a different person (person 2) to the same team - this should succeed
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_SECOND_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_SECOND_PERSON);
         addCommand.execute(model); // This should not throw an exception
     }
 }
