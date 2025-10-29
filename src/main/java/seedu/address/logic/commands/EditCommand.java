@@ -97,16 +97,13 @@ public class EditCommand extends Command {
             for (Person existing : model.getAddressBook().getPersonList()) {
                 if (!existing.isSamePerson(editedPerson)) {
                     if (existing.getEmail().equals(editedPerson.getEmail())) {
-                        throw new CommandException("A person with the same email already exists: "
-                                + Messages.format(existing));
+                        throw new CommandException("A person with the same email already exists");
                     }
                     if (existing.getTelegram().equals(editedPerson.getTelegram())) {
-                        throw new CommandException("A person with the same telegram handle already exists: "
-                                + Messages.format(existing));
+                        throw new CommandException("A person with the same telegram handle already exists");
                     }
                     if (existing.getGitHub().equals(editedPerson.getGitHub())) {
-                        throw new CommandException("A person with the same GitHub handle already exists: "
-                                + Messages.format(existing));
+                        throw new CommandException("A person with the same GitHub handle already exists");
                     }
                 }
             }

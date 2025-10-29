@@ -69,16 +69,13 @@ public class AddCommand extends Command {
             for (Person existing : model.getAddressBook().getPersonList()) {
                 if (!existing.isSamePerson(toAdd)) {
                     if (existing.getEmail().equals(toAdd.getEmail())) {
-                        throw new CommandException("A person with the same email already exists: "
-                                + Messages.format(existing));
+                        throw new CommandException("A person with the same email already exists");
                     }
                     if (existing.getTelegram().equals(toAdd.getTelegram())) {
-                        throw new CommandException("A person with the same telegram handle already exists: "
-                                + Messages.format(existing));
+                        throw new CommandException("A person with the same telegram handle already exists");
                     }
                     if (existing.getGitHub().equals(toAdd.getGitHub())) {
-                        throw new CommandException("A person with the same GitHub handle already exists: "
-                                + Messages.format(existing));
+                        throw new CommandException("A person with the same GitHub handle already exists");
                     }
                 }
             }
