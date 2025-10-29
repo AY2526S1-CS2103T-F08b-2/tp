@@ -20,7 +20,7 @@ import seedu.address.model.team.TeamName;
  */
 public class AddToTeamCommand extends Command {
 
-    public static final String COMMAND_WORD = "addToTeam";
+    public static final String COMMAND_WORD = "addtoteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to an existing team. "
             + "Parameters: "

@@ -23,7 +23,7 @@ import seedu.address.model.team.TeamName;
  */
 public class RemoveFromTeamCommand extends Command {
 
-    public static final String COMMAND_WORD = "removeFromTeam";
+    public static final String COMMAND_WORD = "removefromteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Removes a person from an existing team. "
             + "Parameters: "

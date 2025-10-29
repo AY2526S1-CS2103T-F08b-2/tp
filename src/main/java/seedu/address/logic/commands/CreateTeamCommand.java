@@ -24,7 +24,7 @@ import seedu.address.model.team.TeamName;
  */
 public class CreateTeamCommand extends Command {
 
-    public static final String COMMAND_WORD = "createTeam";
+    public static final String COMMAND_WORD = "createteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Creates a team in Mate. "
             + "Parameters: "

@@ -18,7 +18,7 @@ import seedu.address.model.team.Team;
  */
 public class DeleteTeamCommand extends Command {
 
-    public static final String COMMAND_WORD = "deleteTeam";
+    public static final String COMMAND_WORD = "deleteteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the team identified by the index number used in the displayed team list.\n"

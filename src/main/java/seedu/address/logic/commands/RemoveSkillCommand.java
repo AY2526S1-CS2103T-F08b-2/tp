@@ -15,7 +15,7 @@ import seedu.address.model.skill.Skill;
  * Removes a skill from a person identified by index.
  */
 public class RemoveSkillCommand extends Command {
-    public static final String COMMAND_WORD = "removeSkill";
+    public static final String COMMAND_WORD = "removeskill";
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes the specified skill from the person"
             + " identified by the index number in the displayed person list.\n"
