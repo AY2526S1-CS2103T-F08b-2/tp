@@ -245,11 +245,11 @@ Examples:
 * `addToTeam tn/Development Team p/3` adds the 3rd person in the displayed list to the "Development Team".
 * `addToTeam tn/Alpha Squad p/1` adds the 1st person to the "Alpha Squad" team.
 
-### Removing a person from a team : `removePersonFromTeam`
+### Removing a person from a team : `removeFromTeam`
 
 Removes an existing person from an existing team in the address book.
 
-Format: `removePersonFromTeam tn/TEAM_NAME p/INDEX`
+Format: `removeFromTeam tn/TEAM_NAME p/INDEX`
 
 * Removes the person at the specified `INDEX` from the team with the specified `TEAM_NAME`.
 * The index refers to the index number shown in the displayed person list.
@@ -262,8 +262,8 @@ Format: `removePersonFromTeam tn/TEAM_NAME p/INDEX`
 * After successfully removing a person from a team, the person's record and the team's membership are both updated, and the teams list will be displayed automatically.
 
 Examples:
-* `removePersonFromTeam tn/Tech Innovators p/2` removes the 2nd person in the displayed list from the "Tech Innovators" team.
-* `removePersonFromTeam tn/Alpha Squad p/1` removes the 1st person from the "Alpha Squad" team.
+* `removeFromTeam tn/Tech Innovators p/2` removes the 2nd person in the displayed list from the "Tech Innovators" team.
+* `removeFromTeam tn/Alpha Squad p/1` removes the 1st person from the "Alpha Squad" team.
 
 ### Removing a skill from a person : `removeSkill`
 
@@ -332,7 +332,7 @@ _Details coming soon ..._
 |--------|------------------|
 | **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
 | **Add Person to Team** | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
-| **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
+| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
