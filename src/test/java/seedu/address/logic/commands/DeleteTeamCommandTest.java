@@ -33,7 +33,7 @@ public class DeleteTeamCommandTest {
         Person alice = new PersonBuilder().withName("Alice").withEmail("alice@test.com")
                 .withTelegram("alice").withGitHub("alice").build();
         Person bob = new PersonBuilder().withName("Bob").withEmail("bob@test.com")
-                .withTelegram("bob").withGitHub("bob").build();
+                .withTelegram("bobby").withGitHub("bob").build();
 
         // Create team with members
         Team teamWithMembers = new TeamBuilder()
@@ -219,7 +219,7 @@ public class DeleteTeamCommandTest {
         Person teamMember = new PersonBuilder().withName("Team Member")
                 .withEmail("member@test.com").withTelegram("member").withGitHub("member").build();
         Person nonMember = new PersonBuilder().withName("Non Member")
-                .withEmail("non@test.com").withTelegram("non").withGitHub("non").build();
+                .withEmail("non@test.com").withTelegram("noone").withGitHub("non").build();
 
         // Create team with one member
         Team team = new TeamBuilder()
