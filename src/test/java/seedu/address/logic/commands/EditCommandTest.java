@@ -284,7 +284,7 @@ public class EditCommandTest {
     public void execute_editOtherFieldsWithParticipatingHackathon_success() {
         Person personWithParticipatingHackathon = new PersonBuilder()
                 .withName("Alice Wong")
-                .withEmail("alice@example.com")
+                .withEmail("alicewong@example.com")
                 .withTelegram("alicewong_tg")
                 .withGitHub("alicewong-github")
                 .withParticipatingHackathons("NUSHack")

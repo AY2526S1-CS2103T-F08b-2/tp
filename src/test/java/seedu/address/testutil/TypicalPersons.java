@@ -49,9 +49,9 @@ public class TypicalPersons {
 
     // Manually added
     public static final Person HOON = new PersonBuilder().withName("Hoon Meier")
-            .withEmail("stefan@example.com").build();
+            .withEmail("stefan@example.com").withTelegram("hoon_tg").withGitHub("hoon-github").build();
     public static final Person IDA = new PersonBuilder().withName("Ida Mueller")
-            .withEmail("hans@example.com").build();
+            .withEmail("hans@example.com").withTelegram("ida_tg").withGitHub("ida-github").build();
 
     // Manually added - Person's details found in {@code CommandTestUtil}
     public static final Person AMY = new PersonBuilder().withName(VALID_NAME_AMY)

@@ -13,6 +13,7 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 
 /**
  * Adds a person to the address book.
@@ -61,7 +62,30 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.addPerson(toAdd);
+        try {
+            model.addPerson(toAdd);
+        } catch (DuplicatePersonException e) {
+            // Determine which contact field conflicts to provide a clearer error message
+            for (Person existing : model.getAddressBook().getPersonList()) {
+                if (!existing.isSamePerson(toAdd)) {
+                    if (existing.getEmail().equals(toAdd.getEmail())) {
+                        throw new CommandException("A person with the same email already exists: "
+                                + Messages.format(existing));
+                    }
+                    if (existing.getTelegram().equals(toAdd.getTelegram())) {
+                        throw new CommandException("A person with the same telegram handle already exists: "
+                                + Messages.format(existing));
+                    }
+                    if (existing.getGitHub().equals(toAdd.getGitHub())) {
+                        throw new CommandException("A person with the same GitHub handle already exists: "
+                                + Messages.format(existing));
+                    }
+                }
+            }
+            // Fallback generic message if we couldn't determine the conflicting field
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format((Person) toAdd)));
     }
 
