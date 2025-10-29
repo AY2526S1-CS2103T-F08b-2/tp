@@ -3,7 +3,7 @@ layout: page
 title: User Guide
 ---
 
-Mate is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+Mate is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, Mate can get your contact management tasks done faster than traditional GUI apps.
 
 * Table of Contents
 {:toc}
@@ -17,9 +17,9 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
 
 1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
 
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
+1. Copy the file to the folder you want to use as the _home folder_ for Mate.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar mate.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -30,7 +30,7 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
 
    * `add n/John Doe e/johnd@example.com t/John g/John` : Adds a contact named `John Doe` to the Address Book.
 
-   * `delete 3` : Deletes the 3rd contact shown in the current list.
+   * `delete p/3` : Deletes the 3rd contact shown in the current list.
 
    * `listTeam` : Lists all teams.
 
@@ -64,6 +64,8 @@ Mate is a **desktop app for managing contacts, optimized for use via a Command L
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
+
+* Commands are case-insensitive. e.g. `AdD n/John` is equivalent to `add n/John`
 </div>
 
 ### Viewing help : `help`
@@ -112,7 +114,7 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
+Format: `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -128,11 +130,11 @@ Format: `edit INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKIL
 * **Participating hackathons are preserved** - editing other fields will not affect hackathons the person is currently participating in through their teams
 
 Examples:
-*  `edit 1 e/johndoe@example.com t/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
-*  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
-*  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
-*  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
-*  `edit 4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
+*  `edit p/1 e/johndoe@example.com t/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
+*  `edit p/2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
+*  `edit p/3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
+*  `edit p/3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
+*  `edit p/4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
 
 ### Locating persons : `find`
 
@@ -174,15 +176,15 @@ Examples:
 
 Deletes the specified person from the address book.
 
-Format: `delete INDEX`
+Format: `delete p/INDEX`
 
 * Deletes the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `list` followed by `delete 2` deletes the 2nd person in the address book.
-* `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
+* `list` followed by `delete p/2` deletes the 2nd person in the address book.
+* `find Betsy` followed by `delete p/1` deletes the 1st person in the results of the `find` command.
 
 ### Creating a team : `createTeam`
 
@@ -267,7 +269,7 @@ Examples:
 
 Deletes a team from the address book and removes all members from that team.
 
-Format: `deleteTeam INDEX`
+Format: `deleteTeam p/INDEX`
 
 * Deletes the team at the specified `INDEX`.
 * The index refers to the index number shown in the displayed team list.
@@ -283,14 +285,14 @@ Use the `listTeam` command first to see the current index numbers of teams befor
 </div>
 
 Examples:
-* `listTeam` followed by `deleteTeam 2` deletes the 2nd team in the team list.
-* `deleteTeam 1` deletes the 1st team in the displayed team list.
+* `listTeam` followed by `deleteTeam p/2` deletes the 2nd team in the team list.
+* `deleteTeam p/1` deletes the 1st team in the displayed team list.
 
 ### Removing a skill from a person : `removeSkill`
 
 Removes a skill from a person in the address book.
 
-Format: `removeSkill INDEX SKILL`
+Format: `removeSkill p/INDEX s/SKILL`
 
 * Removes the specified `SKILL` from the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
@@ -299,8 +301,8 @@ Format: `removeSkill INDEX SKILL`
 * If the person does not have the specified skill, an error message will be shown.
 
 Examples:
-* `removeSkill 2 Java` removes the skill "Java" from the 2nd person in the displayed list.
-* `removeSkill 1 Python` removes the skill "Python" from the 1st person in the displayed list.
+* `removeSkill p/2 s/Java` removes the skill "Java" from the 2nd person in the displayed list.
+* `removeSkill p/1 s/Python` removes the skill "Python" from the 1st person in the displayed list.
 
 ### Clearing all entries : `clear`
 
@@ -356,13 +358,13 @@ _Details coming soon ..._
 | **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3` |
-| **Delete** | `delete INDEX`<br> e.g., `delete 3` |
-| **Delete Team** | `deleteTeam INDEX`<br> e.g., `deleteTeam 1` |
-| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate h/NUSHack` |
+| **Delete** | `delete p/INDEX`<br> e.g., `delete p/3` |
+| **Delete Team** | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1` |
+| **Edit** | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack` |
 | **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack`, `filter h/NUSHack` |
 | **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
 | **List** | `list` |
 | **List Team** | `listTeam` |
-| **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
+| **Remove Skill** | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java` |
 | **Help** | `help` |
 | **Exit** | `exit` |
