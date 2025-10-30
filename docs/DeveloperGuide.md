@@ -171,7 +171,7 @@ The Create Team feature allows users to form teams by selecting multiple persons
 
 **Command Format:**
 ```
-createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]...
+createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]...
 ```
 
 **How the Create Team feature works:**
@@ -197,7 +197,7 @@ Given below is an example usage scenario:
 
 Step 1. The user has a list of persons displayed and wants to create a team for "Hackathon 2024" with persons at indices 1 and 3.
 
-Step 2. The user executes `createTeam tn/Development Team hn/Hackathon 2024 p/1 p/3`.
+Step 2. The user executes `createTeam tn/Development Team h/Hackathon 2024 p/1 p/3`.
 
 Step 3. The command is parsed and `CreateTeamCommand` is executed with the following validations:
 * Check that indices 1 and 3 are within bounds of the filtered person list

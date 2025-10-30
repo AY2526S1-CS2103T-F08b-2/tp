@@ -21,7 +21,6 @@ public class RemoveSkillCommandParser implements Parser<RemoveSkillCommand> {
     public RemoveSkillCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PERSON, PREFIX_SKILL);
-
         Index index;
         try {
             index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).orElse(""));

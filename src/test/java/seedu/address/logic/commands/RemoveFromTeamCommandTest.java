@@ -19,7 +19,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
 import seedu.address.model.team.TeamName;
 
-public class RemovePersonFromTeamCommandTest {
+public class RemoveFromTeamCommandTest {
 
     private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
@@ -32,16 +32,16 @@ public class RemovePersonFromTeamCommandTest {
         Team team = new Team(teamName, hackathonName, initialMembers);
         model.addTeam(team);
 
-        // Add the person to the team using AddPersonToTeamCommand
+        // Add the person to the team using AddToTeamCommand
         Person personToModify = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         addCommand.execute(model);
 
-        // Now remove the person using RemovePersonFromTeamCommand
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        // Now remove the person using RemoveFromTeamCommand
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
         CommandResult result = removeCommand.execute(model);
 
-        String expectedMessage = String.format(RemovePersonFromTeamCommand.MESSAGE_SUCCESS,
+        String expectedMessage = String.format(RemoveFromTeamCommand.MESSAGE_SUCCESS,
                 personToModify.getName(), team.getTeamName());
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
@@ -72,10 +72,10 @@ public class RemovePersonFromTeamCommandTest {
         model.addTeam(team);
 
         // Person is not in the team yet, removing should throw
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(removeCommand, model,
-                String.format(RemovePersonFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
+                String.format(RemoveFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
                         model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getName(),
                         teamName));
     }
@@ -84,22 +84,22 @@ public class RemovePersonFromTeamCommandTest {
     public void execute_invalidPersonIndex_throwsCommandException() {
         TeamName teamName = new TeamName("Test Team");
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        RemovePersonFromTeamCommand command = new RemovePersonFromTeamCommand(teamName, outOfBoundIndex);
+        RemoveFromTeamCommand command = new RemoveFromTeamCommand(teamName, outOfBoundIndex);
 
-        assertCommandFailure(command, model, RemovePersonFromTeamCommand.MESSAGE_INVALID_PERSON_INDEX);
+        assertCommandFailure(command, model, RemoveFromTeamCommand.MESSAGE_INVALID_PERSON_INDEX);
     }
 
     @Test
     public void execute_teamNotFound_throwsCommandException() {
         TeamName nonExistentTeamName = new TeamName("Non Existent Team");
-        RemovePersonFromTeamCommand command = new RemovePersonFromTeamCommand(nonExistentTeamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand command = new RemoveFromTeamCommand(nonExistentTeamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(command, model,
-                String.format(RemovePersonFromTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
+                String.format(RemoveFromTeamCommand.MESSAGE_TEAM_NOT_FOUND, nonExistentTeamName));
     }
 
     @Test
-    public void execute_removePersonFromTeam_hackathonAddedBackToInterested() throws Exception {
+    public void execute_removeFromTeam_hackathonAddedBackToInterested() throws Exception {
         // Create a team with a hackathon
         TeamName teamName = new TeamName("Test Team");
         HackathonName hackathonName = new HackathonName("Test Hackathon");
@@ -109,7 +109,7 @@ public class RemovePersonFromTeamCommandTest {
 
         // Add person to the team
         Person personToModify = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         addCommand.execute(model);
 
         // Verify the person is now participating in the hackathon
@@ -124,7 +124,7 @@ public class RemovePersonFromTeamCommandTest {
         int interestedHackathonsSizeBefore = personAfterAdd.getInterestedHackathons().size();
 
         // Remove the person from the team
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
         removeCommand.execute(model);
 
         // Verify the hackathon is removed from participating hackathons
@@ -152,18 +152,18 @@ public class RemovePersonFromTeamCommandTest {
         Team team = new Team(teamName, hackathonName, initialMembers);
         model.addTeam(team);
 
-        // Add the person to the team using AddPersonToTeamCommand
+        // Add the person to the team using AddToTeamCommand
         Person personToModify = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        AddPersonToTeamCommand addCommand = new AddPersonToTeamCommand(teamName, INDEX_FIRST_PERSON);
+        AddToTeamCommand addCommand = new AddToTeamCommand(teamName, INDEX_FIRST_PERSON);
         addCommand.execute(model);
 
         // Remove the person using different case for team name - should still work
         TeamName differentCaseTeamName = new TeamName("TEST TEAM");
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(
                 differentCaseTeamName, INDEX_FIRST_PERSON);
         CommandResult result = removeCommand.execute(model);
 
-        String expectedMessage = String.format(RemovePersonFromTeamCommand.MESSAGE_SUCCESS,
+        String expectedMessage = String.format(RemoveFromTeamCommand.MESSAGE_SUCCESS,
                 personToModify.getName(), team.getTeamName());
 
         assertEquals(expectedMessage, result.getFeedbackToUser());
@@ -187,11 +187,11 @@ public class RemovePersonFromTeamCommandTest {
 
         // Try to remove person using different case for team name - should still throw correct error
         TeamName differentCaseTeamName = new TeamName("test team");
-        RemovePersonFromTeamCommand removeCommand = new RemovePersonFromTeamCommand(
+        RemoveFromTeamCommand removeCommand = new RemoveFromTeamCommand(
                 differentCaseTeamName, INDEX_FIRST_PERSON);
 
         assertCommandFailure(removeCommand, model,
-                String.format(RemovePersonFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
+                String.format(RemoveFromTeamCommand.MESSAGE_PERSON_NOT_IN_TEAM,
                         model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()).getName(),
                         differentCaseTeamName));
     }
@@ -199,8 +199,8 @@ public class RemovePersonFromTeamCommandTest {
     @Test
     public void equals() {
         TeamName teamName = new TeamName("Team A");
-        RemovePersonFromTeamCommand firstCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
-        RemovePersonFromTeamCommand secondCommand = new RemovePersonFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand firstCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
+        RemoveFromTeamCommand secondCommand = new RemoveFromTeamCommand(teamName, INDEX_FIRST_PERSON);
 
         // same object -> returns true
         assertEquals(firstCommand, firstCommand);
@@ -215,3 +215,4 @@ public class RemovePersonFromTeamCommandTest {
         assertEquals(false, firstCommand.equals(null));
     }
 }
+

@@ -1,6 +1,8 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 
 import java.util.List;
 import java.util.Set;
@@ -21,8 +23,10 @@ public class RemoveSkillCommand extends Command {
             + ": Removes the specified skills from the person"
             + " identified by the index number in the displayed person list.\n"
             + "Command is case-insensitive (removeskill, removeSkill, REMOVESKILL all work).\n"
-            + "Parameters: p/INDEX (must be a positive integer) s/SKILL [s/MORE_SKILLS]...\n"
-            + "Example: " + COMMAND_WORD + " p/1 s/java s/python s/docker";
+            + "Parameters:" + PREFIX_PERSON + "INDEX (must be a positive integer) " + PREFIX_SKILL
+            + "SKILL [" + PREFIX_SKILL + "MORE_SKILLS]...\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1 " + PREFIX_SKILL + "java "
+            + PREFIX_SKILL + "python " + PREFIX_SKILL + "docker";
     public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Removed skills from Person: %1$s";
     public static final String MESSAGE_SKILL_NOT_FOUND = "Skill '%1$s' not found for Person: %2$s";
     private final Index targetIndex;
