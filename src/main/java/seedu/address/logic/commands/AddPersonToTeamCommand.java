@@ -21,7 +21,7 @@ import seedu.address.model.team.TeamName;
  * Adds a person to an existing team in the address book.
  */
 public class AddPersonToTeamCommand extends Command {
-    public static final String COMMAND_WORD = "addPersonToTeam";
+    public static final String COMMAND_WORD = "addpersontoteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to an existing team. "
             + "Parameters: "
