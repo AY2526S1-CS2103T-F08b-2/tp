@@ -1,4 +1,3 @@
-
 package seedu.address.model.person;
 
 import static java.util.Objects.requireNonNull;
@@ -10,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class GitHub {
     public static final String MESSAGE_CONSTRAINTS =
-            "GitHub usernames should be 3–39 characters long, "
+            "GitHub usernames should be 1–39 characters long, "
                     + "contain only letters, numbers, or hyphens, "
                     + "cannot start or end with a hyphen, "
                     + "and cannot contain underscores, spaces, or symbols.";
@@ -18,9 +17,9 @@ public class GitHub {
     // Explanation:
     // (?!-)       → must not start with '-'
     // (?!.*--)    → no consecutive hyphens
-    // [A-Za-z0-9-]{3,39} → only valid chars, length 3–39
+    // [A-Za-z0-9-]{1,39} → only valid chars, length 1–39
     // (?<!-)      → must not end with '-'
-    public static final String VALIDATION_REGEX = "^(?!-)(?!.*--)[A-Za-z0-9-]{3,39}(?<!-)$";
+    public static final String VALIDATION_REGEX = "^(?!-)(?!.*--)[A-Za-z0-9-]{1,39}(?<!-)$";
 
     public final String value;
 

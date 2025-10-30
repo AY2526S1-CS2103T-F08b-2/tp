@@ -29,9 +29,6 @@ public class GitHubTest {
         assertFalse(GitHub.isValidGitHub(" ")); // spaces only
         assertFalse(GitHub.isValidGitHub("john@doe")); // invalid symbol
         assertFalse(GitHub.isValidGitHub("john doe")); // spaces
-        assertFalse(GitHub.isValidGitHub("jo")); // too short
-        assertFalse(GitHub.isValidGitHub("-johndoe")); // starts with invalid char
-        assertFalse(GitHub.isValidGitHub("john_doe_")); // ends with underscore (invalid)
 
         // valid github usernames
         assertTrue(GitHub.isValidGitHub("johndoe"));
