@@ -112,125 +112,47 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME]`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
-* **Skills and hackathons are not affected by the edit command** - use `addSkill`/`removeSkill` for skills (both support multiple skills at once) and `addHackathon`/`removeHackathon` for hackathons.
+* When editing skills, new skills are added to the existing skills (i.e., adding of skills is cumulative).
+* If you edit a skill that already exists (same skill name), the experience level will be updated to the new level specified.
+* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
+* If no level is specified for a skill, it defaults to `Beginner`
+* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all interested hackathons.
+* **Duplicate skills or hackathons are not allowed** - each skill/hackathon can only be added once
+* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
+* **Important**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). An error will be shown if you try to do this.
+* **Participating hackathons are preserved** - editing other fields will not affect hackathons the person is currently participating in through their teams
 
 Examples:
 *  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
-*  `edit 2 n/Betsy Crower` Edits the name of the 2nd person to be `Betsy Crower`.
-
-### Adding skills to a person : `addSkill`
-
-Adds one or more skills to an existing person in the address book.
-
-Format: `addSkill p/INDEX s/SKILL[:LEVEL] [s/MORE_SKILLS[:LEVEL]]…​`
-
-* **Command is case-insensitive**: `addSkill`, `addskill`, `ADDSKILL` all work the same way
-* Adds skills to the person at the specified `INDEX` using the `p/` prefix
-* The index refers to the index number shown in the displayed person list
-* The index **must be a positive integer** 1, 2, 3, …​
-* At least one skill must be provided using the `s/` prefix
-* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
-* If no level is specified for a skill, it defaults to `Beginner`
-* **Smart skill upgrade**: If you add a skill that already exists with a **higher** experience level, the skill will be automatically upgraded to the higher level
-* If you add a skill with the **same or lower** level than what already exists, the existing skill level is kept (no downgrade)
-* **Skill names are case-insensitive**: `Java`, `java`, and `JAVA` are all treated as the same skill and will be stored as lowercase
-* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols, but cannot start with '#' and must be at least 1 character long
-* **Duplicate skills are not allowed** - each skill can only be added once per command
-
-Examples:
-*  `addSkill p/1 s/java:Advanced` Adds the Java skill with Advanced level to the 1st person. If Java already exists at Beginner or Intermediate, it will be upgraded to Advanced.
-*  `addSkill p/2 s/python:Intermediate s/docker` Adds Python at Intermediate level and Docker at Beginner level (default) to the 2nd person.
-*  `addSkill p/3 s/c++ s/react.js` Adds C++ and React.js skills at Beginner level to the 3rd person.
-*  `ADDSKILL p/1 s/Python:Advanced` Case-insensitive command - if person 1 has python at Beginner level, it will be upgraded to Advanced.
-
-### Adding interested hackathons to a person : `addHackathon`
-
-Adds one or more interested hackathons to an existing person in the address book.
-
-Format: `addHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​`
-
-* **Command is case-insensitive**: `addHackathon`, `addhackathon`, `ADDHACKATHON` all work the same way
-* Adds interested hackathons to the person at the specified `INDEX` using the `p/` prefix
-* The index refers to the index number shown in the displayed person list
-* The index **must be a positive integer** 1, 2, 3, …​
-* At least one hackathon must be provided using the `h/` prefix
-* Multiple hackathons can be added at once by specifying multiple `h/` prefixes
-* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
-* **Cannot add if already participating**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). An error will be shown if you try to do this.
-* **Ignores duplicates**: If you try to add a hackathon that is already in the interested list, it will be silently ignored (no error).
-* **Duplicate hackathons are not allowed** - each hackathon can only be added once per command
-* Interested hackathons are displayed in light blue boxes in the UI under the "Interested" label.
-
-Examples:
-*  `addHackathon p/1 h/NUSHack` Adds NUSHack to the 1st person's interested hackathons list.
-*  `addHackathon p/2 h/iNTUition h/HackNRoll` Adds iNTUition and HackNRoll to the 2nd person's interested hackathons.
-*  `ADDHACKATHON p/3 h/TechChallenge` Case-insensitive command - adds TechChallenge to the 3rd person's interested hackathons.
-
-### Removing interested hackathons from a person : `removeHackathon`
-
-Removes one or more interested hackathons from an existing person in the address book.
-
-Format: `removeHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​`
-
-* **Command is case-insensitive**: `removeHackathon`, `removehackathon`, `REMOVEHACKATHON` all work the same way
-* Removes interested hackathons from the person at the specified `INDEX` using the `p/` prefix
-* The index refers to the index number shown in the displayed person list
-* The index **must be a positive integer** 1, 2, 3, …​
-* At least one hackathon must be provided using the `h/` prefix
-* Multiple hackathons can be removed at once by specifying multiple `h/` prefixes
-* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
-* **Cannot remove if participating**: You cannot remove a hackathon from the interested list if the person is currently participating in that hackathon (as part of a team). You must first use `removePersonFromTeam` or `deleteTeam` to stop participating. An error will be shown if you try to remove a participating hackathon.
-* If the hackathon is not in the interested list, an error message will be shown.
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Only hackathons in the "Interested" list (shown in light blue boxes) can be removed with this command. Participating hackathons (shown in light orange boxes) must be removed by leaving the team first.
-</div>
-
-Examples:
-*  `removeHackathon p/1 h/NUSHack` Removes NUSHack from the 1st person's interested hackathons list.
-*  `removeHackathon p/2 h/iNTUition h/HackNRoll` Removes iNTUition and HackNRoll from the 2nd person's interested hackathons.
-*  `REMOVEHACKATHON p/3 h/TechChallenge` Case-insensitive command - removes TechChallenge from the 3rd person's interested hackathons.
+*  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
+*  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
+*  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
+*  `edit 4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
 
 ### Locating persons : `find`
 
-Finds persons whose name, skills, Telegram username, or GitHub username contain any of the given keywords.
+Finds persons whose name, email, Telegram username, GitHub username, skills, or hackathons contain all of the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find k/KEYWORD [k/MORE_KEYWORDS]...`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Searches across multiple fields: name, skills, Telegram username, and GitHub username
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword in any of the searchable fields will be returned (i.e. `OR` search).
-  e.g. `find John Python` will return persons with name `John`, or skill `Python`, or Telegram username `John`, or GitHub username `Python`
-
-Examples:
-* `find John` returns persons with name `john` or `John Doe`, or Telegram `john123`, or GitHub `johnny`
-* `find Java` returns persons who have `Java` as a skill
-* `find alex david` returns `Alex Yeoh`, `David Li`, or anyone with Telegram username `alex` or GitHub username `david`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
-
-### Filtering persons : `filter`
-
-Filters persons based on their team-looking status and/or interested hackathons.
-
-Format: `filter [h/HACKATHON [MORE_HACKATHONS]...]`
-
-* At least one of the optional parameters must be provided.
-* `h/HACKATHON` filters for persons interested in the specified hackathon(s).
-* The hackathon search is case-insensitive. e.g. `nushack` will match `NUSHack`
-* As long Hackathon contains the parameter, it will be included e.g. `filter h/AI` will match `Dev AI` and `Tech AI`
-* Only full words will be matched e.g. `NUS` will not match `NUSHack`
-* Persons matching at least one hackathon keyword will be returned (i.e. `OR` search for hackathons).
+* The search is case-insensitive. e.g `k/hans` will match `Hans`
+* The order of the keywords does not matter. e.g. `find k/Hans k/Bo` will match persons with both `Bo` and `Hans`
+* Searches across multiple fields: name, email, Telegram username, GitHub username, skills, interested hackathons, and participating hackathons
+* Partial matching is supported e.g. `k/NUS` will match `NUSHack`
+* Keywords can contain spaces e.g. `k/AI Hackathon 2024` is a single keyword
+* Persons must match ALL keywords to be returned (i.e. `AND` search).
+  e.g. `find k/John k/Python` will return persons that have both `John` AND `Python` somewhere in their fields
 
 Examples:
-* `filter h/NUSHack` returns all persons interested in NUSHack
-* `filter h/NUSHack iNTUition` returns all persons interested in NUSHack or iNTUition
+* `find k/John` returns persons with name `john` or `John Doe`, or email `john@example.com`, or Telegram `john123`
+* `find k/Java` returns persons who have `Java` or `JavaScript` as a skill
+* `find k/alice k/python` returns persons that have both `alice` AND `python` in their fields (e.g., Alice with Python skill)
+* `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
 
 ### Deleting a person : `delete`
 
@@ -348,26 +270,21 @@ Examples:
 * `listTeam` followed by `deleteTeam 2` deletes the 2nd team in the team list.
 * `deleteTeam 1` deletes the 1st team in the displayed team list.
 
-### Removing skills from a person : `removeSkill`
+### Removing a skill from a person : `removeSkill`
 
-Removes one or more skills from a person in the address book.
+Removes a skill from a person in the address book.
 
-Format: `removeSkill p/INDEX s/SKILL [s/MORE_SKILLS]...`
+Format: `removeSkill INDEX SKILL`
 
-* **Command is case-insensitive**: `removeSkill`, `removeskill`, `REMOVESKILL` all work the same way
-* Removes the specified skill(s) from the person at the specified `INDEX` using the `p/` prefix
-* The index refers to the index number shown in the displayed person list
+* Removes the specified `SKILL` from the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
 * The index **must be a positive integer** 1, 2, 3, …
-* At least one skill must be provided using the `s/` prefix
-* Multiple skills can be removed at once by specifying multiple `s/` prefixes
-* **Skill names are case-insensitive**: `Java`, `java`, and `JAVA` are all treated as the same skill
-* Skill names must be lowercase alphanumeric and may include '+' or '#' symbols
-* If the person does not have any of the specified skills, an error message will be shown
+* The skill name is case-sensitive and must match the skill name exactly.
+* If the person does not have the specified skill, an error message will be shown.
 
 Examples:
-* `removeSkill p/2 s/java` removes the skill "java" from the 2nd person in the displayed list.
-* `removeSkill p/1 s/python s/docker` removes the skills "python" and "docker" from the 1st person in the displayed list.
-* `REMOVESKILL p/3 s/java s/python s/c++` removes the skills "java", "python", and "c++" from the 3rd person in the displayed list.
+* `removeSkill 2 Java` removes the skill "Java" from the 2nd person in the displayed list.
+* `removeSkill 1 Python` removes the skill "Python" from the 1st person in the displayed list.
 
 ### Clearing all entries : `clear`
 
@@ -419,20 +336,16 @@ _Details coming soon ..._
 | Action | Format, Examples |
 |--------|------------------|
 | **Add** | `add n/NAME e/EMAIL tg/TELEGRAM_NAME gh/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com tg/John gh/John s/Python:Beginner h/NUSHack` |
-| **Add Hackathon** | `addHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​` <br> e.g., `addHackathon p/1 h/NUSHack h/iNTUition` |
 | **Add Person to Team** | `addPersonToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addPersonToTeam tn/Development Team p/3` |
-| **Add Skill** | `addSkill p/INDEX s/SKILL[:LEVEL] [s/MORE_SKILLS[:LEVEL]]…​` <br> e.g., `addSkill p/1 s/java:Advanced s/python:Intermediate` |
+| **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
 | **Clear** | `clear` |
 | **Create Team** | `createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team hn/Tech Innovation 2024 p/1 p/3` |
 | **Delete** | `delete INDEX`<br> e.g., `delete 3` |
 | **Delete Team** | `deleteTeam INDEX`<br> e.g., `deleteTeam 1` |
-| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME]`<br> e.g.,`edit 2 n/James Lee e/james@example.com` |
-| **Filter** | `filter [h/HACKATHON [MORE_HACKATHONS]...]`<br> e.g., `filter h/NUSHack` |
-| **Find** | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java` |
+| **Edit** | `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit 2 n/James Lee s/Docker:Intermediate h/NUSHack` |
+| **Find** | `find k/KEYWORD [k/MORE_KEYWORDS]...`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024` |
 | **List** | `list` |
 | **List Team** | `listTeam` |
-| **Remove Hackathon** | `removeHackathon p/INDEX h/HACKATHON [h/MORE_HACKATHONS]…​` <br> e.g., `removeHackathon p/1 h/NUSHack h/iNTUition` |
-| **Remove Person from Team** | `removePersonFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removePersonFromTeam tn/Tech Innovators p/2` |
-| **Remove Skill** | `removeSkill p/INDEX s/SKILL [s/MORE_SKILLS]...`<br> e.g., `removeSkill p/2 s/java s/python` |
+| **Remove Skill** | `removeSkill INDEX SKILL`<br> e.g., `removeSkill 2 Java` |
 | **Help** | `help` |
 | **Exit** | `exit` |
