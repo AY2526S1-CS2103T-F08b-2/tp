@@ -53,10 +53,10 @@ Mate is designed for hackathon participants across the technical spectrum — fr
   e.g. in `add n/NAME`, `NAME` is a parameter which can be used as `add n/John Doe`.
 
 * Items in square brackets are optional.<br>
-  e.g `n/NAME [h/HACKATHON]` can be used as `n/John Doe t/NUSHacks` or as `n/John Doe`.
+  e.g `n/NAME [h/HACKATHON]` can be used as `n/John Doe h/NUSHacks` or as `n/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[h/HACKATHON]…​` can be used as ` ` (i.e. 0 times), `h/NUSHacks`, `s/NUSHacks s/NTUHacks` etc.
+  e.g. `[h/HACKATHON]…​` can be used as ` ` (i.e. 0 times), `h/NUSHacks`, `h/NUSHacks h/NTUHacks` etc.
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME t/TELEGRAM`, `t/TELEGRAM  n/NAME` is also acceptable.
@@ -272,22 +272,20 @@ Examples:
 
 ### Locating persons : `find`
 
-Finds persons whose name, skills, Telegram username, or GitHub username contain any of the given keywords.
+Finds persons who match **all** the given keywords.
 
-Format: `find KEYWORD [MORE_KEYWORDS]`
+Format: `find k/KEYWORD [k/MORE_KEYWORDS]…​`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Searches across multiple fields: name, skills, Telegram username, and GitHub username
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword in any of the searchable fields will be returned (i.e. `OR` search).
-  e.g. `find John Python` will return persons with name `John`, or skill `Python`, or Telegram username `John`, or GitHub username `Python`
+* Searches across multiple fields: name, email, Telegram username, GitHub username, skills, and interested/participating hackathons.
+  * Persons matching **all** keywords in any of the searchable fields will be returned (i.e. `AND` search).
+      e.g. `find k/John k/NUSHacks` will return persons who have both `John` AND `NUSHacks`.
+* The search is case-insensitive. e.g `k/hans` will match `Hans`
+* The order of the keywords does not matter. e.g. `k/Hans k/NUSHacks` will match persons that have both `Hans` and `NUSHacks`
+* Only full words will be matched e.g. `k/Han` will not match `Hans`
+* Each keyword can match in any field, but all keywords must have at least one match somewhere
 
 Examples:
-* `find John` returns persons with name `john` or `John Doe`, or Telegram `john123`, or GitHub `johnny`
-* `find Java` returns persons who have `Java` as a skill
-* `find alex david` returns `Alex Yeoh`, `David Li`, or anyone with Telegram username `alex` or GitHub username `david`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find k/C++ k/Git k/AI Challenge 2024` returns persons who have all three: `c++`, `git`, and `AI Challenge 2024` somewhere in their fields.<br>
 
 ### Saving the data
 
@@ -320,20 +318,20 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 
 ## Command summary
 
-| Action                      | Format, Examples                                                                                                                                                                 |
-|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Help**                    | `help`                                                                                                                                                                           |
-| **List**                    | `list`                                                                                                                                                                           |
-| **List Team**               | `listTeam`                                                                                                                                                                       |
-| **Clear**                   | `clear`                                                                                                                                                                          |
-| **Exit**                    | `exit`                                                                                                                                                                           |
+| Action                      | Format, Examples                                                                                                                                                               |
+|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Help**                    | `help`                                                                                                                                                                         |
+| **List**                    | `list`                                                                                                                                                                         |
+| **List Team**               | `listTeam`                                                                                                                                                                     |
+| **Clear**                   | `clear`                                                                                                                                                                        |
+| **Exit**                    | `exit`                                                                                                                                                                         |
 | **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/John g/John s/Python:Beginner h/NUSHack` |
-| **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                          |
-| **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                        |
-| **Delete Team**             | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1`                                                                                                                                  |
-| **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                  |
-| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                         |
-| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack`          |
-| **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                                 |
-| **Find**                    | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`, `find Python Java`                                                                                                   |
+| **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                        |
+| **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                      |
+| **Delete Team**             | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1`                                                                                                                                |
+| **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                |
+| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                       |
+| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack`        |
+| **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                               |
+| **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`                                                                                     |
 
