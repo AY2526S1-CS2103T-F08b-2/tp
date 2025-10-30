@@ -79,6 +79,15 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code skills} directly to the {@code Person} that we are building.
+     * This method preserves the experience levels of the skills.
+     */
+    public PersonBuilder withSkillSet(Set<Skill> skills) {
+        this.skills = new HashSet<>(skills);
+        return this;
+    }
+
+    /**
      * Sets the {@code Email} of the {@code Person} that we are building.
      */
     public PersonBuilder withEmail(String email) {

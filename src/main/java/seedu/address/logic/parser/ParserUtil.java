@@ -44,13 +44,14 @@ public class ParserUtil {
 
     /**
      * Parses a {@code String name} into a {@code Name}.
-     * Leading and trailing whitespaces will be trimmed.
+     * Leading and trailing whitespaces will be trimmed, and multiple consecutive spaces
+     * will be normalized to a single space.
      *
      * @throws ParseException if the given {@code name} is invalid.
      */
     public static Name parseName(String name) throws ParseException {
         requireNonNull(name);
-        String trimmedName = name.trim();
+        String trimmedName = name.trim().replaceAll("\\s+", " ");
         if (!Name.isValidName(trimmedName)) {
             throw new ParseException(Name.MESSAGE_CONSTRAINTS);
         }
@@ -87,16 +88,13 @@ public class ParserUtil {
 
         // Check if skill contains experience level (format: skillName:level)
         String[] parts = trimmedSkill.split(":", 2);
-        String skillName = parts[0].trim();
+        String skillName = parts[0].trim().toLowerCase(); // Convert to lowercase for case-insensitive handling
 
         if (!Skill.isValidSkillName(skillName)) {
             logger.warning("Invalid skill name detected: '" + skillName + "'");
             logger.warning("Skill validation failed. Reason: " + Skill.MESSAGE_CONSTRAINTS);
 
             // Additional detailed logging for common mistakes
-            if (skillName.matches(".*[A-Z].*")) {
-                logger.warning("Detected uppercase letters in skill name. Skill names must be lowercase.");
-            }
             if (skillName.startsWith("#")) {
                 logger.warning("Detected skill name starting with '#'. This is not allowed.");
             }
@@ -181,6 +179,30 @@ public class ParserUtil {
 
         for (String skillName : skills) {
             Skill skill = parseSkill(skillName);
+
+            // Check for duplicate skill names
+            if (skillNames.contains(skill.skillName)) {
+                throw new ParseException("Duplicate skill detected: " + skill.skillName
+                    + ". Each skill can only be added once.");
+            }
+
+            skillNames.add(skill.skillName);
+            skillSet.add(skill);
+        }
+        return skillSet;
+    }
+
+    /**
+     * Parses an array of skill strings into a {@code Set<Skill>}.
+     * @throws ParseException if duplicate skill names are detected.
+     */
+    public static Set<Skill> parseSkillsFromArray(String[] skillStrings) throws ParseException {
+        requireNonNull(skillStrings);
+        final Set<Skill> skillSet = new HashSet<>();
+        final Set<String> skillNames = new HashSet<>();
+
+        for (String skillString : skillStrings) {
+            Skill skill = parseSkill(skillString);
 
             // Check for duplicate skill names
             if (skillNames.contains(skill.skillName)) {

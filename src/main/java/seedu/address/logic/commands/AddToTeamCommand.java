@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.hackathon.HackathonName;
@@ -21,7 +20,6 @@ import seedu.address.model.team.TeamName;
  * Adds a person to an existing team in the address book.
  */
 public class AddToTeamCommand extends Command {
-
     public static final String COMMAND_WORD = "addtoteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to an existing team. "
@@ -39,6 +37,7 @@ public class AddToTeamCommand extends Command {
     public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
 
     private static final Logger logger = Logger.getLogger(AddToTeamCommand.class.getName());
+
     private final TeamName teamName;
     private final Index personIndex;
 
@@ -67,21 +66,23 @@ public class AddToTeamCommand extends Command {
         // Get the person to add
         Person personToAdd = lastShownPersonList.get(personIndex.getZeroBased());
 
-        // Find the target team
+        // Find the target team (case-insensitive match)
         Team targetTeam = teamList.stream()
-                .filter(team -> team.getTeamName().equals(teamName))
+                .filter(team -> team.getTeamName().toString().equalsIgnoreCase(teamName.toString()))
                 .findFirst()
                 .orElseThrow(() -> new CommandException(
                         String.format(MESSAGE_TEAM_NOT_FOUND, teamName)));
 
+        logger.info("Person is in teams : " + personToAdd.getTeams().toString());
+
         // Check if person is already in this specific team by checking the person's teams
         boolean isAlreadyInTeam = personToAdd.getTeams().stream()
-                .anyMatch(team -> team.getTeamName().equals(teamName));
+                .anyMatch(team -> team.getTeamName().toString().equalsIgnoreCase(teamName.toString()));
 
         if (isAlreadyInTeam) {
             throw new CommandException(
                     String.format(MESSAGE_PERSON_ALREADY_IN_THIS_TEAM,
-                            Messages.format(personToAdd), teamName));
+                            personToAdd.getName(), teamName));
         }
 
         // Check if person is already in any team for the same hackathon
@@ -89,8 +90,9 @@ public class AddToTeamCommand extends Command {
 
         if (model.isPersonInHackathon(personToAdd, hackathonName)) {
             throw new CommandException(String.format(MESSAGE_PERSON_ALREADY_IN_TEAM,
-                    Messages.format(personToAdd), hackathonName));
+                    personToAdd.getName(), hackathonName));
         }
+
 
         // Use the model's relationship management to add person to team
         // This automatically handles all bidirectional relationship updates
@@ -100,7 +102,7 @@ public class AddToTeamCommand extends Command {
         model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
 
         return new CommandResult(String.format(MESSAGE_SUCCESS,
-                Messages.format(personToAdd), Messages.format(updatedTeam)),
+                personToAdd.getName(), updatedTeam.getTeamName()),
                 false, false, true); // showTeams = true to display teams list
     }
 

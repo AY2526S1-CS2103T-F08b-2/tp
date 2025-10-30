@@ -18,6 +18,8 @@ import seedu.address.model.person.exceptions.PersonNotFoundException;
  * unique in terms of identity in the UniquePersonList. However, the removal of a person uses Person#equals(Object) so
  * as to ensure that the person with exactly the same fields will be removed.
  *
+ * Additionally, no two persons are allowed to share the same email, telegram handle, or github handle.
+ *
  * Supports a minimal set of list operations.
  *
  * @see Person#isSamePerson(Person)
@@ -38,11 +40,11 @@ public class UniquePersonList implements Iterable<Person> {
 
     /**
      * Adds a person to the list.
-     * The person must not already exist in the list.
+     * The person must not already exist in the list, and must not share email/telegram/github with another person.
      */
     public void add(Person toAdd) {
         requireNonNull(toAdd);
-        if (contains(toAdd)) {
+        if (contains(toAdd) || hasConflictingContact(toAdd)) {
             throw new DuplicatePersonException();
         }
         internalList.add(toAdd);
@@ -52,6 +54,7 @@ public class UniquePersonList implements Iterable<Person> {
      * Replaces the person {@code target} in the list with {@code editedPerson}.
      * {@code target} must exist in the list.
      * The person identity of {@code editedPerson} must not be the same as another existing person in the list.
+     * Edited person must not introduce a conflict on email/telegram/github with any other person in the list.
      */
     public void setPerson(Person target, Person editedPerson) {
         requireAllNonNull(target, editedPerson);
@@ -61,8 +64,20 @@ public class UniquePersonList implements Iterable<Person> {
             throw new PersonNotFoundException();
         }
 
+        // If editedPerson has different identity (name) and matches an existing person by identity, it's a duplicate
         if (!target.isSamePerson(editedPerson) && contains(editedPerson)) {
             throw new DuplicatePersonException();
+        }
+
+        // Ensure editedPerson does not conflict on contact fields with any other person (except the target itself)
+        for (int i = 0; i < internalList.size(); i++) {
+            if (i == index) {
+                continue; // skip the target being replaced
+            }
+            Person other = internalList.get(i);
+            if (hasContactConflictBetween(editedPerson, other)) {
+                throw new DuplicatePersonException();
+            }
         }
 
         internalList.set(index, editedPerson);
@@ -115,7 +130,6 @@ public class UniquePersonList implements Iterable<Person> {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof UniquePersonList)) {
             return false;
         }
@@ -136,15 +150,50 @@ public class UniquePersonList implements Iterable<Person> {
 
     /**
      * Returns true if {@code persons} contains only unique persons.
+     * Uniqueness is checked by identity (name) and also that no two persons share email, telegram, or github.
      */
     private boolean personsAreUnique(List<Person> persons) {
         for (int i = 0; i < persons.size() - 1; i++) {
             for (int j = i + 1; j < persons.size(); j++) {
-                if (persons.get(i).isSamePerson(persons.get(j))) {
+                Person a = persons.get(i);
+                Person b = persons.get(j);
+                if (a.isSamePerson(b) || hasContactConflictBetween(a, b)) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * Returns true if the given person would conflict with any existing person in contact fields
+     * (email, telegram, github).
+     */
+    private boolean hasConflictingContact(Person person) {
+        for (Person other : internalList) {
+            if (hasContactConflictBetween(person, other)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns true if two persons conflict on email, telegram, or github.
+     */
+    private boolean hasContactConflictBetween(Person a, Person b) {
+        if (a == null || b == null) {
+            return false;
+        }
+        // If they are the same person identity (name), don't treat as conflict here
+        if (a.isSamePerson(b)) {
+            return false;
+        }
+
+        boolean emailConflict = a.getEmail().equals(b.getEmail());
+        boolean telegramConflict = a.getTelegram().equals(b.getTelegram());
+        boolean githubConflict = a.getGitHub().equals(b.getGitHub());
+
+        return emailConflict || telegramConflict || githubConflict;
     }
 }

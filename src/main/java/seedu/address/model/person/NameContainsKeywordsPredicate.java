@@ -7,7 +7,9 @@ import seedu.address.commons.util.StringUtil;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person}'s {@code Name} matches any of the keywords given.
+ * Tests that a {@code Person}'s fields match all of the keywords given.
+ * Supports partial matching across name, email, GitHub, Telegram, skills, and hackathons.
+ * All keywords must match for the person to be included (AND logic).
  */
 public class NameContainsKeywordsPredicate implements Predicate<Person> {
     private final List<String> keywords;
@@ -18,12 +20,21 @@ public class NameContainsKeywordsPredicate implements Predicate<Person> {
 
     @Override
     public boolean test(Person person) {
+        if (keywords.isEmpty()) {
+            return false;
+        }
+
         return keywords.stream()
-                .anyMatch(keyword -> StringUtil.containsWordIgnoreCase(person.getName().fullName, keyword)
-                        || StringUtil.containsWordIgnoreCase(person.getGitHub().value, keyword)
-                        || StringUtil.containsWordIgnoreCase(person.getTelegram().value, keyword)
-                || person.getSkills().stream()
-                    .anyMatch(skill -> StringUtil.containsWordIgnoreCase(skill.skillName, keyword)));
+                .allMatch(keyword -> StringUtil.containsSubstringIgnoreCase(person.getName().fullName, keyword)
+                        || StringUtil.containsSubstringIgnoreCase(person.getEmail().value, keyword)
+                        || StringUtil.containsSubstringIgnoreCase(person.getGitHub().value, keyword)
+                        || StringUtil.containsSubstringIgnoreCase(person.getTelegram().value, keyword)
+                        || person.getSkills().stream()
+                            .anyMatch(skill -> StringUtil.containsSubstringIgnoreCase(skill.skillName, keyword))
+                        || person.getInterestedHackathons().stream()
+                            .anyMatch(hackathon -> StringUtil.containsSubstringIgnoreCase(hackathon.value, keyword))
+                        || person.getParticipatingHackathons().stream()
+                            .anyMatch(hackathon -> StringUtil.containsSubstringIgnoreCase(hackathon.value, keyword)));
     }
 
     @Override

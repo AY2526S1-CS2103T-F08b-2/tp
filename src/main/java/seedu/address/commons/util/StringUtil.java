@@ -39,6 +39,28 @@ public class StringUtil {
     }
 
     /**
+     * Returns true if the {@code text} contains the {@code substring} as a substring.
+     *   Ignores case and allows partial matching.
+     *   <br>examples:<pre>
+     *       containsSubstringIgnoreCase("ABc def", "abc") == true
+     *       containsSubstringIgnoreCase("ABc def", "AB") == true
+     *       containsSubstringIgnoreCase("NUSHack 2024", "NUS") == true
+     *       containsSubstringIgnoreCase("AI Hackathon", "AI Hack") == true
+     *       </pre>
+     * @param text cannot be null
+     * @param substring cannot be null, cannot be empty
+     */
+    public static boolean containsSubstringIgnoreCase(String text, String substring) {
+        requireNonNull(text);
+        requireNonNull(substring);
+
+        String preppedSubstring = substring.trim();
+        checkArgument(!preppedSubstring.isEmpty(), "Substring parameter cannot be empty");
+
+        return text.toLowerCase().contains(preppedSubstring.toLowerCase());
+    }
+
+    /**
      * Returns a detailed message of the t, including the stack trace.
      */
     public static String getDetails(Throwable t) {

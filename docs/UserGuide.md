@@ -233,27 +233,29 @@ Examples:
 
 Edits an existing person in the address book.
 
-Format: `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
-* Edits the person at the specified `INDEX`. 
+* Edits the person at the specified `INDEX`.
   * The index refers to the index number shown in the displayed person list.
-  * The index **must be a positive integer** 1, 2, 3, …
+  * The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing skills, new skills are added to the existing skills (i.e., adding of skills is cumulative).
   * If you edit a skill that already exists (same skill name), the experience level will be updated to the new level specified.
-  * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
-  * If no level is specified for a skill, it defaults to `Beginner`
-* `h/HACKATHON` specifies the hackathon that the person is interested in. Can be used multiple times to replace all interested hackathons.
-  * **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
-  * **Important**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon. Doing this will show an error message.
+  * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive).
+  * If no level is specified for a skill, it defaults to `Beginner`.
+* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all interested hackathons.
+  * **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon.
+  * **Important**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). Doing this will show an error message.
   * **Participating hackathons are preserved** - editing other fields will not affect hackathons the person is currently participating in through their teams.
-* **Duplicate skills or hackathons are not allowed** - each skill/hackathon can only be added once
+* **Duplicate skills or hackathons are not allowed** - each skill/hackathon can only be added once,
 
 Examples:
-*  `edit p/1 e/johndoe@example.com t/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
-*  `edit p/3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
-*  `edit p/3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
+*  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
+*  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
+*  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
+*  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
+*  `edit 4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
 
 ### Removing a skill from a person : `removeSkill`
 
@@ -274,18 +276,21 @@ Examples:
 
 Finds persons who match **all** the given keywords.
 
-Format: `find k/KEYWORD [k/MORE_KEYWORDS]…​`
+Format: `find k/KEYWORD [k/MORE_KEYWORDS]...`
 
-* Searches across multiple fields: name, email, Telegram username, GitHub username, skills, and interested/participating hackathons.
+* Searches across multiple fields: name, email, Telegram username, GitHub username, skills, interested hackathons, and participating hackathons.
   * Persons matching **all** keywords in any of the searchable fields will be returned (i.e. `AND` search).
-      e.g. `find k/John k/NUSHacks` will return persons who have both `John` AND `NUSHacks`.
-* The search is case-insensitive. e.g `k/hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `k/Hans k/NUSHacks` will match persons that have both `Hans` and `NUSHacks`
-* Only full words will be matched e.g. `k/Han` will not match `Hans`
-* Each keyword can match in any field, but all keywords must have at least one match somewhere
+    e.g. `find k/John k/NUSHacks` will return persons who have both `John` AND `NUSHacks`.
+* The search is case-insensitive. e.g `k/hans` will match `Hans`.
+* The order of the keywords does not matter. e.g. `find k/Hans k/NUSHacks` will match persons with both `Hans` and `NUSHacks`.
+* Partial matching is supported e.g. `k/NUS` will match `NUSHack`
+* Keywords can contain spaces e.g. `k/AI Hackathon 2024` is a single keyword
 
 Examples:
-* `find k/C++ k/Git k/AI Challenge 2024` returns persons who have all three: `c++`, `git`, and `AI Challenge 2024` somewhere in their fields.<br>
+* `find k/John` returns persons with name `john` or `John Doe`, or email `john@example.com`, or Telegram `john123`
+* `find k/Java` returns persons who have `Java` or `JavaScript` as a skill
+* `find k/alice k/python` returns persons that have both `alice` AND `python` in their fields (e.g., Alice with Python skill)
+* `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
 
 ### Saving the data
 
@@ -318,20 +323,20 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 
 ## Command summary
 
-| Action                      | Format, Examples                                                                                                                                                               |
-|-----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Help**                    | `help`                                                                                                                                                                         |
-| **List**                    | `list`                                                                                                                                                                         |
-| **List Team**               | `listTeam`                                                                                                                                                                     |
-| **Clear**                   | `clear`                                                                                                                                                                        |
-| **Exit**                    | `exit`                                                                                                                                                                         |
+| Action                      | Format, Examples                                                                                                                                                                 |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Help**                    | `help`                                                                                                                                                                           |
+| **List**                    | `list`                                                                                                                                                                           |
+| **List Team**               | `listTeam`                                                                                                                                                                       |
+| **Clear**                   | `clear`                                                                                                                                                                          |
+| **Exit**                    | `exit`                                                                                                                                                                           |
 | **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/John g/John s/Python:Beginner h/NUSHack` |
-| **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                        |
-| **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                      |
-| **Delete Team**             | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1`                                                                                                                                |
-| **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                |
-| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                       |
-| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack`        |
-| **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                               |
-| **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`                                                                                     |
+| **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                          |
+| **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                        |
+| **Delete Team**             | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1`                                                                                                                                  |
+| **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                  |
+| **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                         |
+| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack`          |
+| **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                                 |
+| **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024`                                                                               |
 

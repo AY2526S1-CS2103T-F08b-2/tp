@@ -45,15 +45,15 @@ public class NameContainsKeywordsPredicateTest {
         NameContainsKeywordsPredicate predicate = new NameContainsKeywordsPredicate(Collections.singletonList("Alice"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Multiple keywords
+        // Multiple keywords - AND logic: all must match
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Bob"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Only one matching keyword
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Bob", "Carol"));
-        assertTrue(predicate.test(new PersonBuilder().withName("Alice Carol").build()));
+        // Partial matching
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Ali", "Bo"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Mixed-case keywords
+        // Mixed-case keywords - AND logic
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("aLIce", "bOB"));
         assertTrue(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
     }
@@ -68,9 +68,22 @@ public class NameContainsKeywordsPredicateTest {
         predicate = new NameContainsKeywordsPredicate(Arrays.asList("Carol"));
         assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
 
-        // Keywords match email but does not match name
-        predicate = new NameContainsKeywordsPredicate(Arrays.asList("alice@email.com"));
-        assertFalse(predicate.test(new PersonBuilder().withName("Alice")
+        // AND logic: only one of two keywords matches
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("Alice", "Carol"));
+        assertFalse(predicate.test(new PersonBuilder().withName("Alice Bob").build()));
+    }
+
+    @Test
+    public void test_emailContainsKeywords_returnsTrue() {
+        // Keyword matches email
+        NameContainsKeywordsPredicate predicate =
+                new NameContainsKeywordsPredicate(Arrays.asList("alice@email.com"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Bob")
+                .withEmail("alice@email.com").build()));
+
+        // Partial keyword matches email
+        predicate = new NameContainsKeywordsPredicate(Arrays.asList("alice"));
+        assertTrue(predicate.test(new PersonBuilder().withName("Bob")
                 .withEmail("alice@email.com").build()));
     }
 
