@@ -3,9 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_GITHUB;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -28,6 +26,7 @@ import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.skill.Skill;
 import seedu.address.model.team.Team;
 
@@ -45,14 +44,10 @@ public class EditCommand extends Command {
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_TELEGRAM + "TELEGRAM] "
-            + "[" + PREFIX_GITHUB + "GITHUB] "
-            + "[" + PREFIX_SKILL + "SKILL[:LEVEL]]... "
-            + "[" + PREFIX_HACKATHON_FILTER + "HACKATHON]...\n"
-            + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
+            + "[" + PREFIX_GITHUB + "GITHUB]\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_EMAIL + "johndoe@example.com "
-            + PREFIX_SKILL + "java:Advanced "
-            + PREFIX_HACKATHON_FILTER + "NUSHack";
+            + PREFIX_TELEGRAM + "johndoe_tg";
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
@@ -89,7 +84,27 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.setPerson(personToEdit, editedPerson);
+        try {
+            model.setPerson(personToEdit, editedPerson);
+        } catch (DuplicatePersonException e) {
+            // Find which contact field conflicts to provide clearer message
+            for (Person existing : model.getAddressBook().getPersonList()) {
+                if (!existing.isSamePerson(editedPerson)) {
+                    if (existing.getEmail().equals(editedPerson.getEmail())) {
+                        throw new CommandException("A person with the same email already exists");
+                    }
+                    if (existing.getTelegram().equals(editedPerson.getTelegram())) {
+                        throw new CommandException("A person with the same telegram handle already exists");
+                    }
+                    if (existing.getGitHub().equals(editedPerson.getGitHub())) {
+                        throw new CommandException("A person with the same GitHub handle already exists");
+                    }
+                }
+            }
+            // fallback
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format((Person) editedPerson)));
     }
@@ -106,38 +121,17 @@ public class EditCommand extends Command {
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Telegram updatedTelegram = editPersonDescriptor.getTelegram().orElse(personToEdit.getTelegram());
         GitHub updatedGitHub = editPersonDescriptor.getGitHub().orElse(personToEdit.getGitHub());
-        Set<Skill> updatedSkills = new HashSet<>(personToEdit.getSkills());
 
-        // Remove existing skills with the same name and add new ones with updated levels
-        if (editPersonDescriptor.getSkills().isPresent()) {
-            Set<Skill> newSkills = editPersonDescriptor.getSkills().get();
-            // Remove old skills that have the same name as new skills
-            updatedSkills.removeAll(newSkills);
-            // Add all new skills with their updated experience levels
-            updatedSkills.addAll(newSkills);
-        }
+        // Skills are not affected by edit command - preserve existing skills
+        Set<Skill> updatedSkills = new HashSet<>(personToEdit.getSkills());
 
         Set<Team> updatedTeams = editPersonDescriptor.getTeams().isPresent()
                 ? editPersonDescriptor.getTeams().get()
                 : new HashSet<>(personToEdit.getTeams());
 
-        // Preserve participating hackathons - they should not be affected by edit command
+        // Interested and participating hackathons are not affected by edit command - preserve them
+        Set<HackathonName> updatedInterestedHackathons = new HashSet<>(personToEdit.getInterestedHackathons());
         Set<HackathonName> updatedParticipatingHackathons = new HashSet<>(personToEdit.getParticipatingHackathons());
-
-        Set<HackathonName> updatedInterestedHackathons;
-        if (editPersonDescriptor.getInterestedHackathons().isPresent()) {
-            updatedInterestedHackathons = editPersonDescriptor.getInterestedHackathons().get();
-
-            // Check if any interested hackathon is already in participating hackathons
-            for (HackathonName hackathon : updatedInterestedHackathons) {
-                if (updatedParticipatingHackathons.contains(hackathon)) {
-                    throw new CommandException("Cannot add hackathon '" + hackathon.value
-                            + "' to interested list. You are already participating in this hackathon.");
-                }
-            }
-        } else {
-            updatedInterestedHackathons = new HashSet<>(personToEdit.getInterestedHackathons());
-        }
 
 
         return new Person(updatedName, updatedEmail, updatedTelegram, updatedGitHub, updatedSkills,
@@ -177,32 +171,27 @@ public class EditCommand extends Command {
         private Email email;
         private Telegram telegram;
         private GitHub github;
-        private Set<Skill> skills;
         private Set<Team> teams;
-        private Set<HackathonName> interestedHackathons;
 
         public EditPersonDescriptor() {}
 
         /**
          * Copy constructor.
-         * A defensive copy of {@code skills} and {@code teams} is used internally.
+         * A defensive copy of {@code teams} is used internally.
          */
         public EditPersonDescriptor(EditPersonDescriptor toCopy) {
             setName(toCopy.name);
             setEmail(toCopy.email);
             setTelegram(toCopy.telegram);
             setGitHub(toCopy.github);
-            setSkills(toCopy.skills);
             setTeams(toCopy.teams);
-            setInterestedHackathons(toCopy.interestedHackathons);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, email, telegram, github, skills, teams,
-                    interestedHackathons);
+            return CollectionUtil.isAnyNonNull(name, email, telegram, github, teams);
         }
 
         public void setName(Name name) {
@@ -237,22 +226,6 @@ public class EditCommand extends Command {
             return Optional.ofNullable(github);
         }
 
-        /**
-         * Sets {@code skills} to this object's {@code skills}.
-         * A defensive copy of {@code skills} is used internally.
-         */
-        public void setSkills(Set<Skill> skills) {
-            this.skills = (skills != null) ? new HashSet<>(skills) : null;
-        }
-
-        /**
-         * Returns an unmodifiable skill set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code skills} is null.
-         */
-        public Optional<Set<Skill>> getSkills() {
-            return (skills != null) ? Optional.of(Collections.unmodifiableSet(skills)) : Optional.empty();
-        }
 
         /**
          * Sets {@code teams} to this object's {@code teams}.
@@ -271,26 +244,6 @@ public class EditCommand extends Command {
             return (teams != null) ? Optional.of(Collections.unmodifiableSet(teams)) : Optional.empty();
         }
 
-
-        /**
-         * Sets {@code interestedHackathons} to this object's {@code interestedHackathons}.
-         * A defensive copy of {@code interestedHackathons} is used internally.
-         */
-        public void setInterestedHackathons(Set<HackathonName> interestedHackathons) {
-            this.interestedHackathons = (interestedHackathons != null)
-                    ? new HashSet<>(interestedHackathons) : null;
-        }
-
-        /**
-         * Returns an unmodifiable hackathon set, which throws {@code UnsupportedOperationException}
-         * if modification is attempted.
-         * Returns {@code Optional#empty()} if {@code interestedHackathons} is null.
-         */
-        public Optional<Set<HackathonName>> getInterestedHackathons() {
-            return (interestedHackathons != null)
-                    ? Optional.of(Collections.unmodifiableSet(interestedHackathons)) : Optional.empty();
-        }
-
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -307,9 +260,7 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(telegram, otherEditPersonDescriptor.telegram)
                     && Objects.equals(github, otherEditPersonDescriptor.github)
-                    && Objects.equals(skills, otherEditPersonDescriptor.skills)
-                    && Objects.equals(teams, otherEditPersonDescriptor.teams)
-                    && Objects.equals(interestedHackathons, otherEditPersonDescriptor.interestedHackathons);
+                    && Objects.equals(teams, otherEditPersonDescriptor.teams);
         }
 
         @Override
@@ -317,8 +268,6 @@ public class EditCommand extends Command {
             return new ToStringBuilder(this)
                     .add("name", name)
                     .add("email", email)
-                    .add("skills", skills)
-                    .add("interestedHackathons", interestedHackathons)
                     .toString();
         }
     }

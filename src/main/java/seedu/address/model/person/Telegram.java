@@ -10,17 +10,17 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Telegram {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Telegram handles should be 3–32 characters long, "
+            "Telegram handles should be 5–32 characters long, "
                     + "contain only letters, numbers, and underscores, "
                     + "cannot start with '@', cannot contain spaces, "
                     + "and cannot end with an underscore.";
 
     // Explanation:
     // (?!@) → must not start with '@'
-    // [A-Za-z0-9_]{3,32} → only valid characters (length 3–32)
+    // [A-Za-z0-9_]{5,32} → only valid characters (length 3–32)
     // (?<!_) → must not end with '_'
     // no spaces allowed by default
-    public static final String VALIDATION_REGEX = "^(?!@)[A-Za-z0-9_]{3,32}(?<!_)$";
+    public static final String VALIDATION_REGEX = "^(?!@)[A-Za-z0-9_]{5,32}(?<!_)$";
 
     public final String value;
 

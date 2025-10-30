@@ -3,20 +3,12 @@ package seedu.address.logic.parser;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.HACKATHON_FILTER_DESC_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
-import static seedu.address.logic.commands.CommandTestUtil.INVALID_SKILL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.SKILL_DESC_JAVA;
-import static seedu.address.logic.commands.CommandTestUtil.SKILL_DESC_PYTHON;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_HACKATHON_NAME_TECH;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_AMY;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_JAVA;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_PYTHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -31,12 +23,10 @@ import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
-import seedu.address.model.skill.Skill;
 import seedu.address.testutil.EditPersonDescriptorBuilder;
 
 public class EditCommandParserTest {
 
-    private static final String SKILL_EMPTY = " " + PREFIX_SKILL;
 
     private static final String MESSAGE_INVALID_FORMAT =
             String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
@@ -74,13 +64,6 @@ public class EditCommandParserTest {
     public void parse_invalidValue_failure() {
         assertParseFailure(parser, "1" + INVALID_NAME_DESC, Name.MESSAGE_CONSTRAINTS); // invalid name
         assertParseFailure(parser, "1" + INVALID_EMAIL_DESC, Email.MESSAGE_CONSTRAINTS); // invalid email
-        assertParseFailure(parser, "1" + INVALID_SKILL_DESC, Skill.MESSAGE_CONSTRAINTS); // invalid skill
-
-        // while parsing {@code PREFIX_SKILL} alone will reset the skills of the {@code Person} being edited,
-        // parsing it together with a valid skill results in error
-        assertParseFailure(parser, "1" + SKILL_DESC_PYTHON + SKILL_DESC_JAVA + SKILL_EMPTY, Skill.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + SKILL_DESC_PYTHON + SKILL_EMPTY + SKILL_DESC_JAVA, Skill.MESSAGE_CONSTRAINTS);
-        assertParseFailure(parser, "1" + SKILL_EMPTY + SKILL_DESC_PYTHON + SKILL_DESC_JAVA, Skill.MESSAGE_CONSTRAINTS);
 
         // multiple invalid values, but only the first invalid value is captured
         assertParseFailure(parser, "1" + INVALID_NAME_DESC + INVALID_EMAIL_DESC,
@@ -90,12 +73,10 @@ public class EditCommandParserTest {
     @Test
     public void parse_allFieldsSpecified_success() {
         Index targetIndex = INDEX_SECOND_PERSON;
-        String userInput = targetIndex.getOneBased() + SKILL_DESC_JAVA
-                + EMAIL_DESC_AMY + NAME_DESC_AMY + SKILL_DESC_PYTHON;
+        String userInput = targetIndex.getOneBased() + EMAIL_DESC_AMY + NAME_DESC_AMY;
 
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
-                .withEmail(VALID_EMAIL_AMY)
-                .withSkills(VALID_SKILL_JAVA, VALID_SKILL_PYTHON).build();
+                .withEmail(VALID_EMAIL_AMY).build();
         EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -127,23 +108,16 @@ public class EditCommandParserTest {
         descriptor = new EditPersonDescriptorBuilder().withEmail(VALID_EMAIL_AMY).build();
         expectedCommand = new EditCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
-
-        // skills
-        userInput = targetIndex.getOneBased() + SKILL_DESC_PYTHON;
-        descriptor = new EditPersonDescriptorBuilder().withSkills(VALID_SKILL_PYTHON).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
-        assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
     public void parse_multipleRepeatedFields_failure() {
         // More extensive testing of duplicate parameter detections is done in
         // AddCommandParserTest#parse_repeatedNonSkillValue_failure()
-        // mulltiple valid fields repeated
+        // multiple valid fields repeated
         Index targetIndex = INDEX_FIRST_PERSON;
         String userInput = targetIndex.getOneBased() + EMAIL_DESC_AMY
-                + SKILL_DESC_PYTHON + EMAIL_DESC_AMY + SKILL_DESC_PYTHON
-                + EMAIL_DESC_BOB + SKILL_DESC_JAVA;
+                + EMAIL_DESC_AMY + EMAIL_DESC_BOB;
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
@@ -154,40 +128,5 @@ public class EditCommandParserTest {
 
         assertParseFailure(parser, userInput,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EMAIL));
-    }
-
-    @Test
-    public void parse_resetSkills_success() {
-        Index targetIndex = INDEX_THIRD_PERSON;
-        String userInput = targetIndex.getOneBased() + SKILL_EMPTY;
-
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withSkills().build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
-
-        assertParseSuccess(parser, userInput, expectedCommand);
-    }
-
-    @Test
-    public void parse_duplicateSkills_failure() {
-        Index targetIndex = INDEX_FIRST_PERSON;
-        // duplicate skills with same name
-        String userInput = targetIndex.getOneBased() + SKILL_DESC_JAVA + SKILL_DESC_JAVA;
-        assertParseFailure(parser, userInput,
-                "Duplicate skill detected: java. Each skill can only be added once.");
-        // duplicate skills with different experience levels
-        userInput = targetIndex.getOneBased() + " s/java:beginner s/java:intermediate";
-        assertParseFailure(parser, userInput,
-                "Duplicate skill detected: java. Each skill can only be added once.");
-    }
-
-    @Test
-    public void parse_duplicateHackathons_failure() {
-        Index targetIndex = INDEX_FIRST_PERSON;
-
-        // duplicate hackathon names
-        String userInput = targetIndex.getOneBased() + HACKATHON_FILTER_DESC_TECH + HACKATHON_FILTER_DESC_TECH;
-        assertParseFailure(parser, userInput,
-                "Duplicate hackathon detected: " + VALID_HACKATHON_NAME_TECH
-                + ". Each hackathon can only be added once.");
     }
 }

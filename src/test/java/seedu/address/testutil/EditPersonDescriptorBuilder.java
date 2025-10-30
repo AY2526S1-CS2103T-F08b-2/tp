@@ -1,17 +1,11 @@
 package seedu.address.testutil;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
-import seedu.address.model.hackathon.HackathonName;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
-import seedu.address.model.skill.Skill;
 
 /**
  * A utility class to help with building EditPersonDescriptor objects.
@@ -37,8 +31,6 @@ public class EditPersonDescriptorBuilder {
         descriptor.setEmail(person.getEmail());
         descriptor.setTelegram(person.getTelegram());
         descriptor.setGitHub(person.getGitHub());
-        descriptor.setSkills(person.getSkills());
-        descriptor.setInterestedHackathons(person.getInterestedHackathons());
     }
 
     /**
@@ -70,26 +62,6 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withGitHub(String github) {
         descriptor.setGitHub(new GitHub(github));
-        return this;
-    }
-
-    /**
-     * Parses the {@code skills} into a {@code Set<Skill>} and set it to the {@code EditPersonDescriptor}
-     * that we are building.
-     */
-    public EditPersonDescriptorBuilder withSkills(String... skills) {
-        Set<Skill> skillSet = Stream.of(skills).map(Skill::new).collect(Collectors.toSet());
-        descriptor.setSkills(skillSet);
-        return this;
-    }
-
-    /**
-     * Parses the {@code hackathons} into a {@code Set<HackathonName>} and set it to the {@code EditPersonDescriptor}
-     * that we are building.
-     */
-    public EditPersonDescriptorBuilder withInterestedHackathons(String... hackathons) {
-        Set<HackathonName> hackathonSet = Stream.of(hackathons).map(HackathonName::new).collect(Collectors.toSet());
-        descriptor.setInterestedHackathons(hackathonSet);
         return this;
     }
 
