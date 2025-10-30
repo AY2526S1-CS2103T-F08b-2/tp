@@ -1,8 +1,10 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_KEYWORD;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -19,15 +21,28 @@ public class FindCommandParser implements Parser<FindCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public FindCommand parse(String args) throws ParseException {
-        String trimmedArgs = args.trim();
-        if (trimmedArgs.isEmpty()) {
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_KEYWORD);
+
+        // Check if there are k/ prefixes
+        List<String> keywords = argMultimap.getAllValues(PREFIX_KEYWORD);
+
+        if (keywords.isEmpty()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        String[] nameKeywords = trimmedArgs.split("\\s+");
+        // Filter out empty keywords and trim them
+        List<String> validKeywords = keywords.stream()
+                .map(String::trim)
+                .filter(keyword -> !keyword.isEmpty())
+                .collect(Collectors.toList());
 
-        return new FindCommand(new NameContainsKeywordsPredicate(Arrays.asList(nameKeywords)));
+        if (validKeywords.isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
+        }
+
+        return new FindCommand(new NameContainsKeywordsPredicate(validKeywords));
     }
 
 }
