@@ -419,7 +419,7 @@ _{Explain here how the data archiving feature will be implemented}_
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 | Priority | As a …​ | I want to …​                                                          | So that I can…​                                          |
-|-----|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
+|------|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
 | `* * *` | student | search for peers by programming language                              | quickly find potential teammates with matching skills.   |
 | `* * *` | student | create a team from selected contacts                               | form balanced teams for hackathons                       |
 | `* * *` | student | edit members of an existing team                                        | adjust team composition as needed                        |
@@ -427,10 +427,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* * *` | student | search for multiple skills at once                                    | find students with overlapping technical expertise       |
 | `* * *` | student | add my own skills to my profile                                       | let others discover me for team formation                |
 | `* *` | student | save profiles as facorites                                            |  easily revisit promising teammates later                  |
-| `* *` | student | import contacts from CSV                                             | quickly build my network without manual entry            |
-| `* *` | student | export a team to CSV                                                 | easily share team details with teammates                 |
-| `*` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
-| `*` | student | search for people by email                                            | directly connect with someone I already know             |
+| `* *` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
+| `* *` | student | search for people by email                                            | directly connect with someone I already know             |
+| `*`  | student | import contacts from CSV                                             | quickly build my network without manual entry            |
+| `*`  | student | export a team to CSV                                                 | easily share team details with teammates                 |
 
 ### Use cases
 
