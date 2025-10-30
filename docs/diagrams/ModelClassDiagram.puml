@@ -13,13 +13,17 @@ Class ModelManager
 Class UserPrefs
 
 Class UniquePersonList
+Class UniqueTeamList
 Class Person
+Class Team
 Class Email
 Class Telegram
 Class Name
 Class Github
 Class Skills
 Class Hackathon
+Class TeamName
+Class HackathonName
 
 Class I #FFFFFF
 }
@@ -37,13 +41,19 @@ ModelManager -right-> "1" UserPrefs
 UserPrefs .up.|> ReadOnlyUserPrefs
 
 AddressBook *--> "1" UniquePersonList
+AddressBook *--> "1" UniqueTeamList
 UniquePersonList --> "~* all" Person
+UniqueTeamList --> "~* all" Team
 Person *--> Name
 Person *--> Email
 Person *--> Telegram
 Person *--> Github
 Person *--> "*" Skills
 Person *--> "*" Hackathon
+
+Team *--> TeamName
+Team *--> HackathonName
+Team o--> "*" Person
 
 Person -[hidden]up--> I
 UniquePersonList -[hidden]right-> I
@@ -53,4 +63,5 @@ Github -[hidden]right-> Github
 Telegram -[hidden]right-> Telegram
 
 ModelManager --> "~* filtered" Person
+ModelManager --> "~* filtered" Team
 @enduml

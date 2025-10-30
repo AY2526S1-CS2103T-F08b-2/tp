@@ -72,7 +72,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/se-
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `TeamListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
 The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
 
@@ -81,7 +81,7 @@ The `UI` component,
 * executes user commands using the `Logic` component.
 * listens for changes to `Model` data so that the UI can be updated with the modified data.
 * keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+* depends on some classes in the `Model` component, as it displays `Person` object and Team object residing in the `Model`.
 
 ### Logic component
 
@@ -122,7 +122,7 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Team` objects (which are contained in a `UniqueTeamList` object) in an `AddressBook` object.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -144,10 +144,6 @@ The `Storage` component,
 * can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
-
-### Remove Skill Sequence Diagram
-
-<img src="images/RemoveSkillSequence.png" width="550" />
 
 ### Common classes
 
@@ -186,10 +182,11 @@ createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/INDEX [p/INDEX]...
 4. A `CreateTeamCommand` object is created with the parsed information.
 5. When executed, `CreateTeamCommand` performs the following:
     * Validates all person indices against the current filtered person list
-    * Retrieves the `Person` objects corresponding to each valid index
-    * Creates a new `Team` object with the specified name, hackathon, and members
     * Checks if the team already exists in the model
-    * Adds the team to the model if it's unique
+    * Retrieves the `Person` objects corresponding to each valid index
+    * Ensures that none of the selected persons are already part of a team for the specified hackathon
+    * Creates a new `Team` object with the specified name, hackathon, and members
+    * Adds the team to the model
 6. A `CommandResult` is returned with a success message containing the team details.
 
 **Sequence of Operations:**
@@ -204,12 +201,12 @@ Step 2. The user executes `createTeam tn/Development Team hn/Hackathon 2024 p/1 
 
 Step 3. The command is parsed and `CreateTeamCommand` is executed with the following validations:
 * Check that indices 1 and 3 are within bounds of the filtered person list
+* Check if a team with the name "Development Team" for "Hackathon 2024" already exists
 * Retrieve the persons at these indices
+* Ensure neither person is already in a team for "Hackathon 2024"
 * Create a `Team` object with name "Development Team", hackathon "Hackathon 2024", and the two selected persons
 
-Step 4. The command checks if a team with the same name and hackathon already exists.
-
-Step 5. If the team is unique, it is added to the model's team list.
+Step 4. The team is added to the model's team list.
 
 Step 6. A success message is displayed showing the created team details.
 
@@ -217,9 +214,10 @@ Step 6. A success message is displayed showing the created team details.
 
 The `CreateTeamCommand` handles several error cases:
 
-* **Invalid person index** — If any provided index is out of bounds, a `CommandException` is thrown with the message "The person index provided is invalid"
-* **Duplicate team** — If a team with the same name and hackathon already exists, a `CommandException` is thrown with the message "This team already exists in the address book"
 * **Missing parameters** — If required prefixes (team name, hackathon name, or at least one person index) are missing, the parser throws a `ParseException` with usage instructions
+* **Invalid person index** — If any provided index is out of bounds, a `CommandException` is thrown 
+* **Duplicate team** — If a team with the same name and hackathon already exists, a `CommandException` is thrown 
+* **Person already in team** — If any selected person is already part of a team for the specified hackathon, a `CommandException` is thrown 
 
 #### Design considerations:
 
@@ -243,15 +241,64 @@ The `CreateTeamCommand` handles several error cases:
     * Pros: Simpler implementation and uniqueness check.
     * Cons: Prevents reusing team names across different hackathons, which is restrictive.
 
-**Aspect: Storage of team membership:**
+### List Teams feature
 
-* **Alternative 1 (current choice):** Store references to `Person` objects in the `Team`.
-    * Pros: Direct access to full person information. Easier to display team details.
-    * Cons: Need to handle cascading updates if a person is modified or deleted.
+#### Implementation
 
-* **Alternative 2:** Store only person IDs/indices in the team.
-    * Pros: Reduces coupling between `Team` and `Person`. Simpler to handle person updates.
-    * Cons: Requires additional lookups to retrieve full person information. More complex to display team details.
+The List Teams feature allows users to view all teams created in the address book. This feature is implemented through the `ListTeamsCommand` class.
+
+Step 1. The user enters a `listTeams` command.
+Step 2. `AddressBookParser` recognizes the `listTeams` command word and creates a `ListTeamsCommand` object.
+Step 3. When executed, `ListTeamsCommand` performs the following:
+* Retrieves the list of all teams from the model.
+* Updates the filtered team list in the model to show all teams.
+Step 4. A `CommandResult` is returned with a message indicating that all teams are being listed.
+
+The following sequence diagram illustrates the interactions within the system when a user executes a list teams command:
+
+<img src="images/ListTeamSequenceDiagram.png" width="550" />
+
+### Remove Skill feature
+
+#### Implementation
+
+The Remove Skill feature allows users to remove a specific skill from a person's profile. This is useful when a person's skill set changes or when a skill was added by mistake. The feature is implemented through the `RemoveSkillCommand` class and its associated parser `RemoveSkillCommandParser`.
+
+**Key Components:**
+
+* `RemoveSkillCommand` — Removes a specified skill from a person at a given index.
+* `RemoveSkillCommandParser` — Parses user input to extract the person's index and the skill name to be removed.
+
+**Command Format:**
+```
+removeSkill INDEX SKILL_NAME
+```
+
+**How the Remove Skill feature works:**
+
+The sequence diagram below illustrates the interactions within the system when a user executes a remove skill command:
+
+<img src="images/RemoveSkillSequence.png" width="550" />
+
+1. The user enters a `removeSkill` command with the person's index and the skill name to remove.
+2. `AddressBookParser` recognizes the `removeSkill` command word and delegates parsing to `RemoveSkillCommandParser`.
+3. `RemoveSkillCommandParser` extracts the index and skill name from the input.
+4. A `RemoveSkillCommand` object is created with the parsed information.
+5. When executed, `RemoveSkillCommand` performs the following:
+    * Validates the person index against the current filtered person list.
+    * Retrieves the person at the specified index.
+    * Checks if the person has the specified skill.
+    * Creates a new `Person` object with the skill removed.
+    * Updates the person in the model.
+6. A `CommandResult` is returned with a success message.
+
+**Parser Integration:**
+- The command word `removeSkill` is recognized in `AddressBookParser`.
+- Arguments are parsed by `RemoveSkillCommandParser`, which expects an index and a skill name separated by a space.
+
+**Error Handling:**
+- If the index is invalid, an error message is shown.
+- If the skill does not exist for the person, an error message is shown.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -371,21 +418,25 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                                                         | So that I can…​                                          |
-|----------|---------|----------------------------------------------------------------------|----------------------------------------------------------|
-| `* * *`  | student | search for peers by programming language                             | quickly find potential teammates with matching skills.   |
-| `* * *`  | student | filter contacts by proficiency level (beginner, intermediate, expert) | build a balanced hackathon team.                         |
-| `* * *`  | student | search by GitHub username                                            | I can review their past projects before contacting them.
-|
-| `* * *`  | student | search for multiple skills at once                                   | find students with overlapping technical expertise       |
-| `* * *`  | student | search for people by email                                         | directly connect with someone I already know             |
-| `* * *`  | student | add my own skills to my profile                                                  | let others discover me for team formation                |
-
-*{More to be added}*
+| Priority | As a …​ | I want to …​                                                          | So that I can…​                                          |
+|------|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
+| `* * *` | student | search for peers by programming language                              | quickly find potential teammates with matching skills.   |
+| `* * *` | student | create a team from selected contacts                               | form balanced teams for hackathons                       |
+| `* * *` | student | edit members of an existing team                                        | adjust team composition as needed                        |
+| `* * *` | student | view color-coded skill tags                                           | quickly assess a person's proficiency level              |
+| `* * *` | student | search for multiple skills at once                                    | find students with overlapping technical expertise       |
+| `* * *` | student | add my own skills to my profile                                       | let others discover me for team formation                |
+| `* *` | student | save profiles as facorites                                            |  easily revisit promising teammates later                  |
+| `* *` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
+| `* *` | student | search for people by email                                            | directly connect with someone I already know             |
+| `*`  | student | import contacts from CSV                                             | quickly build my network without manual entry            |
+| `*`  | student | export a team to CSV                                                 | easily share team details with teammates                 |
 
 ### Use cases
 
 (For all use cases below, the **System** is `Mate` and the **Actor** is the `user`, unless specified otherwise)
+
+
 
 **Use case: Delete a person**
 
@@ -410,47 +461,37 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case resumes at step 2.
 
-**Use case: Clear All Persons**
+**Use case: Remove a person from a hackathon team**
 
-**MSS**
-
-1.  User requests to clear all entries.
-2.  Mate removes all persons from storage.
-3.  Mate shows confirmation.
-
-    Use case ends.
-
-**Extensions**
-
-* 1a. User cancels the operation.
-    * 1a1. Mate aborts clearing.
-
-      Use case ends.
-
-**Use case: Create a Team from Selected Contacts**
-
-**MSS**
-
-1.  Student requests to create a new team.
-2.  Mate requests for members to be added.
-3.  Student searches and selects multiple classmates by name or skill.
-4.  Mate confirms the selected members.
-5.  Student confirms creation of the team.
-6.  Mate creates the team and stores it.
+1.  User requests to list teams
+2.  Mate shows a list of teams
+3.  User requests to remove a specific person from a specific team
+4.  Mate removes the person from the team and indicates that the person is interested in joining a team for the hackathon
 
     Use case ends.
 
 **Extensions**
 
-* 3a. No classmates match the search.
-    * 3a1. Mate prompts to refine search or import new contacts.
-    * 3a2. Student retries.
+* 2a. The list is empty.
 
-      Use case resumes at step 5.
+  Use case ends.
 
-* a. At any time, Student cancels the operation.
-    * a1. Mate requests cancellation confirmation.
-    * a2. Student confirms cancellation.
+* 3a. The given team or person is invalid.
+
+    * 3a1. Mate shows an error message.
+
+      Use case resumes at step 2.
+
+* 3b. The person is not part of the team.
+
+    * 3b1. Mate shows an error message.
+
+      Use case resumes at step 2.
+
+* 4a. The user wants to indicate that the person is not interested in joining a team for the hackathon.
+
+    * 4a1. User requests to indicate that the person is not interested in joining a team for the hackathon.
+    * 4a2. Mate confirms the indication.
 
       Use case ends.
 
@@ -485,24 +526,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
     * 5a2. Student chooses.
 
       Use case ends.
-
-**Use case: Export a Team to CSV**
-
-**MSS**
-
-1.  Student requests to export a team.
-2.  Mate generates and saves the CSV file.
-3.  Mate confirms successful export.
-
-    Use case ends.
-
-**Extensions**
-
-* 2a. No existing team matches the input.
-    * 2a1. Mate prompts retry.
-    * 2a2. Student retries.
-
-      Use case resumes at step 2.
 
 ### Non-Functional Requirements
 
@@ -540,16 +563,14 @@ testers are expected to do more *exploratory* testing.
 
    1. Download the jar file and copy into an empty folder
 
-   1. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
+   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-1. Saving window preferences
+2. Saving window preferences
 
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
-   1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
-
-1. _{ more test cases …​ }_
+   2. Re-launch the app by double-clicking the jar file.<br>
+      Expected: The most recent window size and location is retained.
 
 ### Deleting a person
 
@@ -557,34 +578,72 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   1. Test case: `delete 1`<br>
+   2. Test case: `delete 1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   1. Test case: `delete 0`<br>
+   3. Test case: `delete 0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   1. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
-1. _{ more test cases …​ }_
+2. Deleting a person after a find command
 
-### Saving data
+    1. Prerequisites: `find java`
+    
+    2. Test case: `delete 1`<br>
+       Expected: First person in the filtered list is deleted from the address book. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    
+    3. Test case: `delete 0`<br>
+       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
+    
+    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the filtered list size)<br>
+       Expected: Similar to previous.
 
-1. Dealing with missing/corrupted data files
+### Creating a team
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
+1. Creating a team from selected persons in the list
 
-1. _{ more test cases …​ }_
+   1. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/1 p/2`<br>
+      Expected: Team "Alpha Team" for "Hackathon 2024" is created with persons at index 1 and 2 as members. Details of the created team shown in the status message. Timestamp in the status bar is updated.
 
-### RemoveSkillCommand
+   2. Test case: `createTeam tn/Beta Team hn/Hackathon 2024 p/0 p/x` (where x is larger than the list size) <br>
+      Expected: No team is created. Error details shown in the status message. Status bar remains the same.
 
-The `RemoveSkillCommand` allows users to remove a skill from a person by specifying the person's index and the skill name.
+2. Creating a team with duplicate name
 
-**Parser Integration:**
-- The command word `removeSkill` is recognized in `AddressBookParser`.
-- Arguments are parsed by `RemoveSkillCommandParser`, which expects an index and a skill name separated by a space.
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
 
-**Design Notes:**
-- The command checks if the person has the skill before removing it.
-- If successful, the skill is removed and a success message is shown.
-- If the skill is not found or the index is invalid, an error message is displayed.
+   2. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/3 p/4`<br>
+      Expected: No team is created. Error details shown in the status message indicating that the team already exists. Status bar remains the same.
+
+   3. Test case: `createTeam tn/Alpha Team hn/Hackathon 2025 p/3 p/4`<br>
+      Expected: Team "Alpha Team" for "Hackathon 2025" is created with persons at index 3 and 4 as members. Same team name different hackathon allowed. Details of the created team shown in the status message. Timestamp in the status bar is updated.
+
+3. Creating a team for a hackathon with person already participating in hackathon
+
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+
+   2. Test case: `createTeam tn/Gamma Team hn/Hackathon 2024 p/2 p/3`<br>
+      Expected: No team is created. Error details shown in the status message indicating that person at index 2 is already participating in "Hackathon 2024". Status bar remains the same.
+
+### Removing a person from a team
+
+1. Removing a person from a team
+
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+
+   2. Test case: `removeFromTeam tn/Alpha Team p/1`<br>
+      Expected: Person at index 1 is removed from team "Alpha Team". Details of the updated team shown in the status message. Timestamp in the status bar is updated.
+
+   3. Test case : `removeFromTeam tn/Alpha Team p/3`<br>
+      Expected: No person is removed. Error details shown in the status message indicating that person at index 3 is not a member of team "Alpha Team". Status bar remains the same.
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Effort**
+
+- While AB3 primarily deals with the person object in the model component, Mate extends this functionality by introducing a team object. The team object encapsulates a collection of person objects, allowing users to group individuals based on shared skills and hackathon participation. This extension required significant modifications to the model component to accommodate team management features, including creating, listing, and modifying teams.
+- Additionally, several of the new commands introduced like `addToTeam` and `removeFromTeam` required careful handling of the relationships between persons and teams, as there was a bidirectional association that needed to be maintained.
+- Other commands like `createTeam` also required deliberation on what should be allowed, such as preventing duplicate team names for the same hackathon and ensuring that a person cannot be added to multiple teams for the same hackathon.
+
