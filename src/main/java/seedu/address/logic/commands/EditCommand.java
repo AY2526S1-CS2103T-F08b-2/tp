@@ -26,6 +26,7 @@ import seedu.address.model.person.GitHub;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Telegram;
+import seedu.address.model.person.exceptions.DuplicatePersonException;
 import seedu.address.model.skill.Skill;
 import seedu.address.model.team.Team;
 
@@ -83,7 +84,27 @@ public class EditCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        model.setPerson(personToEdit, editedPerson);
+        try {
+            model.setPerson(personToEdit, editedPerson);
+        } catch (DuplicatePersonException e) {
+            // Find which contact field conflicts to provide clearer message
+            for (Person existing : model.getAddressBook().getPersonList()) {
+                if (!existing.isSamePerson(editedPerson)) {
+                    if (existing.getEmail().equals(editedPerson.getEmail())) {
+                        throw new CommandException("A person with the same email already exists");
+                    }
+                    if (existing.getTelegram().equals(editedPerson.getTelegram())) {
+                        throw new CommandException("A person with the same telegram handle already exists");
+                    }
+                    if (existing.getGitHub().equals(editedPerson.getGitHub())) {
+                        throw new CommandException("A person with the same GitHub handle already exists");
+                    }
+                }
+            }
+            // fallback
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format((Person) editedPerson)));
     }

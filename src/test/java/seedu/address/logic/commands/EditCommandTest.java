@@ -225,7 +225,7 @@ public class EditCommandTest {
     public void execute_editFieldsPreservesSkills_success() {
         Person personWithSkills = new PersonBuilder()
                 .withName("Alice Wong")
-                .withEmail("alice@example.com")
+                .withEmail("alicewong@example.com")
                 .withTelegram("alicewong_tg")
                 .withGitHub("alicewong-github")
                 .withSkills("java", "python")
