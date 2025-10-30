@@ -132,9 +132,9 @@ public class RemoveHackathonCommandTest {
     public void execute_hackathonInParticipating_throwsCommandException() {
         Person personWithParticipating = new PersonBuilder()
                 .withName("Alice Wong")
-                .withEmail("alice@example.com")
-                .withTelegram("alicewong")
-                .withGitHub("alicewong")
+                .withEmail("alicewong@example.com")
+                .withTelegram("alicewong_tg")
+                .withGitHub("alicewong-github")
                 .withInterestedHackathons("TechChallenge")
                 .withParticipatingHackathons("NUSHack")
                 .build();
