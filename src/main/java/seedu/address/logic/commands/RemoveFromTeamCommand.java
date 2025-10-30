@@ -20,13 +20,9 @@ import seedu.address.model.team.TeamName;
 /**
  * Removes a person from an existing team in the address book.
  */
-public class RemovePersonFromTeamCommand extends Command {
+public class RemoveFromTeamCommand extends Command {
 
-    // =========================
-    // ===== Static Fields =====
-    // =========================
-
-    public static final String COMMAND_WORD = "removepersonfromteam";
+    public static final String COMMAND_WORD = "removefromteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Removes a person from an existing team. "
             + "Parameters: "
@@ -41,19 +37,15 @@ public class RemovePersonFromTeamCommand extends Command {
     public static final String MESSAGE_PERSON_NOT_IN_TEAM = "Person %1$s is not in team %2$s";
     public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
 
-    private static final Logger logger = LogsCenter.getLogger(RemovePersonFromTeamCommand.class);
-
-    // ===========================
-    // ===== Instance Fields =====
-    // ===========================
+    private static final Logger logger = LogsCenter.getLogger(RemoveFromTeamCommand.class);
 
     private final TeamName teamName;
     private final Index personIndex;
 
     /**
-     * Creates a RemovePersonFromTeamCommand to remove the specified person from the team.
+     * Creates a RemoveFromTeamCommand to remove the specified person from the team.
      */
-    public RemovePersonFromTeamCommand(TeamName teamName, Index personIndex) {
+    public RemoveFromTeamCommand(TeamName teamName, Index personIndex) {
         requireNonNull(teamName);
         requireNonNull(personIndex);
         this.teamName = teamName;
@@ -64,7 +56,7 @@ public class RemovePersonFromTeamCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
 
-        logger.fine("Executing RemovePersonFromTeamCommand: teamName=" + teamName + ", personIndex=" + personIndex);
+        logger.fine("Executing RemoveFromTeamCommand: teamName=" + teamName + ", personIndex=" + personIndex);
 
         List<Person> lastShownPersonList = model.getFilteredPersonList();
         List<Team> teamList = model.getFilteredTeamList();
@@ -95,7 +87,7 @@ public class RemovePersonFromTeamCommand extends Command {
                             personToRemove.getName(), teamName));
         }
 
-        Team updatedTeam = model.removePersonFromTeam(targetTeam, personToRemove);
+        Team updatedTeam = model.removeFromTeam(targetTeam, personToRemove);
         model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
 
         logger.info("Removed person " + personToRemove.getName()
@@ -112,11 +104,11 @@ public class RemovePersonFromTeamCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof RemovePersonFromTeamCommand)) {
+        if (!(other instanceof RemoveFromTeamCommand)) {
             return false;
         }
 
-        RemovePersonFromTeamCommand otherCommand = (RemovePersonFromTeamCommand) other;
+        RemoveFromTeamCommand otherCommand = (RemoveFromTeamCommand) other;
         return teamName.equals(otherCommand.teamName)
                 && personIndex.equals(otherCommand.personIndex);
     }

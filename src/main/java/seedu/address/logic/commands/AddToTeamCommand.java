@@ -19,8 +19,8 @@ import seedu.address.model.team.TeamName;
 /**
  * Adds a person to an existing team in the address book.
  */
-public class AddPersonToTeamCommand extends Command {
-    public static final String COMMAND_WORD = "addpersontoteam";
+public class AddToTeamCommand extends Command {
+    public static final String COMMAND_WORD = "addtoteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to an existing team. "
             + "Parameters: "
@@ -32,19 +32,19 @@ public class AddPersonToTeamCommand extends Command {
 
     public static final String MESSAGE_SUCCESS = "Person %1$s added to team: %2$s";
     public static final String MESSAGE_TEAM_NOT_FOUND = "Team with name '%1$s' does not exist";
-    public static final String MESSAGE_PERSON_ALREADY_IN_TEAM = "Person %1$s is already in a team";
+    public static final String MESSAGE_PERSON_ALREADY_IN_TEAM = "Person %1$s is already in a team for hackathon %2$s";
     public static final String MESSAGE_PERSON_ALREADY_IN_THIS_TEAM = "Person %1$s is already in team %2$s";
     public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
 
-    private static final Logger logger = Logger.getLogger(AddPersonToTeamCommand.class.getName());
+    private static final Logger logger = Logger.getLogger(AddToTeamCommand.class.getName());
 
     private final TeamName teamName;
     private final Index personIndex;
 
     /**
-     * Creates an AddPersonToTeamCommand to add the specified person to the team
+     * Creates an AddToTeamCommand to add the specified person to the team
      */
-    public AddPersonToTeamCommand(TeamName teamName, Index personIndex) {
+    public AddToTeamCommand(TeamName teamName, Index personIndex) {
         requireNonNull(teamName);
         requireNonNull(personIndex);
         this.teamName = teamName;
@@ -62,7 +62,6 @@ public class AddPersonToTeamCommand extends Command {
         if (personIndex.getZeroBased() >= lastShownPersonList.size()) {
             throw new CommandException(MESSAGE_INVALID_PERSON_INDEX);
         }
-
 
         // Get the person to add
         Person personToAdd = lastShownPersonList.get(personIndex.getZeroBased());
@@ -87,19 +86,17 @@ public class AddPersonToTeamCommand extends Command {
         }
 
         // Check if person is already in any team for the same hackathon
-
         HackathonName hackathonName = targetTeam.getHackathonName();
 
         if (model.isPersonInHackathon(personToAdd, hackathonName)) {
-            throw new CommandException(String.format("Person %s is already in a team for hackathon %s",
+            throw new CommandException(String.format(MESSAGE_PERSON_ALREADY_IN_TEAM,
                     personToAdd.getName(), hackathonName));
-
         }
 
 
         // Use the model's relationship management to add person to team
         // This automatically handles all bidirectional relationship updates
-        Team updatedTeam = model.addPersonToTeam(targetTeam, personToAdd);
+        Team updatedTeam = model.addToTeam(targetTeam, personToAdd);
 
         // Update the filtered team list to show all teams
         model.updateFilteredTeamList(Model.PREDICATE_SHOW_ALL_TEAMS);
@@ -115,11 +112,11 @@ public class AddPersonToTeamCommand extends Command {
             return true;
         }
 
-        if (!(other instanceof AddPersonToTeamCommand)) {
+        if (!(other instanceof AddToTeamCommand)) {
             return false;
         }
 
-        AddPersonToTeamCommand otherCommand = (AddPersonToTeamCommand) other;
+        AddToTeamCommand otherCommand = (AddToTeamCommand) other;
         return teamName.equals(otherCommand.teamName)
                 && personIndex.equals(otherCommand.personIndex);
     }

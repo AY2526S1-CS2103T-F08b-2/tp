@@ -1,7 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
@@ -29,12 +29,12 @@ public class CreateTeamCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Creates a team in Mate. "
             + "Parameters: "
             + PREFIX_TEAM_NAME + "TEAM_NAME "
-            + PREFIX_HACKATHON_NAME + "HACKATHON_NAME "
+            + PREFIX_HACKATHON + "HACKATHON_NAME "
             + PREFIX_PERSON + "INDEX "
             + "[" + PREFIX_PERSON + "INDEX]...\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_TEAM_NAME + "Development Team "
-            + PREFIX_HACKATHON_NAME + "Hackathon 2023 "
+            + PREFIX_HACKATHON + "Hackathon 2023 "
             + PREFIX_PERSON + "1 "
             + PREFIX_PERSON + "3";
 
@@ -99,7 +99,7 @@ public class CreateTeamCommand extends Command {
         // Use the model's relationship management methods to add each member
         // This automatically handles all bidirectional relationship updates
         for (Person member : members) {
-            toCreate = model.addPersonToTeam(toCreate, member);
+            toCreate = model.addToTeam(toCreate, member);
         }
 
         // Update the filtered team list to show all teams

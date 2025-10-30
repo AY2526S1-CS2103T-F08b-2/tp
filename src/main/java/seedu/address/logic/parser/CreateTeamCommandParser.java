@@ -1,7 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
@@ -26,17 +26,17 @@ public class CreateTeamCommandParser implements Parser<CreateTeamCommand> {
      */
     public CreateTeamCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME, PREFIX_HACKATHON_NAME, PREFIX_PERSON);
+                ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME, PREFIX_HACKATHON, PREFIX_PERSON);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME, PREFIX_HACKATHON_NAME, PREFIX_PERSON)
+        if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME, PREFIX_HACKATHON, PREFIX_PERSON)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CreateTeamCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TEAM_NAME, PREFIX_HACKATHON_NAME);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TEAM_NAME, PREFIX_HACKATHON);
 
         TeamName teamName = ParserUtil.parseTeamName(argMultimap.getValue(PREFIX_TEAM_NAME).get());
-        HackathonName hackathonName = ParserUtil.parseHackathonName(argMultimap.getValue(PREFIX_HACKATHON_NAME).get());
+        HackathonName hackathonName = ParserUtil.parseHackathonName(argMultimap.getValue(PREFIX_HACKATHON).get());
         Set<Index> personIndices = ParserUtil.parsePersonIndices(argMultimap.getAllValues(PREFIX_PERSON));
 
         return new CreateTeamCommand(teamName, hackathonName, personIndices);

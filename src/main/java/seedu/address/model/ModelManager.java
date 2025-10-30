@@ -225,7 +225,7 @@ public class ModelManager implements Model {
      * @return Updated team with the new member
      */
     @Override
-    public Team addPersonToTeam(Team team, Person person) {
+    public Team addToTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
         // Create updated team with new member
@@ -279,7 +279,7 @@ public class ModelManager implements Model {
      * @return Updated team without the person
      */
     @Override
-    public Team removePersonFromTeam(Team team, Person person) {
+    public Team removeFromTeam(Team team, Person person) {
         requireAllNonNull(team, person);
 
         // Create updated team without the person

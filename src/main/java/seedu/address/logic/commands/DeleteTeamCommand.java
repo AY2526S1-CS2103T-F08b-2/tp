@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
 
 import java.util.List;
 
@@ -22,8 +23,8 @@ public class DeleteTeamCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Deletes the team identified by the index number used in the displayed team list.\n"
-            + "Parameters: INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " 1";
+            + "Parameters: " + PREFIX_PERSON + "INDEX (must be a positive integer)\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1";
 
     public static final String MESSAGE_DELETE_TEAM_SUCCESS = "Deleted Team: %1$s";
 
