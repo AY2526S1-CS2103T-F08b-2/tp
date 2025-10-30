@@ -94,13 +94,11 @@ public class CommandTestUtil {
         DESC_AMY = new EditPersonDescriptorBuilder().withName(VALID_NAME_AMY)
                 .withEmail(VALID_EMAIL_AMY)
                 .withTelegram(VALID_TELEGRAM_AMY)
-                .withGitHub(VALID_GITHUB_AMY)
-                .withSkills(VALID_SKILL_PYTHON).build();
+                .withGitHub(VALID_GITHUB_AMY).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withEmail(VALID_EMAIL_BOB)
                 .withTelegram(VALID_TELEGRAM_BOB)
-                .withGitHub(VALID_GITHUB_BOB)
-                .withSkills(VALID_SKILL_JAVA, VALID_SKILL_PYTHON).build();
+                .withGitHub(VALID_GITHUB_BOB).build();
     }
 
     /**

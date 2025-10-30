@@ -9,7 +9,9 @@ import java.util.regex.Pattern;
 
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
+import seedu.address.logic.commands.AddHackathonCommand;
 import seedu.address.logic.commands.AddPersonToTeamCommand;
+import seedu.address.logic.commands.AddSkillCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CreateTeamCommand;
@@ -21,6 +23,7 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTeamCommand;
+import seedu.address.logic.commands.RemoveHackathonCommand;
 import seedu.address.logic.commands.RemovePersonFromTeamCommand;
 import seedu.address.logic.commands.RemoveSkillCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -54,7 +57,10 @@ public class AddressBookParser {
 
         logger.fine("Command word: " + commandWord + "; Arguments: " + arguments);
 
-        switch (commandWord) {
+        // Convert command word to lowercase for case-insensitive matching
+        final String commandWordLowerCase = commandWord.toLowerCase();
+
+        switch (commandWordLowerCase) {
 
         case AddCommand.COMMAND_WORD:
             return new AddCommandParser().parse(arguments);
@@ -91,6 +97,15 @@ public class AddressBookParser {
 
         case RemoveSkillCommand.COMMAND_WORD:
             return new RemoveSkillCommandParser().parse(arguments);
+
+        case AddSkillCommand.COMMAND_WORD:
+            return new AddSkillCommandParser().parse(arguments);
+
+        case AddHackathonCommand.COMMAND_WORD:
+            return new AddHackathonCommandParser().parse(arguments);
+
+        case RemoveHackathonCommand.COMMAND_WORD:
+            return new RemoveHackathonCommandParser().parse(arguments);
 
         case AddPersonToTeamCommand.COMMAND_WORD:
             return new AddPersonToTeamCommandParser().parse(arguments);

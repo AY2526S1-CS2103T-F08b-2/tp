@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
-import static seedu.address.logic.commands.CommandTestUtil.VALID_SKILL_JAVA;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
@@ -39,7 +38,7 @@ public class EditCommandTest {
         Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder().build();
 
-        // With the new appending behavior, skills from original person should be preserved
+        // Edit command no longer affects skills - skills from original person are preserved
         Person expectedPerson = new PersonBuilder(editedPerson)
                 .withSkills(originalPerson.getSkills().stream()
                         .map(skill -> skill.skillName)
@@ -64,19 +63,10 @@ public class EditCommandTest {
         Person lastPerson = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
 
         PersonBuilder personInList = new PersonBuilder(lastPerson);
-        // With appending behavior, we need to include existing skills plus the new Java skill
-        String[] existingSkills = lastPerson.getSkills().stream()
-                .map(skill -> skill.skillName)
-                .toArray(String[]::new);
-        String[] allSkills = new String[existingSkills.length + 1];
-        System.arraycopy(existingSkills, 0, allSkills, 0, existingSkills.length);
-        allSkills[existingSkills.length] = VALID_SKILL_JAVA;
+        // Edit command no longer affects skills - existing skills are preserved
+        Person editedPerson = personInList.withName(VALID_NAME_BOB).build();
 
-        Person editedPerson = personInList.withName(VALID_NAME_BOB)
-                .withSkills(allSkills).build();
-
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
-                .withSkills(VALID_SKILL_JAVA).build();
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB).build();
         EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
@@ -199,207 +189,71 @@ public class EditCommandTest {
     }
 
     @Test
-    public void execute_interestedHackathonAlreadyInParticipating_failure() {
-        Person personWithParticipatingHackathon = new PersonBuilder()
+    public void execute_editNamePreservesHackathons_success() {
+        Person personWithHackathons = new PersonBuilder()
                 .withName("John Doe")
                 .withEmail("john@example.com")
                 .withTelegram("johndoe_tg")
                 .withGitHub("johndoe-github")
                 .withParticipatingHackathons("NUSHack")
+                .withInterestedHackathons("TechChallenge")
                 .build();
 
-        model.addPerson(personWithParticipatingHackathon);
+        model.addPerson(personWithHackathons);
         Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
 
-        // Try to add "NUSHack" to interested hackathons
+        // Edit name only - all hackathons should be preserved
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withInterestedHackathons("NUSHack")
+                .withName("John Doe Updated")
                 .build();
         EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
 
-        String expectedMessage = "Cannot add hackathon 'NUSHack' to interested list. "
-                + "You are already participating in this hackathon.";
-
-        assertCommandFailure(editCommand, model, expectedMessage);
-    }
-
-    @Test
-    public void execute_multipleInterestedHackathonsOneInParticipating_failure() {
-        Person personWithParticipatingHackathon = new PersonBuilder()
-                .withName("Jane Smith")
-                .withEmail("jane@example.com")
-                .withTelegram("janesmith_tg")
-                .withGitHub("janesmith-github")
-                .withParticipatingHackathons("TechChallenge")
-                .build();
-
-        model.addPerson(personWithParticipatingHackathon);
-        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
-
-        // Try to add multiple hackathons including "TechChallenge" to interested hackathons
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withInterestedHackathons("NUSHack", "TechChallenge", "AIContest")
-                .build();
-        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
-
-        String expectedMessage = "Cannot add hackathon 'TechChallenge' to interested list. "
-                + "You are already participating in this hackathon.";
-
-        assertCommandFailure(editCommand, model, expectedMessage);
-    }
-
-    @Test
-    public void execute_interestedHackathonNotInParticipating_success() {
-        Person personWithParticipatingHackathon = new PersonBuilder()
-                .withName("Bob Lee")
-                .withEmail("bob@example.com")
-                .withTelegram("boblee_tg")
-                .withGitHub("boblee-github")
-                .withParticipatingHackathons("NUSHack")
-                .build();
-
-        model.addPerson(personWithParticipatingHackathon);
-        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
-
-        // Add different hackathons to interested list (not conflicting with participating)
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withInterestedHackathons("TechChallenge", "AIContest")
-                .build();
-        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
-
-        Person expectedPerson = new PersonBuilder(personWithParticipatingHackathon)
-                .withInterestedHackathons("TechChallenge", "AIContest")
+        Person expectedPerson = new PersonBuilder(personWithHackathons)
+                .withName("John Doe Updated")
                 .build();
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 Messages.format(expectedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(personWithParticipatingHackathon, expectedPerson);
+        expectedModel.setPerson(personWithHackathons, expectedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
-    public void execute_editOtherFieldsWithParticipatingHackathon_success() {
-        Person personWithParticipatingHackathon = new PersonBuilder()
+    public void execute_editFieldsPreservesSkills_success() {
+        Person personWithSkills = new PersonBuilder()
                 .withName("Alice Wong")
                 .withEmail("alice@example.com")
                 .withTelegram("alicewong_tg")
                 .withGitHub("alicewong-github")
-                .withParticipatingHackathons("NUSHack")
-                .withInterestedHackathons("TechChallenge")
+                .withSkills("java", "python")
                 .build();
 
-        model.addPerson(personWithParticipatingHackathon);
+        model.addPerson(personWithSkills);
         Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
 
-        // Edit other fields (not hackathons) - participating hackathons should be preserved
+        // Edit other fields - skills should be preserved
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
                 .withName("Alice Wong Updated")
-                .withSkills("java")
+                .withEmail("alice.new@example.com")
                 .build();
         EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
 
-        // Expected person should have the same participating hackathons
-        Person expectedPerson = new PersonBuilder(personWithParticipatingHackathon)
+        // Expected person should have the same skills
+        Person expectedPerson = new PersonBuilder(personWithSkills)
                 .withName("Alice Wong Updated")
-                .withSkills("java")
+                .withEmail("alice.new@example.com")
                 .build();
 
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
                 Messages.format(expectedPerson));
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(personWithParticipatingHackathon, expectedPerson);
+        expectedModel.setPerson(personWithSkills, expectedPerson);
 
         assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_noHackathonEditWithParticipating_preservesParticipating() {
-        // Create a person who is participating in multiple hackathons
-        Person personWithParticipating = new PersonBuilder()
-                .withName("Charlie Brown")
-                .withEmail("charlie@example.com")
-                .withTelegram("charliebrown_tg")
-                .withGitHub("charliebrown-github")
-                .withParticipatingHackathons("NUSHack", "TechChallenge", "AIContest")
-                .withInterestedHackathons("HackForGood")
-                .build();
-
-        model.addPerson(personWithParticipating);
-        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
-
-        // Edit name only - all participating hackathons should be preserved
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withName("Charles Brown")
-                .build();
-        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
-
-        Person expectedPerson = new PersonBuilder(personWithParticipating)
-                .withName("Charles Brown")
-                .build();
-
-        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS,
-                Messages.format(expectedPerson));
-
-        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-        expectedModel.setPerson(personWithParticipating, expectedPerson);
-
-        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
-    }
-
-    @Test
-    public void execute_interestedHackathonConflictCaseInsensitive_failure() {
-        // Create a person who is participating in "NUSHack"
-        Person personWithParticipatingHackathon = new PersonBuilder()
-                .withName("David Lee")
-                .withEmail("david@example.com")
-                .withTelegram("davidlee_tg")
-                .withGitHub("davidlee-github")
-                .withParticipatingHackathons("NUSHack")
-                .build();
-
-        model.addPerson(personWithParticipatingHackathon);
-        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
-
-        // Try to add "nushack" (different case) to interested hackathons - should fail
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withInterestedHackathons("nushack")
-                .build();
-        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
-
-        String expectedMessage = "Cannot add hackathon 'nushack' to interested list. "
-                + "You are already participating in this hackathon.";
-
-        assertCommandFailure(editCommand, model, expectedMessage);
-    }
-
-    @Test
-    public void execute_interestedHackathonConflictMultipleCases_failure() {
-        // Create a person who is participating in "TechChallenge"
-        Person personWithParticipatingHackathon = new PersonBuilder()
-                .withName("Emma Wilson")
-                .withEmail("emma@example.com")
-                .withTelegram("emmawilson_tg")
-                .withGitHub("emmawilson-github")
-                .withParticipatingHackathons("TechChallenge")
-                .build();
-
-        model.addPerson(personWithParticipatingHackathon);
-        Index indexOfPerson = Index.fromOneBased(model.getFilteredPersonList().size());
-
-        // Try to add "TECHCHALLENGE" (uppercase) to interested hackathons - should fail
-        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
-                .withInterestedHackathons("TECHCHALLENGE")
-                .build();
-        EditCommand editCommand = new EditCommand(indexOfPerson, descriptor);
-
-        String expectedMessage = "Cannot add hackathon 'TECHCHALLENGE' to interested list. "
-                + "You are already participating in this hackathon.";
-
-        assertCommandFailure(editCommand, model, expectedMessage);
     }
 
 }

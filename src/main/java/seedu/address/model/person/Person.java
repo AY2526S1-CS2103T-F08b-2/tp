@@ -201,4 +201,14 @@ public class Person {
                 interestedHackathons, updatedParticipatingHackathons);
     }
 
+    /**
+     * Returns a new Person with the given hackathon removed from interested hackathons.
+     */
+    public Person removeInterestedHackathon(HackathonName hackathonName) {
+        Set<HackathonName> updatedInterestedHackathons = new HashSet<>(interestedHackathons);
+        updatedInterestedHackathons.remove(hackathonName);
+        return new Person(name, email, telegram, github, skills, teams,
+                updatedInterestedHackathons, participatingHackathons);
+    }
+
 }
