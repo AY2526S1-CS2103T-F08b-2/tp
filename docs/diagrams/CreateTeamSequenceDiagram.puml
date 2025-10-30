@@ -1,0 +1,47 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+actor User
+
+box UI UI_COLOR_T1
+participant ":UI" as UI UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as Model MODEL_COLOR
+end box
+
+box Storage STORAGE_COLOR_T1
+participant ":Storage" as Storage STORAGE_COLOR
+end box
+
+User -> UI : createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/1 p/2
+activate UI
+
+UI -> LogicManager : execute(...)
+activate LogicManager
+
+LogicManager -> Model : create the team
+activate Model
+
+Model -> Storage : save to file
+activate Storage
+
+Storage --> Model :
+deactivate Storage
+
+Model --> LogicManager :
+deactivate Model
+
+LogicManager --> UI : CommandResult(success message)
+deactivate LogicManager
+
+UI --> User : show(CommandResult)
+deactivate UI
+
+@enduml
