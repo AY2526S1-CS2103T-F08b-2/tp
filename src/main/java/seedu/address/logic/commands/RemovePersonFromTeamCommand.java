@@ -27,7 +27,7 @@ public class RemovePersonFromTeamCommand extends Command {
     // ===== Static Fields =====
     // =========================
 
-    public static final String COMMAND_WORD = "removePersonFromTeam";
+    public static final String COMMAND_WORD = "removepersonfromteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Removes a person from an existing team. "
             + "Parameters: "
