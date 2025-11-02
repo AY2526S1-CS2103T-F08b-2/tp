@@ -81,7 +81,7 @@ public class PersonCard extends UiPart<Region> {
         telegramIcon.setImage(telegramImage);
         applyWhiteColorEffect(telegramIcon);
 
-        Image githubImage = new Image(getClass().getResourceAsStream("/images/github.png"));
+        Image githubImage = new Image(getClass().getResourceAsStream("/images/Github.png"));
         githubIcon.setImage(githubImage);
         applyWhiteColorEffect(githubIcon);
 

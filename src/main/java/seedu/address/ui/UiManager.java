@@ -36,6 +36,15 @@ public class UiManager implements Ui {
     public void start(Stage primaryStage) {
         logger.info("Starting UI...");
 
+        String asciiArt = """
+   __    __     ______     ______   ______
+  /\\ "-./  \\   /\\  __ \\   /\\__  _\\ /\\  ___\\
+  \\ \\ \\-./\\ \\  \\ \\  __ \\  \\/_/\\ \\/ \\ \\  __\\
+   \\ \\_\\ \\ \\_\\  \\ \\_\\ \\_\\    \\ \\_\\  \\ \\_____\\
+    \\/_/  \\/_/   \\/_/\\/_/     \\/_/   \\/_____/
+
+                """;
+        logger.info("\n" + asciiArt);
         //Set the application icon.
         primaryStage.getIcons().add(getImage(ICON_APPLICATION));
 
