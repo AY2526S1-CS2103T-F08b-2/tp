@@ -18,5 +18,5 @@ Person *--> "1"Name
 Person *--> "1"Email
 Person *--> "1"Telegram
 Person *--> "1"Github
-Person *--> "*"Hackathon
+Person o--> "*"Hackathon
 @enduml

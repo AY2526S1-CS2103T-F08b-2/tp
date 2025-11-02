@@ -51,7 +51,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete p/1`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
@@ -91,9 +91,9 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <img src="images/LogicClassDiagram.png" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete p/1")` API call as an example.
 
-![Interactions Inside the Logic Component for the `delete 1` Command](images/DeleteSequenceDiagram.png)
+![Interactions Inside the Logic Component for the `delete p/1` Command](images/DeleteSequenceDiagram.png)
 
 <div markdown="span" class="alert alert-info">:information_source: **Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
 </div>
@@ -122,7 +122,7 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Team` objects (which are contained in a `UniqueTeamList` object) in an `AddressBook` object.
+* stores the Mate data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Team` objects (which are contained in a `UniqueTeamList` object) in an `AddressBook` object.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -141,7 +141,7 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* can save both Mate data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -159,7 +159,7 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 
-The Create Team feature allows users to form teams by selecting multiple persons from the address book and associating them with a hackathon. This feature is implemented through the `CreateTeamCommand` class and its associated parser `CreateTeamCommandParser`.
+The Create Team feature allows users to form teams by selecting multiple persons from Mate and associating them with a hackathon. This feature is implemented through the `CreateTeamCommand` class and its associated parser `CreateTeamCommandParser`.
 
 **Key Components:**
 
@@ -208,7 +208,7 @@ Step 3. The command is parsed and `CreateTeamCommand` is executed with the follo
 
 Step 4. The team is added to the model's team list.
 
-Step 6. A success message is displayed showing the created team details.
+Step 5. A success message is displayed showing the created team details.
 
 **Error Handling:**
 
@@ -245,7 +245,7 @@ The `CreateTeamCommand` handles several error cases:
 
 #### Implementation
 
-The List Teams feature allows users to view all teams created in the address book. This feature is implemented through the `ListTeamsCommand` class.
+The List Teams feature allows users to view all teams created in Mate. This feature is implemented through the `ListTeamsCommand` class.
 
 Step 1. The user enters a `listTeams` command.
 Step 2. `AddressBookParser` recognizes the `listTeams` command word and creates a `ListTeamsCommand` object.
@@ -318,7 +318,7 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 ![UndoRedoState0](images/UndoRedoState0.png)
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `delete p/5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete p/5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 ![UndoRedoState1](images/UndoRedoState1.png)
 
@@ -418,19 +418,17 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                                                          | So that I can…​                                          |
-|------|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
-| `* * *` | student | search for peers by programming language                              | quickly find potential teammates with matching skills.   |
-| `* * *` | student | create a team from selected contacts                               | form balanced teams for hackathons                       |
-| `* * *` | student | edit members of an existing team                                        | adjust team composition as needed                        |
-| `* * *` | student | view color-coded skill tags                                           | quickly assess a person's proficiency level              |
-| `* * *` | student | search for multiple skills at once                                    | find students with overlapping technical expertise       |
-| `* * *` | student | add my own skills to my profile                                       | let others discover me for team formation                |
-| `* *` | student | save profiles as facorites                                            |  easily revisit promising teammates later                  |
-| `* *` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
-| `* *` | student | search for people by email                                            | directly connect with someone I already know             |
-| `*`  | student | import contacts from CSV                                             | quickly build my network without manual entry            |
-| `*`  | student | export a team to CSV                                                 | easily share team details with teammates                 |
+| Priority | As a …​ | I want to …​                             | So that I can…​                                          |
+|-----|---------|------------------------------------------|----------------------------------------------------------|
+| `* * *` | student | search for peers by programming language | quickly find potential teammates with matching skills.   |
+| `* * *` | student | create a team from selected contacts     | form balanced teams for hackathons                       |
+| `* * *` | student | edit members of an existing team         | adjust team composition as needed                        |
+| `* * *` | student | view color-coded skill tags              | quickly assess a person's proficiency level              |
+| `* * *` | student | search for multiple skills at once       | find students with overlapping technical expertise       |
+| `* * *` | student | add my own skills to my profile          | let others discover me for team formation                |
+| `* *` | student | search by GitHub username                | I can review their past projects before contacting them. |
+| `* *` | student | search for people by telegram username   | directly connect with someone I already know             |
+| `*` | student | save profiles as favorites               |  easily revisit promising teammates later                  |
 
 ### Use cases
 
@@ -495,38 +493,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
       Use case ends.
 
-**Use case: Import Contacts from CSV**
-
-**MSS**
-
-1.  Student requests to import contacts.
-2.  Mate requests the file path.
-3.  Student enters the file path.
-4.  Mate validates the CSV format and parses entries.
-5.  Mate imports and displays the number of successful entries.
-
-    Use case ends.
-
-**Extensions**
-
-* 3a. File not found or inaccessible.
-    * 3a1. Mate highlights the error and requests a valid file path.
-    * 3a2. Student re-enters the file path.
-
-      Use case resumes at step 3.
-
-* 4b. CSV contains invalid or missing fields.
-    * 4b1. Mate highlights errors and requests a corrected file.
-    * 4b2. Student fixes and re-uploads.
-
-      Use case resumes at step 4.
-
-* 5a. Duplicate contacts detected.
-    * 5a1. Mate asks whether to merge or skip duplicates.
-    * 5a2. Student chooses.
-
-      Use case ends.
-
 ### Non-Functional Requirements
 
 1.  Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
@@ -578,53 +544,50 @@ testers are expected to do more *exploratory* testing.
 
    1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
 
-   2. Test case: `delete 1`<br>
+   2. Test case: `delete p/1`<br>
       Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
 
-   3. Test case: `delete 0`<br>
+   3. Test case: `delete p/0`<br>
       Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
 
-   4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+   4. Other incorrect delete commands to try: `delete`, `delete p/x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
 
 2. Deleting a person after a find command
 
-    1. Prerequisites: `find java`
+    1. Prerequisites: `find k/java`
     
-    2. Test case: `delete 1`<br>
-       Expected: First person in the filtered list is deleted from the address book. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+    2. Test case: `delete p/1`<br>
+       Expected: First person in the filtered list is deleted from Mate. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
     
-    3. Test case: `delete 0`<br>
+    3. Test case: `delete p/0`<br>
        Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
     
-    4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the filtered list size)<br>
+    4. Other incorrect delete commands to try: `delete`, `delete p/x`, `...` (where x is larger than the filtered list size)<br>
        Expected: Similar to previous.
 
 ### Creating a team
 
 1. Creating a team from selected persons in the list
 
-   1. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/1 p/2`<br>
+   1. Test case: `createTeam tn/Alpha Team h/Hackathon 2024 p/1 p/2`<br>
       Expected: Team "Alpha Team" for "Hackathon 2024" is created with persons at index 1 and 2 as members. Details of the created team shown in the status message. Timestamp in the status bar is updated.
 
-   2. Test case: `createTeam tn/Beta Team hn/Hackathon 2024 p/0 p/x` (where x is larger than the list size) <br>
+   2. Test case: `createTeam tn/Beta Team h/Hackathon 2024 p/0 p/x` (where x is larger than the list size) <br>
       Expected: No team is created. Error details shown in the status message. Status bar remains the same.
 
 2. Creating a team with duplicate name
 
    1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
 
-   2. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/3 p/4`<br>
+   2. Test case: `createTeam tn/Alpha Team h/Hackathon 2024 p/3 p/4`<br>
       Expected: No team is created. Error details shown in the status message indicating that the team already exists. Status bar remains the same.
-
-   3. Test case: `createTeam tn/Alpha Team hn/Hackathon 2025 p/3 p/4`<br>
-      Expected: Team "Alpha Team" for "Hackathon 2025" is created with persons at index 3 and 4 as members. Same team name different hackathon allowed. Details of the created team shown in the status message. Timestamp in the status bar is updated.
 
 3. Creating a team for a hackathon with person already participating in hackathon
 
    1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
 
-   2. Test case: `createTeam tn/Gamma Team hn/Hackathon 2024 p/2 p/3`<br>
+   2. Test case: `createTeam tn/Gamma Team h/Hackathon 2024 p/2 p/3`<br>
       Expected: No team is created. Error details shown in the status message indicating that person at index 2 is already participating in "Hackathon 2024". Status bar remains the same.
 
 ### Removing a person from a team
@@ -647,3 +610,12 @@ testers are expected to do more *exploratory* testing.
 - Additionally, several of the new commands introduced like `addToTeam` and `removeFromTeam` required careful handling of the relationships between persons and teams, as there was a bidirectional association that needed to be maintained.
 - Other commands like `createTeam` also required deliberation on what should be allowed, such as preventing duplicate team names for the same hackathon and ensuring that a person cannot be added to multiple teams for the same hackathon.
 
+----------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Planned enhancements**
+
+Team size: 5
+
+1. Allow users to view both individual list and team list side by side in the UI. This would enable users easily reference person indexes or team names when editing individual or team details.
+2. Allow different persons to have the same name. This would reflect real-world scenarios where multiple individuals may share the same name.
+3. Allow user to add or remove multiple persons to/from a team in one command. This would streamline the process of managing team memberships, especially for larger teams.

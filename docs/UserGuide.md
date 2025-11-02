@@ -179,9 +179,9 @@ Examples:
 
 Deletes a team from Mate and removes all members from that team.
 
-Format: `deleteTeam p/INDEX`
+Format: `deleteTeam tn/TEAM_NAME`
 
-* Deletes the team at the specified `INDEX` (see [Field Constraints](#field-constraints) for index requirements)
+* Deletes the team with the specified `TEAM_NAME` (see [Field Constraints](#field-constraints) for index requirements)
 * **Hackathon Management**: When a team is deleted:
     * All team members are automatically removed from the team
     * The team's hackathon is removed from all members' **participating hackathons**
@@ -189,12 +189,11 @@ Format: `deleteTeam p/INDEX`
 * After successfully deleting a team, the team list will be updated automatically
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use the `listTeam` command first to see the current index numbers of teams before deleting one.
+Use the `listTeam` command first to see the team names before deleting one.
 </div>
 
 Examples:
-* `listTeam` followed by `deleteTeam p/2` deletes the 2nd team in the team list.
-* `deleteTeam p/1` deletes the 1st team in the displayed team list.
+* `deleteTeam tn/Alpha Squad` deletes the team named "Alpha Squad".
 
 ### Adding a person to a team : `addToTeam`
 
@@ -323,7 +322,7 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 | **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/JohnTG g/JohnGH s/Python:Beginner h/NUSHack` |
 | **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                              |
 | **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                            |
-| **Delete Team**             | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1`                                                                                                                                      |
+| **Delete Team**             | `deleteTeam tn/TEAM_NAME`<br> e.g., `deleteTeam tn/Tech Innovation`                                                                                                                  |
 | **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                      |
 | **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                             |
 | **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`<br> e.g.,`edit p/2 n/James Lee`                                                                                  |
