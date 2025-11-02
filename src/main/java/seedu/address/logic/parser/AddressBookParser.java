@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.logic.commands.AddCommand;
 import seedu.address.logic.commands.AddHackathonCommand;
-import seedu.address.logic.commands.AddPersonToTeamCommand;
 import seedu.address.logic.commands.AddSkillCommand;
+import seedu.address.logic.commands.AddToTeamCommand;
 import seedu.address.logic.commands.ClearCommand;
 import seedu.address.logic.commands.Command;
 import seedu.address.logic.commands.CreateTeamCommand;
@@ -23,8 +23,8 @@ import seedu.address.logic.commands.FindCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.ListTeamCommand;
+import seedu.address.logic.commands.RemoveFromTeamCommand;
 import seedu.address.logic.commands.RemoveHackathonCommand;
-import seedu.address.logic.commands.RemovePersonFromTeamCommand;
 import seedu.address.logic.commands.RemoveSkillCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
@@ -107,11 +107,11 @@ public class AddressBookParser {
         case RemoveHackathonCommand.COMMAND_WORD:
             return new RemoveHackathonCommandParser().parse(arguments);
 
-        case AddPersonToTeamCommand.COMMAND_WORD:
-            return new AddPersonToTeamCommandParser().parse(arguments);
+        case AddToTeamCommand.COMMAND_WORD:
+            return new AddToTeamCommandParser().parse(arguments);
 
-        case RemovePersonFromTeamCommand.COMMAND_WORD:
-            return new RemovePersonFromTeamCommandParser().parse(arguments);
+        case RemoveFromTeamCommand.COMMAND_WORD:
+            return new RemoveFromTeamCommandParser().parse(arguments);
 
         default:
             logger.finer("This user input caused a ParseException: " + userInput);

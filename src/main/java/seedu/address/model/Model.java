@@ -129,7 +129,7 @@ public interface Model {
      * @param person The person to add to the team
      * @return Updated team with the new member
      */
-    Team addPersonToTeam(Team team, Person person);
+    Team addToTeam(Team team, Person person);
 
     /**
      * Removes a person from a team, maintaining bidirectional relationship.
@@ -139,7 +139,7 @@ public interface Model {
      * @param person The person to remove from the team
      * @return Updated team without the person
      */
-    Team removePersonFromTeam(Team team, Person person);
+    Team removeFromTeam(Team team, Person person);
 
     /**
      * Returns true if the person is already in a team for the given hackathon.

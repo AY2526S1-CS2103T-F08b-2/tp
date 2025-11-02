@@ -2,7 +2,7 @@ package seedu.address.logic.parser;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON_FILTER;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_HACKATHON;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -29,7 +29,7 @@ public class AddHackathonCommandParserTest {
 
         AddHackathonCommand expectedCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, expectedHackathons);
 
-        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "NUSHack", expectedCommand);
+        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON + "NUSHack", expectedCommand);
     }
 
     @Test
@@ -40,8 +40,8 @@ public class AddHackathonCommandParserTest {
 
         AddHackathonCommand expectedCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, expectedHackathons);
 
-        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "NUSHack "
-                + PREFIX_HACKATHON_FILTER + "iNTUition", expectedCommand);
+        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON + "NUSHack "
+                + PREFIX_HACKATHON + "iNTUition", expectedCommand);
     }
 
     @Test
@@ -51,27 +51,27 @@ public class AddHackathonCommandParserTest {
 
         AddHackathonCommand expectedCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, expectedHackathons);
 
-        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "NUS Hack", expectedCommand);
+        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON + "NUS Hack", expectedCommand);
     }
 
     @Test
     public void parse_invalidIndex_throwsParseException() {
         // negative index
-        assertParseFailure(parser, " p/-1 " + PREFIX_HACKATHON_FILTER + "NUSHack",
+        assertParseFailure(parser, " p/-1 " + PREFIX_HACKATHON + "NUSHack",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
 
         // zero index
-        assertParseFailure(parser, " p/0 " + PREFIX_HACKATHON_FILTER + "NUSHack",
+        assertParseFailure(parser, " p/0 " + PREFIX_HACKATHON + "NUSHack",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
 
         // non-numeric index
-        assertParseFailure(parser, " p/a " + PREFIX_HACKATHON_FILTER + "NUSHack",
+        assertParseFailure(parser, " p/a " + PREFIX_HACKATHON + "NUSHack",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_missingIndex_throwsParseException() {
-        assertParseFailure(parser, " " + PREFIX_HACKATHON_FILTER + "NUSHack",
+        assertParseFailure(parser, " " + PREFIX_HACKATHON + "NUSHack",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
@@ -86,21 +86,21 @@ public class AddHackathonCommandParserTest {
     @Test
     public void parse_invalidHackathonName_throwsParseException() {
         // empty hackathon name - throws HackathonName validation error
-        assertParseFailure(parser, " p/1 " + PREFIX_HACKATHON_FILTER,
+        assertParseFailure(parser, " p/1 " + PREFIX_HACKATHON,
                 HackathonName.MESSAGE_CONSTRAINTS);
     }
 
     @Test
     public void parse_duplicateHackathons_throwsParseException() {
-        assertParseFailure(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "NUSHack "
-                + PREFIX_HACKATHON_FILTER + "NUSHack",
+        assertParseFailure(parser, " p/1 " + PREFIX_HACKATHON + "NUSHack "
+                + PREFIX_HACKATHON + "NUSHack",
                 "Duplicate hackathon detected: NUSHack. Each hackathon can only be added once.");
     }
 
     @Test
     public void parse_duplicateHackathonsCaseInsensitive_throwsParseException() {
-        assertParseFailure(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "NUSHack "
-                + PREFIX_HACKATHON_FILTER + "nushack",
+        assertParseFailure(parser, " p/1 " + PREFIX_HACKATHON + "NUSHack "
+                + PREFIX_HACKATHON + "nushack",
                 "Duplicate hackathon detected: nushack. Each hackathon can only be added once.");
     }
 
@@ -123,7 +123,7 @@ public class AddHackathonCommandParserTest {
 
     @Test
     public void parse_invalidPrefixBeforeIndex_throwsParseException() {
-        assertParseFailure(parser, " " + PREFIX_HACKATHON_FILTER + "NUSHack",
+        assertParseFailure(parser, " " + PREFIX_HACKATHON + "NUSHack",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddHackathonCommand.MESSAGE_USAGE));
     }
 
@@ -135,8 +135,8 @@ public class AddHackathonCommandParserTest {
 
         AddHackathonCommand expectedCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, expectedHackathons);
 
-        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "HackMIT "
-                + PREFIX_HACKATHON_FILTER + "HackNYU2024", expectedCommand);
+        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON + "HackMIT "
+                + PREFIX_HACKATHON + "HackNYU2024", expectedCommand);
     }
 
     @Test
@@ -147,7 +147,7 @@ public class AddHackathonCommandParserTest {
         AddHackathonCommand expectedCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, expectedHackathons);
 
         // Parser should trim leading and trailing spaces
-        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON_FILTER + "  NUSHack  ", expectedCommand);
+        assertParseSuccess(parser, " p/1 " + PREFIX_HACKATHON + "  NUSHack  ", expectedCommand);
     }
 }
 
