@@ -80,13 +80,13 @@ Format: `help`
 
 ### Listing all persons : `list`
 
-Shows a list of all persons in the address book.
+Shows a list of all persons in Mate.
 
 Format: `list`
 
 ### Listing all teams : `listTeam`
 
-Shows a list of all teams in the address book.
+Shows a list of all teams in Mate.
 
 * Displays all teams with their team names, hackathon names, and member counts.
 * No parameters are required for this command.
@@ -95,7 +95,7 @@ Format: `listTeam`
 
 ### Clearing all entries : `clear`
 
-Clears all entries from the address book.
+Clears all entries from Mate.
 
 Format: `clear`
 
@@ -107,7 +107,7 @@ Format: `exit`
 
 ### Adding a person: `add`
 
-Adds a person to the address book.
+Adds a person to Mate.
 
 Format: `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
@@ -133,7 +133,7 @@ Examples:
 
 ### Deleting a person : `delete`
 
-Deletes the specified person from the address book.
+Deletes the specified person from the Mate.
 
 Format: `delete p/INDEX`
 
@@ -190,7 +190,7 @@ Examples:
 
 ### Adding a person to a team : `addToTeam`
 
-Adds an existing person to an existing team in the address book.
+Adds an existing person to an existing team in the Mate.
 
 Format: `addToTeam tn/TEAM_NAME p/INDEX`
 
@@ -211,7 +211,7 @@ Examples:
 
 ### Removing a person from a team : `removeFromTeam`
 
-Removes an existing person from an existing team in the address book.
+Removes an existing person from an existing team in the Mate.
 
 Format: `removeFromTeam tn/TEAM_NAME p/INDEX`
 
@@ -231,7 +231,7 @@ Examples:
 
 ### Editing a person : `edit`
 
-Edits an existing person in the address book.
+Edits an existing person in the Mate.
 
 Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
@@ -259,7 +259,7 @@ Examples:
 
 ### Removing a skill from a person : `removeSkill`
 
-Removes a skill from a person in the address book.
+Removes a skill from a person in the Mate.
 
 Format: `removeSkill p/INDEX s/SKILL`
 
