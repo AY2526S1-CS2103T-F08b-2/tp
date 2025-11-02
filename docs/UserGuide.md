@@ -88,9 +88,6 @@ Format: `list`
 
 Shows a list of all teams in Mate.
 
-* Displays all teams with their team names, hackathon names, and member counts.
-* No parameters are required for this command.
-
 Format: `listTeam`
 
 ### Clearing all entries : `clear`
@@ -339,4 +336,22 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 | **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack`          |
 | **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                                 |
 | **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024`                                                                               |
+
+--------------------------------------------------------------------------------------------------------------------
+
+## Field constraints
+
+This table summarizes the input restrictions for each field in Mate:
+
+| Field             | Prefix | Constraints                                                                                                                                                                                                                                   | Valid Examples                      | Invalid Examples                           |
+|-------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|--------------------------------------------|
+| **Name**          | `n/`   | • Only alphanumeric characters and spaces<br>• Cannot be blank<br>• Cannot start with whitespace                                                                                                                                             | `John Doe`<br>`Alice123`            | `@John`<br>` Bob`<br>`Charlie_Wu`          |
+| **Email**         | `e/`   | • Format: `local-part@domain`<br>• Local part: alphanumeric and `+_.-` only<br>• Cannot start/end with special characters<br>• Domain: alphanumeric with hyphens allowed<br>• Domain must end with at least 2 characters                     | `john@example.com`<br>`user+tag@uni.edu.sg` | `@john@ex.com`<br>`user@.com`<br>`user@domain` |
+| **Telegram**      | `t/`   | • 5–32 characters long<br>• Only letters, numbers, and underscores<br>• Cannot start with `@`<br>• Cannot start or end with underscore<br>• Cannot have consecutive underscores                                                              | `john_doe`<br>`alice123`            | `_john`<br>`john_`<br>`jo__hn`<br>`@john`  |
+| **GitHub**        | `g/`   | • 1–39 characters long<br>• Only letters, numbers, and hyphens<br>• Cannot start or end with hyphen<br>• Cannot have consecutive hyphens<br>• No underscores, spaces, or symbols                                                              | `john-doe`<br>`alice123`            | `-john`<br>`john-`<br>`jo--hn`<br>`john_doe` |
+| **Skill**         | `s/`   | • Lowercase alphanumeric characters<br>• May include `+` or `#` symbols<br>• Cannot start with `#`<br>• At least 1 character long<br>• Optional level: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)                          | `java`<br>`c++`<br>`python:Advanced` | `Java`<br>`#sharp`<br>`c++:`               |
+| **Hackathon**     | `h/`   | • Only alphanumeric characters and spaces<br>• Cannot be blank<br>• Cannot start with whitespace<br>• Case-insensitive for matching                                                                                                          | `NUSHacks`<br>`AI Challenge 2024`  | `NUS_Hacks`<br>` Hackathon`<br>`@Event`    |
+| **Team Name**     | `tn/`  | • Only alphanumeric characters and spaces<br>• Cannot be blank<br>• Cannot start with whitespace<br>• Must be unique                                                                                                                         | `Development Team`<br>`Alpha Squad` | `Team_A`<br>` Beta`<br>`@TeamName`         |
+| **Index**         | `p/`   | • Must be a positive integer<br>• Must be valid in the current displayed list<br>• Used for person or team operations                                                                                                                        | `1`<br>`5`<br>`100`                 | `0`<br>`-1`<br>`1.5`<br>`abc`              |
+| **Keyword**       | `k/`   | • Can contain any characters including spaces<br>• Case-insensitive matching<br>• Supports partial matching<br>• Searches across all person fields                                                                                           | `John`<br>`c++`<br>`AI Hackathon 2024` | _(No restrictions)_                        |
 
