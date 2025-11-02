@@ -620,3 +620,5 @@ testers are expected to do more *exploratory* testing.
 Team size: 5
 
 1. Allow users to view both individual list and team list side by side in the UI. This would enable users easily reference person indexes or team names when editing individual or team details.
+2. Allow different persons to have the same name. This would reflect real-world scenarios where multiple individuals may share the same name.
+3. 
