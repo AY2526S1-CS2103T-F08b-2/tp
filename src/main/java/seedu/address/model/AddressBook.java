@@ -99,6 +99,24 @@ public class AddressBook implements ReadOnlyAddressBook {
         requireNonNull(editedPerson);
 
         persons.setPerson(target, editedPerson);
+
+        for (Team team : teams) {
+            boolean containsByIdentity = team.getMembers().stream().anyMatch(member -> member.isSamePerson(target));
+            if (containsByIdentity) {
+                Set<Person> updatedMembers = new HashSet<>(team.getMembers());
+                updatedMembers.removeIf(member -> member.isSamePerson(target));
+                updatedMembers.add(editedPerson);
+
+                Team updatedTeam;
+                if (team.getHackathonName() == null) {
+                    updatedTeam = new Team(team.getTeamName(), updatedMembers);
+                } else {
+                    updatedTeam = new Team(team.getTeamName(), team.getHackathonName(), updatedMembers);
+                }
+
+                teams.setTeam(team, updatedTeam);
+            }
+        }
     }
 
     /**

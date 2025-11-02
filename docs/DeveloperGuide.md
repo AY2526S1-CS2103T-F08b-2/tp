@@ -613,3 +613,10 @@ testers are expected to do more *exploratory* testing.
 - Additionally, several of the new commands introduced like `addToTeam` and `removeFromTeam` required careful handling of the relationships between persons and teams, as there was a bidirectional association that needed to be maintained.
 - Other commands like `createTeam` also required deliberation on what should be allowed, such as preventing duplicate team names for the same hackathon and ensuring that a person cannot be added to multiple teams for the same hackathon.
 
+----------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Planned enhancements**
+
+Team size: 5
+
+1. Allow users to view both individual list and team list side by side in the UI. This would enable users easily reference person indexes or team names when editing individual or team details.
