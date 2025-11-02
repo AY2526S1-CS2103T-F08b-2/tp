@@ -28,7 +28,7 @@ public class CreateTeamCommandParser implements Parser<CreateTeamCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME, PREFIX_HACKATHON, PREFIX_PERSON);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME, PREFIX_HACKATHON, PREFIX_PERSON)
+        if (!arePrefixesPresent(argMultimap, PREFIX_TEAM_NAME, PREFIX_HACKATHON)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, CreateTeamCommand.MESSAGE_USAGE));
         }
