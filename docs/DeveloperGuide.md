@@ -583,9 +583,6 @@ testers are expected to do more *exploratory* testing.
    2. Test case: `createTeam tn/Alpha Team h/Hackathon 2024 p/3 p/4`<br>
       Expected: No team is created. Error details shown in the status message indicating that the team already exists. Status bar remains the same.
 
-   3. Test case: `createTeam tn/Alpha Team h/Hackathon 2025 p/3 p/4`<br>
-      Expected: Team "Alpha Team" for "Hackathon 2025" is created with persons at index 3 and 4 as members. Same team name different hackathon allowed. Details of the created team shown in the status message. Timestamp in the status bar is updated.
-
 3. Creating a team for a hackathon with person already participating in hackathon
 
    1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
