@@ -50,11 +50,11 @@ public class GitHub {
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof GitHub
-                && value.equals(((GitHub) other).value));
+                && value.equalsIgnoreCase(((GitHub) other).value));
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase().hashCode();
     }
 }

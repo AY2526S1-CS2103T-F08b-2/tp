@@ -31,7 +31,7 @@ Mate is designed for hackathon participants across the technical spectrum — fr
 
    * `listTeam` : Lists all teams.
 
-   * `add n/John Doe e/johnd@example.com t/John g/John` : Adds a contact named `John Doe` to Mate.
+   * `add n/John Doe e/johnd@example.com t/John03 g/John` : Adds a contact named `John Doe` to Mate.
 
    * `delete p/3` : Deletes the 3rd contact shown in the current list.
 

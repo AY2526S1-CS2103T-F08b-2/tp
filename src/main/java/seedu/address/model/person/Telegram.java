@@ -51,11 +51,11 @@ public class Telegram {
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof Telegram
-                && value.equals(((Telegram) other).value));
+                && value.equalsIgnoreCase(((Telegram) other).value));
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return value.toLowerCase().hashCode();
     }
 }
