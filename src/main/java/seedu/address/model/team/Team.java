@@ -85,6 +85,7 @@ public class Team {
     /**
      * Returns true if both teams have the same team name.
      * This defines a weaker notion of equality between two teams.
+     * Team name alone is used as the unique identifier.
      */
     public boolean isSameTeam(Team otherTeam) {
         if (otherTeam == this) {
@@ -92,8 +93,7 @@ public class Team {
         }
 
         return otherTeam != null
-                && otherTeam.getTeamName().equals(getTeamName())
-                && otherTeam.getHackathonName().equals(getHackathonName());
+                && otherTeam.getTeamName().equals(getTeamName());
     }
 
     /**

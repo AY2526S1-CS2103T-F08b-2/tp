@@ -1,11 +1,11 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.DeleteTeamCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.team.TeamName;
 
 /**
  * Parses input arguments and creates a new DeleteTeamCommand object
@@ -18,17 +18,17 @@ public class DeleteTeamCommandParser implements Parser<DeleteTeamCommand> {
      * @throws ParseException if the user input does not conform the expected format
      */
     public DeleteTeamCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_PERSON);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TEAM_NAME);
 
-        if (!argMultimap.getValue(PREFIX_PERSON).isPresent() || !argMultimap.getPreamble().isEmpty()) {
+        if (!argMultimap.getValue(PREFIX_TEAM_NAME).isPresent() || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTeamCommand.MESSAGE_USAGE));
         }
 
-        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_PERSON);
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TEAM_NAME);
 
         try {
-            Index index = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_PERSON).get());
-            return new DeleteTeamCommand(index);
+            TeamName teamName = ParserUtil.parseTeamName(argMultimap.getValue(PREFIX_TEAM_NAME).get());
+            return new DeleteTeamCommand(teamName);
         } catch (ParseException pe) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, DeleteTeamCommand.MESSAGE_USAGE), pe);

@@ -56,7 +56,15 @@ public class UniqueTeamList implements Iterable<Team> {
     public void setTeam(Team target, Team editedTeam) {
         requireAllNonNull(target, editedTeam);
 
-        int index = internalList.indexOf(target);
+        // Find the index by team identity (isSameTeam) rather than exact equality
+        int index = -1;
+        for (int i = 0; i < internalList.size(); i++) {
+            if (internalList.get(i).isSameTeam(target)) {
+                index = i;
+                break;
+            }
+        }
+
         if (index == -1) {
             throw new TeamNotFoundException();
         }

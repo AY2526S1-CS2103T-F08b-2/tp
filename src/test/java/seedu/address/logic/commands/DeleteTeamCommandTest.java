@@ -5,12 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
-import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
@@ -18,6 +15,7 @@ import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TeamBuilder;
 
@@ -28,7 +26,7 @@ import seedu.address.testutil.TeamBuilder;
 public class DeleteTeamCommandTest {
 
     @Test
-    public void execute_validIndexUnfilteredListWithMembers_success() {
+    public void execute_validTeamNameUnfilteredListWithMembers_success() {
         // Create persons
         Person alice = new PersonBuilder().withName("Alice").withEmail("alice@test.com")
                 .withTelegram("alice").withGitHub("alice").build();
@@ -54,7 +52,7 @@ public class DeleteTeamCommandTest {
         Model model = new ModelManager(addressBook, new UserPrefs());
 
         // Execute delete
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Team Alpha"));
 
         String expectedMessage = String.format(DeleteTeamCommand.MESSAGE_DELETE_TEAM_SUCCESS,
                 Messages.format(teamWithMembers));
@@ -71,7 +69,7 @@ public class DeleteTeamCommandTest {
     }
 
     @Test
-    public void execute_validIndexUnfilteredListEmptyTeam_success() {
+    public void execute_validTeamNameUnfilteredListEmptyTeam_success() {
         // Create empty team (no members)
         Team emptyTeam = new TeamBuilder()
                 .withTeamName("Empty Team")
@@ -85,7 +83,7 @@ public class DeleteTeamCommandTest {
         Model model = new ModelManager(addressBook, new UserPrefs());
 
         // Execute delete
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Empty Team"));
 
         String expectedMessage = String.format(DeleteTeamCommand.MESSAGE_DELETE_TEAM_SUCCESS,
                 Messages.format(emptyTeam));
@@ -97,21 +95,21 @@ public class DeleteTeamCommandTest {
     }
 
     @Test
-    public void execute_invalidIndexUnfilteredList_throwsCommandException() {
+    public void execute_invalidTeamNameUnfilteredList_throwsCommandException() {
         Team team = new TeamBuilder().withTeamName("Team One").withoutMembers().build();
 
         AddressBook addressBook = new AddressBook();
         addressBook.addTeam(team);
         Model model = new ModelManager(addressBook, new UserPrefs());
 
-        Index outOfBoundIndex = Index.fromOneBased(model.getFilteredTeamList().size() + 1);
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(outOfBoundIndex);
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Non Existent Team"));
 
-        assertCommandFailure(deleteTeamCommand, model, Messages.MESSAGE_INVALID_TEAM_DISPLAYED_INDEX);
+        assertCommandFailure(deleteTeamCommand, model,
+                String.format(DeleteTeamCommand.MESSAGE_TEAM_NOT_FOUND, "Non Existent Team"));
     }
 
     @Test
-    public void execute_validIndexFilteredList_success() {
+    public void execute_validTeamNameFilteredList_success() {
         // Create two teams
         Team team1 = new TeamBuilder().withTeamName("Team Alpha").withoutMembers().build();
         Team team2 = new TeamBuilder().withTeamName("Team Beta").withoutMembers().build();
@@ -124,8 +122,8 @@ public class DeleteTeamCommandTest {
         // Filter to show only first team
         model.updateFilteredTeamList(team -> team.getTeamName().equals(team1.getTeamName()));
 
-        // Delete the first team in filtered list
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+        // Delete the first team by name
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Team Alpha"));
 
         String expectedMessage = String.format(DeleteTeamCommand.MESSAGE_DELETE_TEAM_SUCCESS,
                 Messages.format(team1));
@@ -140,7 +138,7 @@ public class DeleteTeamCommandTest {
     }
 
     @Test
-    public void execute_invalidIndexFilteredList_throwsCommandException() {
+    public void execute_invalidTeamNameFilteredList_throwsCommandException() {
         Team team1 = new TeamBuilder().withTeamName("Team Alpha").withoutMembers().build();
         Team team2 = new TeamBuilder().withTeamName("Team Beta").withoutMembers().build();
 
@@ -152,14 +150,11 @@ public class DeleteTeamCommandTest {
         // Filter to show only first team
         model.updateFilteredTeamList(team -> team.getTeamName().equals(team1.getTeamName()));
 
-        // Try to delete index 1 (which doesn't exist in filtered list)
-        Index outOfBoundIndex = Index.fromZeroBased(1);
-        // Ensure that outOfBoundIndex is still valid in unfiltered list
-        assertTrue(outOfBoundIndex.getZeroBased() < model.getAddressBook().getTeamList().size());
+        // Try to delete a team that exists in full list but not in filtered list
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Team Beta"));
 
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(outOfBoundIndex);
-
-        assertCommandFailure(deleteTeamCommand, model, Messages.MESSAGE_INVALID_TEAM_DISPLAYED_INDEX);
+        assertCommandFailure(deleteTeamCommand, model,
+                String.format(DeleteTeamCommand.MESSAGE_TEAM_NOT_FOUND, "Team Beta"));
     }
 
     @Test
@@ -193,7 +188,7 @@ public class DeleteTeamCommandTest {
         Model model = new ModelManager(addressBook, new UserPrefs());
 
         // Execute delete
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Big Team"));
 
         try {
             deleteTeamCommand.execute(model);
@@ -248,7 +243,7 @@ public class DeleteTeamCommandTest {
         Model model = new ModelManager(addressBook, new UserPrefs());
 
         // Execute delete on first team
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Partial Team"));
 
         try {
             deleteTeamCommand.execute(model);
@@ -310,7 +305,7 @@ public class DeleteTeamCommandTest {
         int interestedHackathonsSizeBefore = personWithTeam.getInterestedHackathons().size();
 
         // Execute delete team
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(Index.fromZeroBased(0));
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(new TeamName("Test Team"));
 
         try {
             deleteTeamCommand.execute(model);
@@ -341,14 +336,17 @@ public class DeleteTeamCommandTest {
 
     @Test
     public void equals() {
-        DeleteTeamCommand deleteFirstCommand = new DeleteTeamCommand(INDEX_FIRST_PERSON);
-        DeleteTeamCommand deleteSecondCommand = new DeleteTeamCommand(INDEX_SECOND_PERSON);
+        TeamName teamAlpha = new TeamName("Team Alpha");
+        TeamName teamBeta = new TeamName("Team Beta");
+
+        DeleteTeamCommand deleteFirstCommand = new DeleteTeamCommand(teamAlpha);
+        DeleteTeamCommand deleteSecondCommand = new DeleteTeamCommand(teamBeta);
 
         // same object -> returns true
         assertTrue(deleteFirstCommand.equals(deleteFirstCommand));
 
         // same values -> returns true
-        DeleteTeamCommand deleteFirstCommandCopy = new DeleteTeamCommand(INDEX_FIRST_PERSON);
+        DeleteTeamCommand deleteFirstCommandCopy = new DeleteTeamCommand(teamAlpha);
         assertTrue(deleteFirstCommand.equals(deleteFirstCommandCopy));
 
         // different types -> returns false
@@ -363,9 +361,9 @@ public class DeleteTeamCommandTest {
 
     @Test
     public void toStringMethod() {
-        Index targetIndex = Index.fromOneBased(1);
-        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(targetIndex);
-        String expected = DeleteTeamCommand.class.getCanonicalName() + "{targetIndex=" + targetIndex + "}";
+        TeamName teamName = new TeamName("Team Alpha");
+        DeleteTeamCommand deleteTeamCommand = new DeleteTeamCommand(teamName);
+        String expected = DeleteTeamCommand.class.getCanonicalName() + "{targetTeamName=" + teamName + "}";
         assertEquals(expected, deleteTeamCommand.toString());
     }
 }

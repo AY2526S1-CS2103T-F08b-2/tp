@@ -21,7 +21,6 @@ Class Telegram
 Class Name
 Class Github
 Class Skills
-Class Hackathon
 Class TeamName
 Class HackathonName
 
@@ -48,8 +47,9 @@ Person *--> Name
 Person *--> Email
 Person *--> Telegram
 Person *--> Github
-Person *--> "*" Skills
-Person *--> "*" Hackathon
+Person o--> "*" Skills
+Person o--> "*" HackathonName
+Person o--> "*" Team
 
 Team *--> TeamName
 Team *--> HackathonName
