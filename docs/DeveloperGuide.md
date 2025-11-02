@@ -208,7 +208,7 @@ Step 3. The command is parsed and `CreateTeamCommand` is executed with the follo
 
 Step 4. The team is added to the model's team list.
 
-Step 6. A success message is displayed showing the created team details.
+Step 5. A success message is displayed showing the created team details.
 
 **Error Handling:**
 
@@ -418,19 +418,17 @@ _{Explain here how the data archiving feature will be implemented}_
 
 Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
-| Priority | As a …​ | I want to …​                                                          | So that I can…​                                          |
-|------|---------|-----------------------------------------------------------------------|----------------------------------------------------------|
-| `* * *` | student | search for peers by programming language                              | quickly find potential teammates with matching skills.   |
-| `* * *` | student | create a team from selected contacts                               | form balanced teams for hackathons                       |
-| `* * *` | student | edit members of an existing team                                        | adjust team composition as needed                        |
-| `* * *` | student | view color-coded skill tags                                           | quickly assess a person's proficiency level              |
-| `* * *` | student | search for multiple skills at once                                    | find students with overlapping technical expertise       |
-| `* * *` | student | add my own skills to my profile                                       | let others discover me for team formation                |
-| `* *` | student | save profiles as facorites                                            |  easily revisit promising teammates later                  |
-| `* *` | student | search by GitHub username                                             | I can review their past projects before contacting them. |
-| `* *` | student | search for people by email                                            | directly connect with someone I already know             |
-| `*`  | student | import contacts from CSV                                             | quickly build my network without manual entry            |
-| `*`  | student | export a team to CSV                                                 | easily share team details with teammates                 |
+| Priority | As a …​ | I want to …​                             | So that I can…​                                          |
+|-----|---------|------------------------------------------|----------------------------------------------------------|
+| `* * *` | student | search for peers by programming language | quickly find potential teammates with matching skills.   |
+| `* * *` | student | create a team from selected contacts     | form balanced teams for hackathons                       |
+| `* * *` | student | edit members of an existing team         | adjust team composition as needed                        |
+| `* * *` | student | view color-coded skill tags              | quickly assess a person's proficiency level              |
+| `* * *` | student | search for multiple skills at once       | find students with overlapping technical expertise       |
+| `* * *` | student | add my own skills to my profile          | let others discover me for team formation                |
+| `* *` | student | search by GitHub username                | I can review their past projects before contacting them. |
+| `* *` | student | search for people by telegram username   | directly connect with someone I already know             |
+| `*` | student | save profiles as favorites               |  easily revisit promising teammates later                  |
 
 ### Use cases
 
@@ -492,38 +490,6 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
     * 4a1. User requests to indicate that the person is not interested in joining a team for the hackathon.
     * 4a2. Mate confirms the indication.
-
-      Use case ends.
-
-**Use case: Import Contacts from CSV**
-
-**MSS**
-
-1.  Student requests to import contacts.
-2.  Mate requests the file path.
-3.  Student enters the file path.
-4.  Mate validates the CSV format and parses entries.
-5.  Mate imports and displays the number of successful entries.
-
-    Use case ends.
-
-**Extensions**
-
-* 3a. File not found or inaccessible.
-    * 3a1. Mate highlights the error and requests a valid file path.
-    * 3a2. Student re-enters the file path.
-
-      Use case resumes at step 3.
-
-* 4b. CSV contains invalid or missing fields.
-    * 4b1. Mate highlights errors and requests a corrected file.
-    * 4b2. Student fixes and re-uploads.
-
-      Use case resumes at step 4.
-
-* 5a. Duplicate contacts detected.
-    * 5a1. Mate asks whether to merge or skip duplicates.
-    * 5a2. Student chooses.
 
       Use case ends.
 
@@ -589,7 +555,7 @@ testers are expected to do more *exploratory* testing.
 
 2. Deleting a person after a find command
 
-    1. Prerequisites: `find java`
+    1. Prerequisites: `find k/java`
     
     2. Test case: `delete 1`<br>
        Expected: First person in the filtered list is deleted from the address book. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
@@ -604,27 +570,27 @@ testers are expected to do more *exploratory* testing.
 
 1. Creating a team from selected persons in the list
 
-   1. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/1 p/2`<br>
+   1. Test case: `createTeam tn/Alpha Team h/Hackathon 2024 p/1 p/2`<br>
       Expected: Team "Alpha Team" for "Hackathon 2024" is created with persons at index 1 and 2 as members. Details of the created team shown in the status message. Timestamp in the status bar is updated.
 
-   2. Test case: `createTeam tn/Beta Team hn/Hackathon 2024 p/0 p/x` (where x is larger than the list size) <br>
+   2. Test case: `createTeam tn/Beta Team h/Hackathon 2024 p/0 p/x` (where x is larger than the list size) <br>
       Expected: No team is created. Error details shown in the status message. Status bar remains the same.
 
 2. Creating a team with duplicate name
 
    1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
 
-   2. Test case: `createTeam tn/Alpha Team hn/Hackathon 2024 p/3 p/4`<br>
+   2. Test case: `createTeam tn/Alpha Team h/Hackathon 2024 p/3 p/4`<br>
       Expected: No team is created. Error details shown in the status message indicating that the team already exists. Status bar remains the same.
 
-   3. Test case: `createTeam tn/Alpha Team hn/Hackathon 2025 p/3 p/4`<br>
+   3. Test case: `createTeam tn/Alpha Team h/Hackathon 2025 p/3 p/4`<br>
       Expected: Team "Alpha Team" for "Hackathon 2025" is created with persons at index 3 and 4 as members. Same team name different hackathon allowed. Details of the created team shown in the status message. Timestamp in the status bar is updated.
 
 3. Creating a team for a hackathon with person already participating in hackathon
 
    1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
 
-   2. Test case: `createTeam tn/Gamma Team hn/Hackathon 2024 p/2 p/3`<br>
+   2. Test case: `createTeam tn/Gamma Team h/Hackathon 2024 p/2 p/3`<br>
       Expected: No team is created. Error details shown in the status message indicating that person at index 2 is already participating in "Hackathon 2024". Status bar remains the same.
 
 ### Removing a person from a team
