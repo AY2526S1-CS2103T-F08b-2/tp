@@ -122,7 +122,7 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Team` objects (which are contained in a `UniqueTeamList` object) in an `AddressBook` object.
+* stores the Mate data i.e., all `Person` objects (which are contained in a `UniquePersonList` object) and all `Team` objects (which are contained in a `UniqueTeamList` object) in an `AddressBook` object.
 * stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -141,7 +141,7 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+* can save both Mate data and user preference data in JSON format, and read them back into corresponding objects.
 * inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
 * depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
 
@@ -159,7 +159,7 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Implementation
 
-The Create Team feature allows users to form teams by selecting multiple persons from the address book and associating them with a hackathon. This feature is implemented through the `CreateTeamCommand` class and its associated parser `CreateTeamCommandParser`.
+The Create Team feature allows users to form teams by selecting multiple persons from Mate and associating them with a hackathon. This feature is implemented through the `CreateTeamCommand` class and its associated parser `CreateTeamCommandParser`.
 
 **Key Components:**
 
@@ -245,7 +245,7 @@ The `CreateTeamCommand` handles several error cases:
 
 #### Implementation
 
-The List Teams feature allows users to view all teams created in the address book. This feature is implemented through the `ListTeamsCommand` class.
+The List Teams feature allows users to view all teams created in Mate. This feature is implemented through the `ListTeamsCommand` class.
 
 Step 1. The user enters a `listTeams` command.
 Step 2. `AddressBookParser` recognizes the `listTeams` command word and creates a `ListTeamsCommand` object.
@@ -558,7 +558,7 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: `find k/java`
     
     2. Test case: `delete 1`<br>
-       Expected: First person in the filtered list is deleted from the address book. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
+       Expected: First person in the filtered list is deleted from Mate. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
     
     3. Test case: `delete 0`<br>
        Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
