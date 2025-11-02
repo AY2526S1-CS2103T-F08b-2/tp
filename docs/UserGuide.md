@@ -31,7 +31,7 @@ Mate is designed for hackathon participants across the technical spectrum — fr
 
    * `listTeam` : Lists all teams.
 
-   * `add n/John Doe e/johnd@example.com t/John03 g/John` : Adds a contact named `John Doe` to Mate.
+   * `add n/John Doe e/johnd@example.com t/John g/John` : Adds a contact named `John Doe` to Mate.
 
    * `delete p/3` : Deletes the 3rd contact shown in the current list.
 
@@ -109,7 +109,7 @@ Format: `exit`
 
 Adds a person to the address book.
 
-Format: `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [sk/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
+Format: `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
 * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
 * If no level is specified for a skill, it defaults to `Beginner`
@@ -128,8 +128,8 @@ A person can have any number of skills and hackathons (including 0).
 
 Examples:
 * `add n/John Doe e/johnd@example.com t/JohnTG g/JohnGH`
-* `add n/Alice e/alice@example.com t/alice_tg g/alice123 sk/Docker h/TechChallenge`
-* `add n/Betsy Crowe e/betsycrowe@example.com t/Betsygram g/Betsy03 sk/C#:Intermediate sk/Java:Advanced h/NUSHack h/iNTUition`
+* `add n/Alice e/alice@example.com t/alice_tg g/alice123 s/Docker h/TechChallenge`
+* `add n/Betsy Crowe e/betsycrowe@example.com t/Betsygram g/Betsy03 s/C#:Intermediate s/Java:Advanced h/NUSHack h/iNTUition`
 
 ### Deleting a person : `delete`
 
@@ -233,7 +233,7 @@ Examples:
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [sk/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
+Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
 * Edits the person at the specified `INDEX`.
   * The index refers to the index number shown in the displayed person list.
@@ -252,8 +252,8 @@ Format: `edit INDEX [n/NAME] [e/EMAIL] [tg/TELEGRAM_NAME] [gh/GITHUB_NAME] [sk/S
 
 Examples:
 *  `edit 1 e/johndoe@example.com tg/johndoe_tg` Edits the email address and Telegram name of the 1st person to be `johndoe@example.com` and `johndoe_tg` respectively.
-*  `edit 2 n/Betsy Crower sk/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
-*  `edit 3 sk/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
+*  `edit 2 n/Betsy Crower s/Python:Advanced` Edits the name of the 2nd person to be `Betsy Crower` and adds/updates the Python skill to Advanced level.
+*  `edit 3 s/Docker:Intermediate` Updates the Docker skill of the 3rd person to Intermediate level (or adds it if it doesn't exist).
 *  `edit 3 h/NUSHack h/iNTUition` Sets the 3rd person's interested hackathons to NUSHack and iNTUition (replaces all previous interested hackathons).
 *  `edit 4 h/HackNRoll` Sets the 4th person's interested hackathon to HackNRoll.
 
@@ -261,7 +261,7 @@ Examples:
 
 Removes a skill from a person in the address book.
 
-Format: `removeSkill p/INDEX sk/SKILL`
+Format: `removeSkill p/INDEX s/SKILL`
 
 * Removes the specified `SKILL` from the person at the specified `INDEX`.
 * The index refers to the index number shown in the displayed person list.
@@ -269,8 +269,8 @@ Format: `removeSkill p/INDEX sk/SKILL`
 * If the person does not have the specified skill, an error message will be shown.
 
 Examples:
-* `removeSkill p/2 sk/Java` removes the skill "Java" from the 2nd person in the displayed list.
-* `removeSkill p/1 sk/Python` removes the skill "Python" from the 1st person in the displayed list.
+* `removeSkill p/2 s/Java` removes the skill "Java" from the 2nd person in the displayed list.
+* `removeSkill p/1 s/Python` removes the skill "Python" from the 1st person in the displayed list.
 
 ### Locating persons : `find`
 
@@ -330,13 +330,13 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 | **List Team**               | `listTeam`                                                                                                                                                                       |
 | **Clear**                   | `clear`                                                                                                                                                                          |
 | **Exit**                    | `exit`                                                                                                                                                                           |
-| **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [sk/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/John g/John sk/Python:Beginner h/NUSHack` |
+| **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/John g/John s/Python:Beginner h/NUSHack` |
 | **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                          |
 | **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                        |
 | **Delete Team**             | `deleteTeam p/INDEX`<br> e.g., `deleteTeam p/1`                                                                                                                                  |
 | **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                  |
 | **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                         |
-| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [sk/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee sk/Docker:Intermediate h/NUSHack`          |
-| **Remove Skill**            | `removeSkill p/INDEX sk/SKILL`<br> e.g., `removeSkill p/2 sk/Java`                                                                                                                 |
+| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME] [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`<br> e.g.,`edit p/2 n/James Lee s/Docker:Intermediate h/NUSHack`          |
+| **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                                 |
 | **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024`                                                                               |
 
