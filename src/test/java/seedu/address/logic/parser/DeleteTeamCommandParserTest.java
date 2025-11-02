@@ -1,15 +1,15 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
-import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.DeleteTeamCommand;
+import seedu.address.model.team.TeamName;
 
 /**
  * Tests for DeleteTeamCommandParser.
@@ -20,12 +20,14 @@ public class DeleteTeamCommandParserTest {
 
     @Test
     public void parse_validArgs_returnsDeleteTeamCommand() {
-        assertParseSuccess(parser, " p/1", new DeleteTeamCommand(INDEX_FIRST_PERSON));
+        TeamName teamName = new TeamName("Team Alpha");
+        assertParseSuccess(parser, " tn/Team Alpha", new DeleteTeamCommand(teamName));
     }
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
-        assertParseFailure(parser, " p/a", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+        // Empty team name
+        assertParseFailure(parser, " tn/", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 DeleteTeamCommand.MESSAGE_USAGE));
     }
 
@@ -42,21 +44,15 @@ public class DeleteTeamCommandParserTest {
     }
 
     @Test
-    public void parse_negativeIndex_throwsParseException() {
-        assertParseFailure(parser, " p/-1", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                DeleteTeamCommand.MESSAGE_USAGE));
-    }
-
-    @Test
-    public void parse_zeroIndex_throwsParseException() {
-        assertParseFailure(parser, " p/0", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+    public void parse_missingPrefix_throwsParseException() {
+        assertParseFailure(parser, " Team Alpha", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 DeleteTeamCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_multipleArgs_throwsParseException() {
-        assertParseFailure(parser, " p/1 p/2",
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_PERSON));
+        assertParseFailure(parser, " tn/Team Alpha tn/Team Beta",
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_TEAM_NAME));
     }
 }
 

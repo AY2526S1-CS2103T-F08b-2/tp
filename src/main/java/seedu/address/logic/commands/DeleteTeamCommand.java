@@ -1,20 +1,20 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_PERSON;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TEAM_NAME;
 
 import java.util.List;
 
-import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 import seedu.address.model.team.Team;
+import seedu.address.model.team.TeamName;
 
 /**
- * Deletes a team identified using its displayed index from the address book.
+ * Deletes a team identified by its team name from the address book.
  * Also removes the team reference from all persons who belong to that team.
  */
 public class DeleteTeamCommand extends Command {
@@ -22,16 +22,17 @@ public class DeleteTeamCommand extends Command {
     public static final String COMMAND_WORD = "deleteteam";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Deletes the team identified by the index number used in the displayed team list.\n"
-            + "Parameters: " + PREFIX_PERSON + "INDEX (must be a positive integer)\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1";
+            + ": Deletes the team identified by the team name.\n"
+            + "Parameters: " + PREFIX_TEAM_NAME + "TEAM_NAME\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TEAM_NAME + "Development Team";
 
     public static final String MESSAGE_DELETE_TEAM_SUCCESS = "Deleted Team: %1$s";
+    public static final String MESSAGE_TEAM_NOT_FOUND = "Team with name '%1$s' does not exist";
 
-    private final Index targetIndex;
+    private final TeamName targetTeamName;
 
-    public DeleteTeamCommand(Index targetIndex) {
-        this.targetIndex = targetIndex;
+    public DeleteTeamCommand(TeamName targetTeamName) {
+        this.targetTeamName = targetTeamName;
     }
 
     @Override
@@ -39,11 +40,12 @@ public class DeleteTeamCommand extends Command {
         requireNonNull(model);
         List<Team> lastShownList = model.getFilteredTeamList();
 
-        if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_TEAM_DISPLAYED_INDEX);
-        }
-
-        Team teamToDelete = lastShownList.get(targetIndex.getZeroBased());
+        // Find the target team (case-insensitive match)
+        Team teamToDelete = lastShownList.stream()
+                .filter(team -> team.getTeamName().toString().equalsIgnoreCase(targetTeamName.toString()))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(
+                        String.format(MESSAGE_TEAM_NOT_FOUND, targetTeamName)));
 
         // Update all persons who belong to this team
         List<Person> allPersons = model.getAddressBook().getPersonList();
@@ -79,13 +81,13 @@ public class DeleteTeamCommand extends Command {
         }
 
         DeleteTeamCommand otherDeleteTeamCommand = (DeleteTeamCommand) other;
-        return targetIndex.equals(otherDeleteTeamCommand.targetIndex);
+        return targetTeamName.equals(otherDeleteTeamCommand.targetTeamName);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndex", targetIndex)
+                .add("targetTeamName", targetTeamName)
                 .toString();
     }
 }
