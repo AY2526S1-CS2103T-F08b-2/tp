@@ -118,6 +118,9 @@ public class ModelManager implements Model {
         // Force UI refresh by temporarily changing predicate
         updateFilteredPersonList(p -> false);
         updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+        // Also refresh team list since team members may have been updated
+        updateFilteredTeamList(t -> false);
+        updateFilteredTeamList(PREDICATE_SHOW_ALL_TEAMS);
     }
 
     @Override
