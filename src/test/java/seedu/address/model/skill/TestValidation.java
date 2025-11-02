@@ -17,7 +17,7 @@ public class TestValidation {
      * This method tests various valid skill name formats including:
      * - Standard lowercase skill names (java, python, javascript)
      * - Skills containing numbers (c++, c#, html5, react16)
-     * - Skills with valid symbols + and # not at the start (node+express, spring#boot)
+     * - Skills with valid symbols +, #, ., -, _ (not # at start)
      * - Minimum length skills with 1 character (a, b, 1, 2)
      */
     @Test
@@ -38,6 +38,22 @@ public class TestValidation {
         assertTrue(Skill.isValidSkillName("spring#boot"));
         assertTrue(Skill.isValidSkillName("docker+kubernetes"));
 
+        // Valid with dots (for .NET, React.js, etc.)
+        assertTrue(Skill.isValidSkillName("node.js"));
+        assertTrue(Skill.isValidSkillName("vue.js"));
+        assertTrue(Skill.isValidSkillName(".net"));
+        assertTrue(Skill.isValidSkillName("asp.net"));
+        assertTrue(Skill.isValidSkillName("react.js"));
+
+        // Valid with hyphens (for react-native, etc.)
+        assertTrue(Skill.isValidSkillName("spring-boot"));
+        assertTrue(Skill.isValidSkillName("react-native"));
+        assertTrue(Skill.isValidSkillName("vue-router"));
+
+        // Valid with underscores (for scikit_learn, etc.)
+        assertTrue(Skill.isValidSkillName("scikit_learn"));
+        assertTrue(Skill.isValidSkillName("tensor_flow"));
+
         // Valid minimum length (1 character)
         assertTrue(Skill.isValidSkillName("a"));
         assertTrue(Skill.isValidSkillName("b"));
@@ -49,8 +65,8 @@ public class TestValidation {
      * Tests that invalid skill names return false when validated.
      * This method tests various invalid skill name formats including:
      * - Skills containing uppercase letters (Java, PYTHON, JavaScript, C++, C#)
-     * - Skills starting with forbidden symbols (# or +)
-     * - Skills containing invalid special characters (., /, -, @)
+     * - Skills starting with forbidden symbol (#)
+     * - Skills containing invalid special characters (/, @, spaces)
      * - Empty strings and whitespace-only strings
      */
     @Test
@@ -67,18 +83,16 @@ public class TestValidation {
         assertFalse(Skill.isValidSkillName("#java"));
         assertFalse(Skill.isValidSkillName("#nodejs"));
 
-        // Starts with + symbol
-        assertFalse(Skill.isValidSkillName("+python"));
-        assertFalse(Skill.isValidSkillName("+java"));
-
-        // Contains invalid special characters
-        assertFalse(Skill.isValidSkillName("node.js"));
+        // Contains invalid special characters (/, @, spaces, etc.)
         assertFalse(Skill.isValidSkillName("c++/java"));
-        assertFalse(Skill.isValidSkillName("spring-boot"));
         assertFalse(Skill.isValidSkillName("react@16"));
-        assertFalse(Skill.isValidSkillName("vue.js"));
+        assertFalse(Skill.isValidSkillName("node js")); // space
+        assertFalse(Skill.isValidSkillName("spring boot")); // space
+        assertFalse(Skill.isValidSkillName("c++\\java")); // backslash
+        assertFalse(Skill.isValidSkillName("react&vue")); // ampersand
+        assertFalse(Skill.isValidSkillName("node$js")); // dollar sign
 
-        // Empty or null
+        // Empty or whitespace
         assertFalse(Skill.isValidSkillName(""));
         assertFalse(Skill.isValidSkillName(" "));
         assertFalse(Skill.isValidSkillName("  "));
@@ -88,9 +102,10 @@ public class TestValidation {
      * Tests edge cases for skill name validation.
      * This method tests complex scenarios including:
      * - Skills with mixed valid symbols (framework+library#version)
-     * - Skills starting with numbers (3dmodeling, 2dgraphics)
+     * - Skills starting with numbers or dots (3dmodeling, .net)
      * - Skills with multiple consecutive valid symbols (skill++, tool##)
-     * - Skills starting with multiple invalid symbols (++skill, ##tool, #+mixed)
+     * - Skills starting with invalid symbols (++skill, ##tool, #sharp)
+     * - Complex combinations of dots, hyphens, and underscores
      * These edge cases ensure the validation regex handles complex combinations correctly.
      */
     @Test
@@ -98,19 +113,37 @@ public class TestValidation {
         // Mixed valid symbols
         assertTrue(Skill.isValidSkillName("framework+library#version"));
         assertTrue(Skill.isValidSkillName("tool123+addon#extension"));
+        assertTrue(Skill.isValidSkillName("web3.0-framework"));
+        assertTrue(Skill.isValidSkillName("lib_name.v2+ext"));
 
         // Numbers at start
         assertTrue(Skill.isValidSkillName("3dmodeling"));
         assertTrue(Skill.isValidSkillName("2dgraphics"));
 
+        // Dot at start (for .NET)
+        assertTrue(Skill.isValidSkillName(".net"));
+        assertTrue(Skill.isValidSkillName(".core"));
+
         // Multiple consecutive symbols
         assertTrue(Skill.isValidSkillName("skill++"));
         assertTrue(Skill.isValidSkillName("tool##"));
         assertTrue(Skill.isValidSkillName("lang+#hybrid"));
+        assertTrue(Skill.isValidSkillName("lib--version"));
+        assertTrue(Skill.isValidSkillName("tool__ext"));
 
-        // Invalid consecutive symbols at start
-        assertFalse(Skill.isValidSkillName("++skill"));
-        assertFalse(Skill.isValidSkillName("##tool"));
-        assertFalse(Skill.isValidSkillName("#+mixed"));
+        // Complex real-world examples
+        assertTrue(Skill.isValidSkillName("next.js"));
+        assertTrue(Skill.isValidSkillName("express.js"));
+        assertTrue(Skill.isValidSkillName("scikit-learn"));
+        assertTrue(Skill.isValidSkillName("react-native"));
+
+        // Invalid: starts with #
+        assertFalse(Skill.isValidSkillName("#sharp"));
+        assertFalse(Skill.isValidSkillName("#python"));
+
+        // Invalid: contains spaces or other special chars
+        assertFalse(Skill.isValidSkillName("react native"));
+        assertFalse(Skill.isValidSkillName("node@js"));
+        assertFalse(Skill.isValidSkillName("c++/python"));
     }
 }
