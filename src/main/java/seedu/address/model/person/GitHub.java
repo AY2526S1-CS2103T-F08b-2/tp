@@ -11,7 +11,7 @@ public class GitHub {
     public static final String MESSAGE_CONSTRAINTS =
             "GitHub usernames should be 1–39 characters long, "
                     + "contain only letters, numbers, or hyphens, "
-                    + "cannot start or end with a hyphen, "
+                    + "cannot start or end with a hyphen or have 2 consecutive hyphens, "
                     + "and cannot contain underscores, spaces, or symbols.";
 
     // Explanation:

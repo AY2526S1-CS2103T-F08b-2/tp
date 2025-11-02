@@ -32,12 +32,15 @@ public class TelegramTest {
         assertFalse(Telegram.isValidTelegram("jo")); // too short
         assertFalse(Telegram.isValidTelegram("john!doe")); // invalid symbol
         assertFalse(Telegram.isValidTelegram("john_doe_")); // ends with underscore
+        assertFalse(Telegram.isValidTelegram("_johndoe")); // starts with underscore (new constraint)
+        assertFalse(Telegram.isValidTelegram("john__doe")); // consecutive underscores (new constraint)
 
         // valid telegram handles
         assertTrue(Telegram.isValidTelegram("johndoe"));
         assertTrue(Telegram.isValidTelegram("john_doe"));
         assertTrue(Telegram.isValidTelegram("john123"));
         assertTrue(Telegram.isValidTelegram("john_doe123"));
+        assertTrue(Telegram.isValidTelegram("john_doe_1"));
     }
 
     @Test
@@ -60,4 +63,3 @@ public class TelegramTest {
         assertFalse(telegram.equals(new Telegram("janedoe")));
     }
 }
-

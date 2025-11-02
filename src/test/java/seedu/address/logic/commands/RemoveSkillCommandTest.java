@@ -44,7 +44,7 @@ public class RemoveSkillCommandTest {
         expectedModel.setPerson(person, expectedPerson);
 
         String expectedMessage = String.format(RemoveSkillCommand.MESSAGE_REMOVE_SKILL_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -77,7 +77,7 @@ public class RemoveSkillCommandTest {
         expectedModel.setPerson(personWithSkills, expectedPerson);
 
         String expectedMessage = String.format(RemoveSkillCommand.MESSAGE_REMOVE_SKILL_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -110,7 +110,7 @@ public class RemoveSkillCommandTest {
         expectedModel.setPerson(personWithSkills, expectedPerson);
 
         String expectedMessage = String.format(RemoveSkillCommand.MESSAGE_REMOVE_SKILL_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
 
@@ -121,9 +121,7 @@ public class RemoveSkillCommandTest {
         RemoveSkillCommand command = new RemoveSkillCommand(INDEX_FIRST_PERSON, skillNames);
 
         Person person = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        String expectedMessage = String.format(RemoveSkillCommand.MESSAGE_SKILL_NOT_FOUND,
-                "nonexistentskill",
-                Messages.format(person));
+        String expectedMessage = RemoveSkillCommand.MESSAGE_SKILL_NOT_FOUND;
 
         assertCommandFailure(command, model, expectedMessage);
     }
@@ -138,9 +136,7 @@ public class RemoveSkillCommandTest {
         skillNames.add("nonexistentskill");
         RemoveSkillCommand command = new RemoveSkillCommand(INDEX_FIRST_PERSON, skillNames);
 
-        String expectedMessage = String.format(RemoveSkillCommand.MESSAGE_SKILL_NOT_FOUND,
-                "nonexistentskill",
-                Messages.format(person));
+        String expectedMessage = RemoveSkillCommand.MESSAGE_SKILL_NOT_FOUND;
 
         assertCommandFailure(command, model, expectedMessage);
     }

@@ -107,7 +107,8 @@ public class EditCommand extends Command {
         }
 
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
-        return new CommandResult(String.format(MESSAGE_EDIT_PERSON_SUCCESS, Messages.format((Person) editedPerson)));
+        // Succinct success message: only person's name and success verb.
+        return new CommandResult(String.format("%1$s successfully edited.", editedPerson.getName()));
     }
 
     /**

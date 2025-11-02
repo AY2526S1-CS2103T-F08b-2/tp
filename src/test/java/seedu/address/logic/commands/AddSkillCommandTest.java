@@ -45,7 +45,7 @@ public class AddSkillCommandTest {
         Person editedPerson = new PersonBuilder(firstPerson).withSkillSet(updatedSkills).build();
 
         String expectedMessage = String.format(AddSkillCommand.MESSAGE_ADD_SKILL_SUCCESS,
-                Messages.format(editedPerson));
+                editedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -75,10 +75,7 @@ public class AddSkillCommandTest {
         Person editedPerson = new PersonBuilder(firstPerson).withSkillSet(updatedSkills).build();
 
         String expectedMessage = String.format(AddSkillCommand.MESSAGE_SKILL_UPGRADED,
-                existingSkill.skillName,
-                existingSkill.getExperienceLevel().toString(),
-                ExperienceLevel.ADVANCED.toString(),
-                Messages.format(editedPerson));
+                editedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -99,13 +96,8 @@ public class AddSkillCommandTest {
 
         AddSkillCommand addSkillCommand = new AddSkillCommand(INDEX_FIRST_PERSON, skillsToAdd);
 
-        // The skill should remain unchanged (no upgrade)
-        String expectedMessage = String.format(AddSkillCommand.MESSAGE_ADD_SKILL_SUCCESS,
-                Messages.format(firstPerson));
-
-        ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-
-        assertCommandSuccess(addSkillCommand, model, expectedMessage, expectedModel);
+        // Since no change occurs (same skill and level), command should fail with a concise message
+        assertCommandFailure(addSkillCommand, model, AddSkillCommand.MESSAGE_SKILL_ALREADY_PRESENT);
     }
 
     @Test
@@ -134,7 +126,7 @@ public class AddSkillCommandTest {
         Person editedPerson = new PersonBuilder(firstPerson).withSkillSet(updatedSkills).build();
 
         String expectedMessage = String.format(AddSkillCommand.MESSAGE_ADD_SKILL_SUCCESS,
-                Messages.format(editedPerson));
+                editedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -182,4 +174,3 @@ public class AddSkillCommandTest {
         assertEquals(expected, addSkillCommand.toString());
     }
 }
-
