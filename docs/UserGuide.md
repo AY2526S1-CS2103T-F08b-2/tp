@@ -112,6 +112,10 @@ Clears all entries from Mate.
 
 Format: `clear`
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+This action is irreversible! All persons and teams will be permanently deleted. Make sure to backup your data file before clearing if you might need it later.
+</div>
+
 ### Exiting the program : `exit`
 
 Exits the program.
