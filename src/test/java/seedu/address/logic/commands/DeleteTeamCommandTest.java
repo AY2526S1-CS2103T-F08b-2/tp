@@ -165,11 +165,11 @@ public class DeleteTeamCommandTest {
     @Test
     public void execute_deleteTeamWithMultipleMembers_allMembersUpdated() {
         // Create three persons
-        Person person1 = new PersonBuilder().withName("Person 1").withEmail("p1@test.com")
+        Person person1 = new PersonBuilder().withName("Person One").withEmail("p1@test.com")
                 .withTelegram("person1").withGitHub("person1").build();
-        Person person2 = new PersonBuilder().withName("Person 2").withEmail("p2@test.com")
+        Person person2 = new PersonBuilder().withName("Person Two").withEmail("p2@test.com")
                 .withTelegram("person2").withGitHub("person2").build();
-        Person person3 = new PersonBuilder().withName("Person 3").withEmail("p3@test.com")
+        Person person3 = new PersonBuilder().withName("Person Three").withEmail("p3@test.com")
                 .withTelegram("person3").withGitHub("person3").build();
 
         // Create team with all three members

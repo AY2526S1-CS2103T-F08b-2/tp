@@ -189,7 +189,7 @@ public class AddCommandParserTest {
 
         // duplicate skills with different experience levels
         String duplicateSkillDifferentLevels = NAME_DESC_BOB + EMAIL_DESC_BOB
-                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + " s/java:beginner s/java:intermediate";
+                + TELEGRAM_DESC_BOB + GITHUB_DESC_BOB + " sk/java:beginner sk/java:intermediate";
         assertParseFailure(parser, duplicateSkillDifferentLevels,
                 "Duplicate skill detected: java. Each skill can only be added once.");
     }
