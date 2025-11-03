@@ -20,7 +20,7 @@ box Storage STORAGE_COLOR_T1
 participant ":Storage" as Storage STORAGE_COLOR
 end box
 
-User -> UI : createTeam tn/TEAM_NAME hn/HACKATHON_NAME p/1 p/2
+User -> UI : createTeam tn/TEAM_NAME h/HACKATHON_NAME p/1 p/2
 activate UI
 
 UI -> LogicManager : execute(...)

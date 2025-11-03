@@ -32,7 +32,7 @@ deactivate AddressBookParser
 LogicManager -> ListTeamCommand : execute(m)
 activate ListTeamCommand
 
-ListTeamCommand -> Model : updateFilteredTeamList(PREDICATE_SHOW_ALL_TEAMS)
+ListTeamCommand -> Model : retrieve team list
 activate Model
 
 Model --> ListTeamCommand
