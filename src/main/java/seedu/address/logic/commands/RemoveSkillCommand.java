@@ -27,7 +27,7 @@ public class RemoveSkillCommand extends Command {
             + "SKILL [" + PREFIX_SKILL + "MORE_SKILLS]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1 " + PREFIX_SKILL + "java "
             + PREFIX_SKILL + "python " + PREFIX_SKILL + "docker";
-    public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Removed skill(s) from %1$s";
+    public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Edited skill(s) for %1$s";
     public static final String MESSAGE_SKILL_NOT_FOUND = "Skill(s) not found";
     private final Index targetIndex;
     private final Set<String> skillNames;

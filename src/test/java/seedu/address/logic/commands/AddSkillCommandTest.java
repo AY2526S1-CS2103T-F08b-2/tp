@@ -43,9 +43,7 @@ public class AddSkillCommandTest {
         updatedSkills.addAll(skillsToAdd);
 
         Person editedPerson = new PersonBuilder(firstPerson).withSkillSet(updatedSkills).build();
-
-        String expectedMessage = String.format(AddSkillCommand.MESSAGE_ADD_SKILL_SUCCESS,
-                editedPerson.getName());
+        String expectedMessage = String.format(AddSkillCommand.MESSAGE_SKILL_EDITED, editedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -73,9 +71,7 @@ public class AddSkillCommandTest {
         updatedSkills.add(upgradedSkill); // Add upgraded skill
 
         Person editedPerson = new PersonBuilder(firstPerson).withSkillSet(updatedSkills).build();
-
-        String expectedMessage = String.format(AddSkillCommand.MESSAGE_SKILL_UPGRADED,
-                editedPerson.getName());
+        String expectedMessage = String.format(AddSkillCommand.MESSAGE_SKILL_EDITED, editedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -124,9 +120,7 @@ public class AddSkillCommandTest {
         updatedSkills.addAll(skillsToAdd);
 
         Person editedPerson = new PersonBuilder(firstPerson).withSkillSet(updatedSkills).build();
-
-        String expectedMessage = String.format(AddSkillCommand.MESSAGE_ADD_SKILL_SUCCESS,
-                editedPerson.getName());
+        String expectedMessage = String.format(AddSkillCommand.MESSAGE_SKILL_EDITED, editedPerson.getName());
 
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);

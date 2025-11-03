@@ -27,9 +27,8 @@ public class RemoveHackathonCommand extends Command {
             + "Parameters: p/INDEX (must be a positive integer) h/HACKATHON_NAME [h/HACKATHON_NAME]...\n"
             + "Example: " + COMMAND_WORD + " p/1 h/NUSHack h/TechChallenge";
 
-    public static final String MESSAGE_DELETE_HACKATHON_SUCCESS = "Removed hackathon(s) from Person: %1$s";
-    public static final String MESSAGE_HACKATHON_NOT_FOUND = "Hackathon '%1$s' not found in "
-            + "interested list for Person: %2$s";
+    public static final String MESSAGE_DELETE_HACKATHON_SUCCESS = "Removed hackathon(s) from %1$s";
+    public static final String MESSAGE_HACKATHON_NOT_FOUND = "Hackathon(s) not found interested list for %1$s";
     public static final String MESSAGE_HACKATHON_IN_PARTICIPATING = "Cannot remove hackathon '%1$s' "
            + "because you are currently participating in it. Use removePersonFromTeam or deleteTeam first.";
     public static final String MESSAGE_NO_HACKATHONS_PROVIDED = "At least one hackathon must be specified for removal.";
@@ -82,7 +81,7 @@ public class RemoveHackathonCommand extends Command {
         for (HackathonName hackathon : hackathonsToDelete) {
             if (!editedPerson.getInterestedHackathons().contains(hackathon)) {
                 throw new CommandException(String.format(MESSAGE_HACKATHON_NOT_FOUND,
-                        hackathon.value, Messages.format(personToEdit)));
+                        personToEdit.getName()));
             }
             editedPerson = editedPerson.removeInterestedHackathon(hackathon);
         }
@@ -91,7 +90,7 @@ public class RemoveHackathonCommand extends Command {
         logger.info("Successfully removed " + hackathonsToDelete.size() + " hackathon(s) from person at index "
                 + targetIndex.getOneBased());
 
-        return new CommandResult(String.format(MESSAGE_DELETE_HACKATHON_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_DELETE_HACKATHON_SUCCESS, editedPerson.getName()));
     }
 
     @Override
@@ -115,4 +114,3 @@ public class RemoveHackathonCommand extends Command {
                 + ", hackathonsToDelete=" + hackathonsToDelete + "}";
     }
 }
-

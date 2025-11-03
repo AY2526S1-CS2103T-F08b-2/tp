@@ -26,10 +26,8 @@ public class AddSkillCommand extends Command {
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " p/1 sk/java:Advanced sk/python:Intermediate sk/docker";
 
-    public static final String MESSAGE_ADD_SKILL_SUCCESS = "Added skill(s) to %1$s";
-    public static final String MESSAGE_SKILL_UPGRADED = "Upgraded skill(s) for %1$s";
     public static final String MESSAGE_SKILL_ALREADY_PRESENT = "Skill(s) already present";
-    public static final String MESSAGE_SKILL_DOWNGRADED = "Downgraded skill(s) for %1$s";
+    public static final String MESSAGE_SKILL_EDITED = "Edited skill(s) for %1$s";
 
     private final Index targetIndex;
     private final Set<Skill> skillsToAdd;
@@ -115,14 +113,7 @@ public class AddSkillCommand extends Command {
             throw new CommandException(MESSAGE_SKILL_ALREADY_PRESENT);
         }
 
-        // Return appropriate message based on whether downgrade/upgrade occurred
-        if (hasDowngrade) {
-            return new CommandResult(String.format(MESSAGE_SKILL_DOWNGRADED, editedPerson.getName()));
-        }
-        if (hasUpgrade) {
-            return new CommandResult(String.format(MESSAGE_SKILL_UPGRADED, editedPerson.getName()));
-        }
-        return new CommandResult(String.format(MESSAGE_ADD_SKILL_SUCCESS, editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_SKILL_EDITED, editedPerson.getName()));
     }
 
     @Override
