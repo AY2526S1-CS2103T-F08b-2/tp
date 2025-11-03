@@ -24,6 +24,8 @@ Mate is designed for hackathon participants across the technical spectrum — fr
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
+<div style="page-break-after: always;"></div>
+
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
@@ -57,6 +59,8 @@ Mate is designed for hackathon participants across the technical spectrum — fr
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
   e.g. `[h/HACKATHON]…​` can be used as `​` (i.e. 0 times), `h/NUSHacks`, `h/NUSHacks h/NTUHacks` etc.
+
+<div style="page-break-after: always;"></div>
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME t/TELEGRAM`, `t/TELEGRAM  n/NAME` is also acceptable.
@@ -175,7 +179,7 @@ Format: `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`
 * Existing values will be updated to the input values.
 * See [Field Constraints](#field-constraints) for input requirements.
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:"
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use dedicated commands to manage skills (`addSkill`, `removeSkill`) and hackathons (`addHackathon`, `removeHackathon`).
 </div>
 
@@ -235,10 +239,6 @@ Format: `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`
 Examples:
 * `removeHackathon p/2 h/TechChallenge` removes TechChallenge from person 2's interested list.
 * `removeHackathon p/4 h/NUSHack h/iNTUition` removes both hackathons from person 4.
-
-### Team commands (moved to the end)
-
-The following team-related commands are grouped at the end of this section to keep person-focused commands together.
 
 ### Listing all teams : `listTeam`
 
