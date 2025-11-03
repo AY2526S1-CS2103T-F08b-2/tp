@@ -618,8 +618,8 @@ Team size: 5
 
 2. Allow different persons to have the same name and duplicate team names for different hackathons.
    - This would reflect real-world scenarios where multiple individuals may share the same name, and teams may reuse names across different events.
-3. Allow duplicate team names for different hackathons.
-    - This would reflect real-world scenarios where teams may reuse names across different events.
+   
+3. Improve the specificity of error messages e.g. add command error message should specify which fields are missing.
 
 4. Add confirmation before executing the `clear` command. 
    - This would prevent accidental data loss by ensuring that users explicitly confirm their intention to clear all data.
