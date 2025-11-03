@@ -5,7 +5,7 @@ title: About Us
 
 We are a team based in the [School of Computing, National University of Singapore](https://www.comp.nus.edu.sg).
 
-You can reach us at the email `seer[at]comp.nus.edu.sg`
+You can reach us at the email `e1406437@u.nus.edu`
 
 ## Project team
 
@@ -13,9 +13,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/aarontoh.png" width="200px">
 
-[[homepage](http://www.comp.nus.edu.sg/~damithch)]
 [[github](https://github.com/aarontoh)]
-[[portfolio](team/johndoe.md)]
 
 * Role: Code Quality
 
@@ -24,7 +22,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/makis4n.png" width="200px">
 
 [[github](http://github.com/makis4n)]
-[[portfolio](team/johndoe.md)]
 
 * Role: Team Lead
 * Responsibilities: UI
@@ -33,7 +30,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/thejus03.png" width="200px">
 
-[[github](http://github.com/thejus03)] [[portfolio](team/johndoe.md)]
+[[github](http://github.com/thejus03)] 
 
 * Role: Developer
 * Responsibilities: Data
@@ -43,7 +40,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/rihiz.png" width="200px">
 
 [[github](http://github.com/Rihiz)]
-[[portfolio](team/johndoe.md)]
 
 * Role: Developer
 * Responsibilities: Dev Ops + Threading
@@ -53,7 +49,6 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 <img src="images/naresh2478.png" width="200px">
 
 [[github](http://github.com/naresh2478)]
-[[portfolio](team/johndoe.md)]
 
 * Role: Testing
 * Responsibilities: Ensures the testing of the project is done properly and on time.

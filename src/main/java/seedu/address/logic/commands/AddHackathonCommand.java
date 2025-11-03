@@ -27,8 +27,8 @@ public class AddHackathonCommand extends Command {
             + "Example: " + COMMAND_WORD + " p/1 h/NUSHack h/iNTUition";
 
     public static final String MESSAGE_ADD_HACKATHON_SUCCESS = "Added interested hackathon(s) to %1$s";
-    public static final String MESSAGE_ALREADY_PARTICIPATING = "Cannot add hackathon '%1$s' to interested list. "
-            + "You are already participating in this hackathon.";
+    public static final String MESSAGE_ALREADY_PARTICIPATING = "Cannot add hackathon '%2$s' to interested list. "
+            + "\nPerson %1$s is already participating in this hackathon.";
     public static final String MESSAGE_ALREADY_INTERESTED = "Hackathon(s) already present in interested list for %1$s";
 
     private final Index targetIndex;
@@ -68,7 +68,8 @@ public class AddHackathonCommand extends Command {
             // Check if already participating (case-insensitive)
             for (HackathonName participating : participatingHackathons) {
                 if (participating.value.equalsIgnoreCase(hackathonToAdd.value)) {
-                    throw new CommandException(String.format(MESSAGE_ALREADY_PARTICIPATING, hackathonToAdd.value));
+                    throw new CommandException(String.format(MESSAGE_ALREADY_PARTICIPATING,
+                            personToEdit.getName(), hackathonToAdd.value));
                 }
             }
 

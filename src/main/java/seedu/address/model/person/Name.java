@@ -10,13 +10,15 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Name {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Names should only contain alphabetical characters, spaces, and forward slashes (/).";
+            "Names should only contain alphabetical characters, spaces, and at most one forward slash (/).";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
+     * Names can contain at most one forward slash (/).
      */
-    public static final String VALIDATION_REGEX = "[\\p{Alpha}/][\\p{Alpha} /]*";
+    public static final String VALIDATION_REGEX = "\\p{Alpha}[\\p{Alpha} ]*"
+            + "(/\\p{Alpha}[\\p{Alpha} ]*)?|\\p{Alpha}[\\p{Alpha} ]*";
 
     public final String fullName;
 
