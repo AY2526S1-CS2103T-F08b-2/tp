@@ -22,7 +22,7 @@ public class AddHackathonCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds interested hackathons to the person identified by the index number "
             + "in the displayed person list.\n"
-            + "Command is case-insensitive (addhackathon, addHackathon, ADDHACKATHON all work).\n"
+            + "Command is case-insensitive.\n"
             + "Parameters: p/INDEX (must be a positive integer) h/HACKATHON_NAME...\n"
             + "Example: " + COMMAND_WORD + " p/1 h/NUSHack h/iNTUition";
 

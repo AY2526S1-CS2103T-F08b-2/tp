@@ -21,7 +21,7 @@ public class AddSkillCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Adds skills to the person identified by the index number in the displayed person list.\n"
-            + "Command is case-insensitive (addskill, addSkill, ADDSKILL all work).\n"
+            + "Command is case-insensitive.\n"
             + "Parameters: p/INDEX (must be a positive integer) sk/SKILL[:LEVEL]...\n"
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " p/1 sk/java:Advanced sk/python:Intermediate sk/docker";

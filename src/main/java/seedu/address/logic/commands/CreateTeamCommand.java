@@ -39,7 +39,7 @@ public class CreateTeamCommand extends Command {
             + PREFIX_PERSON + "3";
 
     public static final String MESSAGE_SUCCESS = "New team created: %1$s";
-    public static final String MESSAGE_DUPLICATE_TEAM = "This team already exists in the address book";
+    public static final String MESSAGE_DUPLICATE_TEAM = "This team already exists in Mate";
     public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid";
 
     private final TeamName teamName;
