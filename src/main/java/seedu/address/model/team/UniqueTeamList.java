@@ -82,7 +82,15 @@ public class UniqueTeamList implements Iterable<Team> {
      */
     public void remove(Team toRemove) {
         requireNonNull(toRemove);
-        if (!internalList.remove(toRemove)) {
+        boolean removed = false;
+        for (int i = 0; i < internalList.size(); i++) {
+            if (internalList.get(i).isSameTeam(toRemove)) {
+                internalList.remove(i);
+                removed = true;
+                break;
+            }
+        }
+        if (!removed) {
             throw new TeamNotFoundException();
         }
     }

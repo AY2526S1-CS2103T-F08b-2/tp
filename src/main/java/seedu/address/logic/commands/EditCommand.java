@@ -39,8 +39,7 @@ public class EditCommand extends Command {
     public static final String COMMAND_WORD = "edit";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
-            + "by the index number used in the displayed person list. "
-            + "Existing values will be overwritten by the input values.\n"
+            + "by the index number used in the displayed person list.\n"
             + "Parameters: " + PREFIX_PERSON + "INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
@@ -53,6 +52,10 @@ public class EditCommand extends Command {
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
+    public static final String MESSAGE_DUPLICATE_EMAIL = "A person with the same email already exists";
+    public static final String MESSAGE_DUPLICATE_TELEGRAM = "A person with the same telegram handle already exists";
+    public static final String MESSAGE_DUPLICATE_GITHUB = "A person with the same GitHub handle already exists";
+    public static final String MESSAGE_EDIT_SUCCESS = "%1$s successfully edited.";
 
     private final Index index;
     private final EditPersonDescriptor editPersonDescriptor;
@@ -92,13 +95,13 @@ public class EditCommand extends Command {
             for (Person existing : model.getAddressBook().getPersonList()) {
                 if (!existing.isSamePerson(editedPerson)) {
                     if (existing.getEmail().equals(editedPerson.getEmail())) {
-                        throw new CommandException("A person with the same email already exists");
+                        throw new CommandException(MESSAGE_DUPLICATE_EMAIL);
                     }
                     if (existing.getTelegram().equals(editedPerson.getTelegram())) {
-                        throw new CommandException("A person with the same telegram handle already exists");
+                        throw new CommandException(MESSAGE_DUPLICATE_TELEGRAM);
                     }
                     if (existing.getGitHub().equals(editedPerson.getGitHub())) {
-                        throw new CommandException("A person with the same GitHub handle already exists");
+                        throw new CommandException(MESSAGE_DUPLICATE_GITHUB);
                     }
                 }
             }
@@ -108,7 +111,7 @@ public class EditCommand extends Command {
 
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         // Succinct success message: only person's name and success verb.
-        return new CommandResult(String.format("%1$s successfully edited.", editedPerson.getName()));
+        return new CommandResult(String.format(MESSAGE_EDIT_SUCCESS, editedPerson.getName()));
     }
 
     /**

@@ -9,8 +9,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Skill {
 
-    public static final String MESSAGE_CONSTRAINTS = "Skills names should be lowercase alphanumeric "
-            + "and may include '+', '#', '.', '-', or '_' symbols,\n"
+    public static final String MESSAGE_CONSTRAINTS = "Skills names must be alphanumeric "
+            + "and may include the '+', '#', '.', '-', or '_' symbols,\n"
             + "but cannot start with '#' and must be at least 1 character long";
     public static final String VALIDATION_REGEX = "[a-z0-9.][a-z0-9+#._-]*";
 

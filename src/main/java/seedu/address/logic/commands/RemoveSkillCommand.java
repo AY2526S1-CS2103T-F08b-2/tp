@@ -22,7 +22,7 @@ public class RemoveSkillCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Removes the specified skills from the person"
             + " identified by the index number in the displayed person list.\n"
-            + "Command is case-insensitive (removeskill, removeSkill, REMOVESKILL all work).\n"
+            + "Command is case-insensitive.\n"
             + "Parameters:" + PREFIX_PERSON + "INDEX (must be a positive integer) " + PREFIX_SKILL
             + "SKILL [" + PREFIX_SKILL + "MORE_SKILLS]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1 " + PREFIX_SKILL + "java "
