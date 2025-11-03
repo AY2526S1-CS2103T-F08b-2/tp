@@ -107,6 +107,8 @@ Format: `list`
 
 Shows a list of all teams in Mate.
 
+![listedTeams](images/listteam.png)
+
 Format: `listTeam`
 
 ### Clearing all entries : `clear`
