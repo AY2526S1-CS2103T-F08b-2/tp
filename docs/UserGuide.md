@@ -93,6 +93,8 @@ This table summarises the input restrictions for each field in Mate:
 | **Index**     | `p/`   | • Must be a positive integer<br>• Must be valid in the current displayed list                                                                                                                                                                                                                                                       | • `1`<br>• `5`<br>• `100`                                        | • `0`<br>• `-1`<br>• `1.5`<br>• `abc`                |
 | **Keyword**   | `k/`   | • Can contain any characters including spaces                                                                                                                                                                                                                                                                                           | • `John`<br>• `c++`<br>• `AI Hackathon 2024`                     | _(No restrictions)_                                  |
 
+<div style="page-break-after: always;"></div>
+
 ### Viewing help : `help`
 
 Shows a message explaining how to access the help page.
@@ -122,6 +124,8 @@ This action is irreversible! All persons and teams will be permanently deleted. 
 Exits the program.
 
 Format: `exit`
+
+<div style="page-break-after: always;"></div>
 
 ### Adding a person: `add`
 
@@ -156,6 +160,8 @@ Examples:
 * `find k/java k/python` returns persons that have both `java` AND `python` as skills.
 * `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
 
+<div style="page-break-after: always;"></div>
+
 ### Deleting a person : `delete`
 
 Deletes the specified person from Mate.
@@ -187,6 +193,8 @@ Examples:
 * `edit p/2 n/Betsy Crower` edits the name of the 2nd person in the displayed list to `Betsy Crower`.
 * `edit p/1 e/johndoe@example.com t/johndoe_tg` edits the email address and Telegram name of the 1st person in the displayed list.
 
+<div style="page-break-after: always;"></div>
+
 ### Adding skills to a person : `addSkill`
 
 Adds one or more skills (with optional levels) to a person.
@@ -212,6 +220,8 @@ Format: `removeSkill p/INDEX sk/SKILL [sk/SKILL]...`
 
 Examples:
 * `removeSkill p/1 sk/python` removes the Python skill from the 1st person in the displayed list.
+
+<div style="page-break-after: always;"></div>
 
 ### Adding an interested hackathon to a person : `addHackathon`
 
@@ -240,6 +250,8 @@ Examples:
 * `removeHackathon p/2 h/TechChallenge` removes TechChallenge from person 2's interested list.
 * `removeHackathon p/4 h/NUSHack h/iNTUition` removes both hackathons from person 4.
 
+<div style="page-break-after: always;"></div>
+
 ### Listing all teams : `listTeam`
 
 Shows a list of all teams in Mate.
@@ -267,6 +279,8 @@ Make sure to use the `list` command first to see the current index numbers of pe
 
 Examples:
 * `createTeam tn/Alpha Squad h/AI Challenge p/2 p/4 p/5` creates a team called "Alpha Squad" for the "AI Challenge" hackathon with the 2nd, 4th, and 5th persons as members.
+
+<div style="page-break-after: always;"></div>
 
 ### Deleting a team : `deleteTeam`
 
@@ -299,6 +313,8 @@ Format: `addToTeam p/INDEX tn/TEAM_NAME`
 Examples:
 * `addToTeam p/1 tn/Alpha Squad` adds the 1st person to the "Alpha Squad" team.
 
+<div style="page-break-after: always;"></div>
+
 ### Removing a person from a team : `removeFromTeam`
 
 Removes an existing person from an existing team in Mate.
@@ -325,6 +341,8 @@ If your changes to the data file makes its format invalid, Mate will discard all
 Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
+<div style="page-break-after: always;"></div>
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## FAQ
@@ -340,6 +358,8 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
+
+<div style="page-break-after: always;"></div>
 
 ## Command summary
 
