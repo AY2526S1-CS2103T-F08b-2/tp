@@ -26,8 +26,8 @@ public class AddSkillCommand extends Command {
             + "LEVEL can be: Beginner, Intermediate, or Advanced (default: Beginner)\n"
             + "Example: " + COMMAND_WORD + " p/1 sk/java:Advanced sk/python:Intermediate sk/docker";
 
-    public static final String MESSAGE_ADD_SKILL_SUCCESS = "Added skills to Person: %1$s";
-    public static final String MESSAGE_SKILL_UPGRADED = "Upgraded skill '%1$s' from %2$s to %3$s for Person: %4$s";
+    public static final String MESSAGE_SKILL_ALREADY_PRESENT = "Skill(s) already present";
+    public static final String MESSAGE_SKILL_EDITED = "Edited skill(s) for %1$s";
 
     private final Index targetIndex;
     private final Set<Skill> skillsToAdd;
@@ -60,9 +60,7 @@ public class AddSkillCommand extends Command {
         // Create updated skill set
         Set<Skill> updatedSkills = new HashSet<>(existingSkills);
         boolean hasUpgrade = false;
-        String upgradedSkillName = "";
-        String oldLevel = "";
-        String newLevel = "";
+        boolean hasDowngrade = false;
 
         // For each skill to add, check if it exists and compare levels
         for (Skill skillToAdd : skillsToAdd) {
@@ -78,14 +76,17 @@ public class AddSkillCommand extends Command {
 
             if (existingSkill != null) {
                 // Compare experience levels and keep the higher one
-                if (skillToAdd.getExperienceLevel().compareTo(existingSkill.getExperienceLevel()) > 0) {
-                    // New skill has higher level - remove old and add new
+                int cmp = skillToAdd.getExperienceLevel().compareTo(existingSkill.getExperienceLevel());
+                if (cmp > 0) {
+                    // New skill has higher level - remove old and add new (upgrade)
                     updatedSkills.remove(existingSkill);
                     updatedSkills.add(skillToAdd);
                     hasUpgrade = true;
-                    upgradedSkillName = skillToAdd.skillName;
-                    oldLevel = existingSkill.getExperienceLevel().toString();
-                    newLevel = skillToAdd.getExperienceLevel().toString();
+                } else if (cmp < 0) {
+                    // New skill has lower level - remove old and add new (downgrade)
+                    updatedSkills.remove(existingSkill);
+                    updatedSkills.add(skillToAdd);
+                    hasDowngrade = true;
                 }
                 // If new level is same or lower, keep existing skill (do nothing)
             } else {
@@ -107,13 +108,12 @@ public class AddSkillCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
 
-        // Return appropriate message based on whether upgrade occurred
-        if (hasUpgrade && skillsToAdd.size() == 1) {
-            return new CommandResult(String.format(MESSAGE_SKILL_UPGRADED,
-                    upgradedSkillName, oldLevel, newLevel, Messages.format(editedPerson)));
-        } else {
-            return new CommandResult(String.format(MESSAGE_ADD_SKILL_SUCCESS, Messages.format(editedPerson)));
+        // If nothing changed (no new skills added and no upgrades), inform user
+        if (!hasUpgrade && !hasDowngrade && updatedSkills.equals(existingSkills)) {
+            throw new CommandException(MESSAGE_SKILL_ALREADY_PRESENT);
         }
+
+        return new CommandResult(String.format(MESSAGE_SKILL_EDITED, editedPerson.getName()));
     }
 
     @Override

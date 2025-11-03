@@ -62,7 +62,7 @@ public class AddHackathonCommandTest {
                 .build();
 
         String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ADD_HACKATHON_SUCCESS,
-                Messages.format(editedPerson));
+                editedPerson.getName());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -89,7 +89,7 @@ public class AddHackathonCommandTest {
                 .build();
 
         String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ADD_HACKATHON_SUCCESS,
-                Messages.format(editedPerson));
+                editedPerson.getName());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -111,12 +111,10 @@ public class AddHackathonCommandTest {
             AddHackathonCommand addHackathonCommand = new AddHackathonCommand(INDEX_FIRST_PERSON, hackathonsToAdd);
 
             // Should not fail, just keep existing hackathon
-            String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ADD_HACKATHON_SUCCESS,
-                    Messages.format(firstPerson));
+            String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ALREADY_INTERESTED,
+                    firstPerson.getName());
 
-            Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
-
-            assertCommandSuccess(addHackathonCommand, model, expectedMessage, expectedModel);
+            assertCommandFailure(addHackathonCommand, model, expectedMessage);
         }
     }
 
@@ -246,7 +244,7 @@ public class AddHackathonCommandTest {
                 .build();
 
         String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ADD_HACKATHON_SUCCESS,
-                Messages.format(editedPerson));
+                editedPerson.getName());
 
         Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
         expectedModel.setPerson(firstPerson, editedPerson);
@@ -254,4 +252,3 @@ public class AddHackathonCommandTest {
         assertCommandSuccess(addHackathonCommand, model, expectedMessage, expectedModel);
     }
 }
-

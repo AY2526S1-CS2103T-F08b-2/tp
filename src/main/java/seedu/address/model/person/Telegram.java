@@ -13,16 +13,15 @@ public class Telegram {
             "Telegram handles should be 5–32 characters long, "
                     + "contain only letters, numbers, and underscores, "
                     + "cannot start with '@', cannot contain spaces, "
-                    + "cannot start or end with an underscore, "
-                    + "and cannot have consecutive underscores.";
+                    + "cannot start or end with an underscore, and cannot contain consecutive underscores.";
 
-    // Explanation:
-    // (?!@) → must not start with '@'
-    // (?!_) → must not start with '_'
-    // (?!.*__) → must not contain consecutive underscores
-    // (?!.*_$) → must not end with '_'
-    // [A-Za-z0-9_]{5,32} → only valid characters (length 5–32)
-    public static final String VALIDATION_REGEX = "^(?!@)(?!_)(?!.*__)(?!.*_$)[A-Za-z0-9_]{5,32}$";
+    // Explanation of the regex parts:
+    // (?!@)        -> must not start with '@'
+    // (?!.*__)     -> must not contain two consecutive underscores anywhere
+    // (?!_)        -> must not start with an underscore
+    // [A-Za-z0-9_]{5,32} -> only valid characters, length between 5 and 32
+    // (?<!_)       -> must not end with an underscore
+    public static final String VALIDATION_REGEX = "^(?!@)(?!.*__)(?!_)[A-Za-z0-9_]{5,32}(?<!_)$";
 
     public final String value;
 

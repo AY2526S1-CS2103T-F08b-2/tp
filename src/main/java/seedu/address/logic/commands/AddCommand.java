@@ -9,7 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_SKILL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TELEGRAM;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -41,7 +40,7 @@ public class AddCommand extends Command {
             + PREFIX_HACKATHON + "NUSHack "
             + PREFIX_HACKATHON + "iNTUition";
 
-    public static final String MESSAGE_SUCCESS = "New person added: %1$s";
+    public static final String MESSAGE_SUCCESS = "%1$s successfully added.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book";
 
     private final Person toAdd;
@@ -83,7 +82,8 @@ public class AddCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
         }
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format((Person) toAdd)));
+        // Return a succinct success message containing only the person's name.
+        return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd.getName()));
     }
 
     @Override

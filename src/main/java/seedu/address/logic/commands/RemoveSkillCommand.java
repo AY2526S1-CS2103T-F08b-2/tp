@@ -27,8 +27,8 @@ public class RemoveSkillCommand extends Command {
             + "SKILL [" + PREFIX_SKILL + "MORE_SKILLS]...\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_PERSON + "1 " + PREFIX_SKILL + "java "
             + PREFIX_SKILL + "python " + PREFIX_SKILL + "docker";
-    public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Removed skills from Person: %1$s";
-    public static final String MESSAGE_SKILL_NOT_FOUND = "Skill '%1$s' not found for Person: %2$s";
+    public static final String MESSAGE_REMOVE_SKILL_SUCCESS = "Edited skill(s) for %1$s";
+    public static final String MESSAGE_SKILL_NOT_FOUND = "Skill(s) not found";
     private final Index targetIndex;
     private final Set<String> skillNames;
 
@@ -65,14 +65,13 @@ public class RemoveSkillCommand extends Command {
 
             Skill skillToRemove = new Skill(skillName);
             if (!editedPerson.getSkills().contains(skillToRemove)) {
-                throw new CommandException(String.format(MESSAGE_SKILL_NOT_FOUND, skillName,
-                        Messages.format(personToEdit)));
+                throw new CommandException(MESSAGE_SKILL_NOT_FOUND);
             }
             editedPerson = editedPerson.removeSkill(skillToRemove);
         }
 
         model.setPerson(personToEdit, editedPerson);
-        return new CommandResult(String.format(MESSAGE_REMOVE_SKILL_SUCCESS, Messages.format(editedPerson)));
+        return new CommandResult(String.format(MESSAGE_REMOVE_SKILL_SUCCESS, editedPerson.getName()));
     }
 
     @Override

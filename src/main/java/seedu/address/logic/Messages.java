@@ -55,4 +55,13 @@ public class Messages {
         return builder.toString();
     }
 
+    /**
+     * Returns a persons listed overview message with correct singular/plural form.
+     * Per project rule: 0 or 1 -> "person", 2+ -> "persons".
+     */
+    public static String getPersonsListedOverview(int count) {
+        String noun = (count <= 1) ? "person" : "persons";
+        return String.format("%d %s listed!", count, noun);
+    }
+
 }

@@ -26,10 +26,10 @@ public class AddHackathonCommand extends Command {
             + "Parameters: p/INDEX (must be a positive integer) h/HACKATHON_NAME...\n"
             + "Example: " + COMMAND_WORD + " p/1 h/NUSHack h/iNTUition";
 
-    public static final String MESSAGE_ADD_HACKATHON_SUCCESS = "Added interested hackathons to Person: %1$s";
+    public static final String MESSAGE_ADD_HACKATHON_SUCCESS = "Added interested hackathon(s) to %1$s";
     public static final String MESSAGE_ALREADY_PARTICIPATING = "Cannot add hackathon '%1$s' to interested list. "
             + "You are already participating in this hackathon.";
-    public static final String MESSAGE_ALREADY_INTERESTED = "Hackathon '%1$s' is already in the interested list.";
+    public static final String MESSAGE_ALREADY_INTERESTED = "Hackathon(s) already present in interested list for %1$s";
 
     private final Index targetIndex;
     private final Set<HackathonName> hackathonsToAdd;
@@ -99,7 +99,12 @@ public class AddHackathonCommand extends Command {
         );
 
         model.setPerson(personToEdit, editedPerson);
-        return new CommandResult(String.format(MESSAGE_ADD_HACKATHON_SUCCESS, Messages.format(editedPerson)));
+        // If no new hackathons were added, inform user succinctly
+        if (updatedInterestedHackathons.equals(existingInterestedHackathons)) {
+            throw new CommandException(String.format(MESSAGE_ALREADY_INTERESTED, editedPerson.getName()));
+        }
+
+        return new CommandResult(String.format(MESSAGE_ADD_HACKATHON_SUCCESS, editedPerson.getName()));
     }
 
     @Override
@@ -120,4 +125,3 @@ public class AddHackathonCommand extends Command {
         return "AddHackathonCommand{targetIndex=" + targetIndex + ", hackathonsToAdd=" + hackathonsToAdd + "}";
     }
 }
-

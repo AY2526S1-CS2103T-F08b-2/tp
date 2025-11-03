@@ -128,17 +128,41 @@ Adds a person to Mate.
 
 Format: `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [s/SKILL[:LEVEL]]…​ [h/HACKATHON]…​`
 
-* Skills can have an optional level: `Beginner`, `Intermediate`, or `Advanced` (defaults to `Beginner`)
-* Skills are displayed with color-coded backgrounds (Green=Beginner, Blue=Intermediate, Purple=Advanced)
-* Skills are sorted by level, then alphabetically
-* Duplicate skills or hackathons are not allowed
-* See [Field Constraints](#field-constraints) for input requirements
+* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)
+* If no level is specified for a skill, it defaults to `Beginner`
+* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to add multiple hackathons.
+* **Duplicate skills or hackathons are not allowed.**
+* **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon
+* Skills are displayed with color-coded backgrounds in the UI:
+  * **Beginner** - Green background
+  * **Intermediate** - Blue background  
+  * **Advanced** - Purple background
+* Skills are sorted by experience level (Advanced → Intermediate → Beginner), then alphabetically within each level
+* Telegram handle constraints (must meet these or `add` will fail):
+  * 5–32 characters long
+  * contain only letters, numbers, and underscores
+  * cannot start with '@'
+  * cannot contain spaces
+  * cannot start or end with an underscore
+  * cannot contain consecutive underscores
 
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of skills and hackathons (including 0).
-</div>
+  (This matches the app's validation: "Telegram handles should be 5–32 characters long, contain only letters, numbers, and underscores, cannot start with '@', cannot contain spaces, cannot start or end with an underscore, and cannot contain consecutive underscores.")
+* Email constraints (must meet these or `add` will fail):
+  * Format: local-part@domain
+  * Local-part may contain alphanumeric characters and the special characters "+ _ . -" (but may not start or end with one of them)
+  * Domain is made of labels separated by periods; each label must start and end with an alphanumeric character and may contain hyphens
+  * The final domain label must be at least 2 characters long
 
-Examples:
+  (This matches the app's validation: "Emails should be of the format local-part@domain and adhere to the constraints described in the app.")
+* GitHub username constraints (must meet these or `add` will fail):
+  * 1–39 characters long
+  * contain only letters, numbers, or hyphens
+  * cannot start or end with a hyphen
+  * cannot have 2 consecutive hyphens
+  * cannot contain underscores, spaces, or other symbols
+
+  (This matches the app's validation: "GitHub usernames should be 1–39 characters long, contain only letters, numbers, or hyphens, cannot start or end with a hyphen or have 2 consecutive hyphens, and cannot contain underscores, spaces, or symbols.")
+* Examples:
 * `add n/John Doe e/johnd@example.com t/JohnTG g/JohnGH`
 * `add n/Alice e/alice@example.com t/alice_tg g/alice123 s/docker h/TechChallenge`
 * `add n/Betsy Crowe e/betsycrowe@example.com t/Betsygram g/Betsy03 s/c#:Intermediate s/java:Advanced h/NUSHack h/iNTUition`
@@ -236,30 +260,101 @@ Examples:
 
 ### Editing a person : `edit`
 
-Edits an existing person in Mate.
+Edits an existing person's basic contact details in Mate.
 
 Format: `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`
 
-* At least one of the optional fields must be provided
-* Existing values will be updated to the input values
-* See [Field Constraints](#field-constraints) for input requirements
+* Edits the person at the specified `INDEX`.
+  * The index refers to the index number shown in the displayed person list.
+  * The index **must be a positive integer** 1, 2, 3, …​
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+* * Note: The `edit` command does NOT modify a person's skills or interested/participating hackathon lists. To manage those use the dedicated commands: `addSkill`, `addHackathon`, and `removeHackathon`.
+* When editing skills, new skills are added to the existing skills (i.e., adding of skills is cumulative).
+  * If you edit a skill that already exists (same skill name), the experience level will be updated to the new level specified.
+  * `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive).
+  * If no level is specified for a skill, it defaults to `Beginner`.
+* `h/HACKATHON` specifies hackathons the person is interested in. Can be used multiple times to replace all interested hackathons.
+  * **Hackathon names are case-insensitive** - "NUSHack", "nushack", and "NUSHACK" are treated as the same hackathon.
+  * **Important**: You cannot add a hackathon to the interested list if the person is already participating in that hackathon (as part of a team). Doing this will show an error message.
+  * **Participating hackathons are preserved** - editing other fields will not affect hackathons the person is currently participating in through their teams.
+* **Duplicate skills or hackathons are not allowed** - each skill/hackathon can only be added once,
 
 Examples:
-*  `edit p/1 e/johndoe@example.com t/johndoe_tg` Edits the email and Telegram name of the 1st person
+* `edit p/1 e/johndoe@example.com t/johndoe_tg` — Edits the email address and Telegram name of the 1st person.
+* `edit p/2 n/Betsy Crower` — Edits the name of the 2nd person to `Betsy Crower`.
+* `edit p/3 gh/alice-gh` — Edits GitHub username of the 3rd person.
 
 ### Removing a skill from a person : `removeSkill`
 
 Removes a skill from a person in Mate.
 
-Format: `removeSkill p/INDEX s/SKILL`
+Format: `removeSkill p/INDEX s/SKILL [s/SKILL]...`
 
-* Removes the specified `SKILL` from the person at the specified `INDEX`
-* If the person does not have the specified skill, an error message will be shown
+* You may remove multiple skills in a single command by repeating the `s/` prefix (e.g. `s/java s/python`).
+* Removes each specified `SKILL` from the person at the specified `INDEX`.
+* The index refers to the index number shown in the displayed person list.
+* The index **must be a positive integer** 1, 2, 3, …
+* If the person does not have one of the specified skills, an error message will be shown and the command will fail (no partial removal).
 * See [Field Constraints](#field-constraints) for input requirements
 
 Examples:
 * `removeSkill p/2 s/java` removes the skill "java" from the 2nd person in the displayed list
 * `removeSkill p/1 s/python` removes the skill "python" from the 1st person in the displayed list
+
+
+### Adding skills to a person : `addSkill`
+
+Adds one or more skills (with optional levels) to a person identified by index.
+
+Format: `addSkill p/INDEX s/SKILL[:LEVEL] [s/SKILL[:LEVEL]]...`
+
+* You may add multiple skills in a single command (e.g. `s/java s/python:Intermediate`).
+* Adds each specified `SKILL` to the person at the specified `p/INDEX`.
+* `LEVEL` can be: `Beginner`, `Intermediate`, or `Advanced` (default: `Beginner`).
+* Behavior when the skill already exists on the person:
+  * If you add the same skill with a higher level than the existing one, the skill will be upgraded to the higher level.
+  * If you add the same skill with a lower level than the existing one, the skill will be downgraded to the lower level.
+  * If you add the same skill with the same level, nothing will change for that skill (no error).
+* Duplicate skill names (case-insensitive) are treated as the same skill.
+* The index **must be a positive integer** 1, 2, 3, …
+
+Examples:
+* `addSkill p/1 s/java:Advanced` adds Java at Advanced level to person 1 (or upgrades it if a lower level existed).
+* `addSkill p/2 s/python s/docker:Intermediate` adds Python (Beginner) and Docker (Intermediate) to person 2.
+* `addSkill p/3 s/java:Beginner s/java:Advanced` in the same command will result in the higher level (Advanced) being kept for Java.
+
+### Adding an interested hackathon to a person : `addHackathon`
+
+Adds one or more hackathons to a person's interested list.
+
+Format: `addHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`
+
+* Adds each specified hackathon to the person's interested hackathons (replaces nothing — it only adds).
+* Hackathon names are case-insensitive (e.g., `NUSHack`, `nushack` are treated the same).
+* If the person is already participating in a hackathon (via a team), that hackathon cannot be added to the interested list — the command will fail with an error.
+* The index **must be a positive integer** 1, 2, 3, …
+
+Examples:
+* `addHackathon p/1 h/NUSHack` adds NUSHack to person 1's interested list.
+* `addHackathon p/3 h/NUSHack h/iNTUition` adds both hackathons to person 3's interested list.
+
+
+### Removing an interested hackathon from a person : `removeHackathon`
+
+Removes one or more hackathons from a person's interested hackathon list.
+
+Format: `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`
+
+* Removes each specified hackathon from the person's interested list.
+* You cannot remove a hackathon that the person is currently participating in — attempting to do so will fail and suggest removing the person from the team (or deleting the team) first.
+* At least one `h/HACKATHON_NAME` must be provided.
+* Hackathon names are case-insensitive.
+* The index **must be a positive integer** 1, 2, 3, …
+
+Examples:
+* `removeHackathon p/2 h/TechChallenge` removes TechChallenge from person 2's interested list.
+* `removeHackathon p/4 h/NUSHack h/iNTUition` removes both hackathons from person 4.
 
 ### Locating persons : `find`
 
@@ -325,7 +420,10 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 | **Delete Team**             | `deleteTeam tn/TEAM_NAME`<br> e.g., `deleteTeam tn/Tech Innovation`                                                                                                                  |
 | **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                      |
 | **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                             |
-| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`<br> e.g.,`edit p/2 n/James Lee`                                                                                  |
-| **Remove Skill**            | `removeSkill p/INDEX s/SKILL`<br> e.g., `removeSkill p/2 s/Java`                                                                                                                     |
+| **Edit**                    | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`<br> e.g., `edit p/2 n/James Lee`                                                                                 |
+| **Remove Skill**            | `removeSkill p/INDEX s/SKILL [s/SKILL]...`<br> e.g., `removeSkill p/2 s/Java s/Python`                                                                                               |
+| **Add Skill**              | `addSkill p/INDEX s/SKILL[:LEVEL] [s/SKILL[:LEVEL]]...`<br> e.g., `addSkill p/1 s/java:Advanced`, `addSkill p/2 s/python s/docker:Intermediate`                                      |
+| **Add Hackathon**          | `addHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g., `addHackathon p/1 h/NUSHack`, `addHackathon p/3 h/NUSHack h/iNTUition`                                       |
+| **Remove Hackathon**       | `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g., `removeHackathon p/2 h/TechChallenge`, `removeHackathon p/4 h/NUSHack h/iNTUition`                        |
 | **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024`                                                                                   |
 

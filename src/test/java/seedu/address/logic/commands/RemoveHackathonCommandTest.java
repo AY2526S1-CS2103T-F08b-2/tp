@@ -58,7 +58,7 @@ public class RemoveHackathonCommandTest {
         expectedModel.setPerson(personWithHackathon, expectedPerson);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_DELETE_HACKATHON_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
@@ -93,7 +93,7 @@ public class RemoveHackathonCommandTest {
         expectedModel.setPerson(personWithHackathons, expectedPerson);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_DELETE_HACKATHON_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
@@ -120,7 +120,7 @@ public class RemoveHackathonCommandTest {
         RemoveHackathonCommand command = new RemoveHackathonCommand(indexOfPerson, hackathonsToDelete);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_HACKATHON_NOT_FOUND,
-                "TechChallenge", Messages.format(personWithHackathon));
+                personWithHackathon.getName());
 
         assertCommandFailure(command, model, expectedMessage);
     }
@@ -209,7 +209,7 @@ public class RemoveHackathonCommandTest {
         expectedModel.setPerson(personWithHackathon, expectedPerson);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_DELETE_HACKATHON_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
@@ -244,7 +244,7 @@ public class RemoveHackathonCommandTest {
         expectedModel.setPerson(personWithHackathons, expectedPerson);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_DELETE_HACKATHON_SUCCESS,
-                Messages.format(expectedPerson));
+                expectedPerson.getName());
 
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
     }
@@ -373,4 +373,3 @@ public class RemoveHackathonCommandTest {
         assertCommandFailure(command, model, expectedMessage);
     }
 }
-

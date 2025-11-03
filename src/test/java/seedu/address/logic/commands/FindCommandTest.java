@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.Messages.MESSAGE_PERSONS_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 import static seedu.address.testutil.TypicalPersons.BENSON;
@@ -15,6 +14,7 @@ import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
 
+import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -56,7 +56,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_zeroKeywords_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getPersonsListedOverview(0);
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -67,7 +67,7 @@ public class FindCommandTest {
     @Test
     public void execute_multipleKeywords_personFound() {
         // Test AND logic: both keywords must match
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("Alice java");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -77,7 +77,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_githubKeyword_personFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("alice-github");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -87,7 +87,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_telegramKeyword_personFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("benson_tg");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -97,7 +97,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_partialGithubKeyword_personFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("alice-github");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -107,7 +107,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_partialTelegramKeyword_personFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("carl_tg");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -118,7 +118,7 @@ public class FindCommandTest {
     @Test
     public void execute_multipleGithubKeywords_noPersonFound() {
         // Test AND logic: no person has both alice-github AND benson-github
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getPersonsListedOverview(0);
         NameContainsKeywordsPredicate predicate = preparePredicate("alice-github benson-github");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -129,7 +129,7 @@ public class FindCommandTest {
     @Test
     public void execute_multipleTelegramKeywords_noPersonFound() {
         // Test AND logic: no person has both elle_tg AND fiona_tg
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getPersonsListedOverview(0);
         NameContainsKeywordsPredicate predicate = preparePredicate("elle_tg fiona_tg");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -140,7 +140,7 @@ public class FindCommandTest {
     @Test
     public void execute_mixedKeywords_personFound() {
         // Test AND logic: searching for name AND github username in same person
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("Alice alice-github");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -150,7 +150,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_nonExistentGithubKeyword_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getPersonsListedOverview(0);
         NameContainsKeywordsPredicate predicate = preparePredicate("nonexistent-github");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -160,7 +160,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_nonExistentTelegramKeyword_noPersonFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 0);
+        String expectedMessage = Messages.getPersonsListedOverview(0);
         NameContainsKeywordsPredicate predicate = preparePredicate("nonexistent_tg");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -170,7 +170,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_githubKeywordCaseInsensitive_personFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("ALICE-GITHUB");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -180,7 +180,7 @@ public class FindCommandTest {
 
     @Test
     public void execute_telegramKeywordCaseInsensitive_personFound() {
-        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        String expectedMessage = Messages.getPersonsListedOverview(1);
         NameContainsKeywordsPredicate predicate = preparePredicate("BENSON_TG");
         FindCommand command = new FindCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
@@ -203,3 +203,4 @@ public class FindCommandTest {
         return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
     }
 }
+
