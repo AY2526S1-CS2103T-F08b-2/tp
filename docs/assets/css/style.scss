@@ -10,39 +10,3 @@
     height: 21px;
     width: 21px
 }
-
-/* Print-specific styles for PDF export */
-@media print {
-  /* Force page break after elements with page-break-after style */
-  div[style*="page-break-after: always"] {
-    page-break-after: always;
-  }
-
-  /* Prevent page breaks inside tables */
-  table {
-    page-break-inside: avoid;
-  }
-
-  /* Prevent page breaks inside table rows */
-  tr {
-    page-break-inside: avoid;
-    page-break-after: auto;
-  }
-
-  /* Allow page breaks between table rows when needed */
-  tbody tr {
-    page-break-inside: avoid;
-  }
-
-  /* Ensure table headers repeat on each page */
-  thead {
-    display: table-header-group;
-  }
-
-  /* Add spacing after page breaks */
-  div[style*="page-break-after: always"] + * {
-    margin-top: 0;
-    padding-top: 0;
-  }
-}
-
