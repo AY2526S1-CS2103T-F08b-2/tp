@@ -254,6 +254,7 @@ Adds one or more skills (with optional levels) to a person.
 Format: `addSkill p/INDEX sk/SKILL[:LEVEL] [sk/SKILL[:LEVEL]]...`
 
 * If the skill already exists, it will be upgraded/downgraded to the new level.
+* Duplicate skills in the parameters with different levels will cause the command to fail (no partial addition).
 * See [Field Constraints](#field-constraints) for input requirements.
 
 Examples:
