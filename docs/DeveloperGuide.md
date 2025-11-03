@@ -9,7 +9,6 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
 * Based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org/).
 * UML diagrams generated using [PlantUML](https://github.com/plantuml)
 
@@ -602,7 +601,9 @@ testers are expected to do more *exploratory* testing.
 ## **Appendix: Effort**
 
 - While AB3 primarily deals with the person object in the model component, Mate extends this functionality by introducing a team object. The team object encapsulates a collection of person objects, allowing users to group individuals based on shared skills and hackathon participation. This extension required significant modifications to the model component to accommodate team management features, including creating, listing, and modifying teams.
+
 - Additionally, several of the new commands introduced like `addToTeam` and `removeFromTeam` required careful handling of the relationships between persons and teams, as there was a bidirectional association that needed to be maintained.
+
 - Other commands like `createTeam` also required deliberation on what should be allowed, such as preventing duplicate team names for the same hackathon and ensuring that a person cannot be added to multiple teams for the same hackathon.
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -611,12 +612,32 @@ testers are expected to do more *exploratory* testing.
 
 Team size: 5
 
-1. Allow users to view both individual list and team list side by side in the UI. This would enable users easily reference person indexes or team names when editing individual or team details.
-2. Allow different persons to have the same name. This would reflect real-world scenarios where multiple individuals may share the same name.
-3. Allow user to add or remove multiple persons to/from a team in one command. This would streamline the process of managing team memberships, especially for larger teams.
-4. Add confirmation before executing the `clear` command. This would prevent accidental data loss by ensuring that users explicitly confirm their intention to clear all data.
-5. Show list of commands when `help` command is executed, instead of only providing the link to the user guide. This would provide users with a quick reference to available commands and their usage, enhancing user experience.
-6. Allow users to find by level of skill instead of just skill name. This would enable users to search for individuals based on proficiency levels, facilitating the formation of balanced teams.
-7. Improve duplicate detection for teams. Currently, "NUSHacks", "NUS Hacks", and "NUS  Hacks" are treated as different hackathons. Implementing a more robust duplicate detection mechanism would help maintain data integrity and prevent confusion.
-8. Provide users with an OR search option. The current `find` command uses an AND search by default (to find an exact search in the context of finding hackathon teammates). An OR search option would allow users to retrieve results even if he or she only matches some of the search criteria.
-9. Provide short forms alternatives for commonly used commands. This would enhance user convenience by allowing quicker command entry.
+1. Allow users to view both individual list and team list side by side in the UI. 
+   - This would enable users easily reference person indexes or team names when editing individual or team details.  
+
+2. Allow different persons to have the same name. 
+   - This would reflect real-world scenarios where multiple individuals may share the same name.
+
+3. Allow user to add or remove multiple persons to/from a team in one command. 
+   - This would streamline the process of managing team memberships, especially for larger teams.
+
+4. Add confirmation before executing the `clear` command. 
+   - This would prevent accidental data loss by ensuring that users explicitly confirm their intention to clear all data.
+
+5. Show list of commands when `help` command is executed, instead of only providing the link to the user guide. 
+   - This would provide users with a quick reference to available commands and their usage, enhancing user experience.
+
+6. Allow users to find by level of skill instead of just skill name. 
+   - This would enable users to search for individuals based on proficiency levels, facilitating the formation of balanced teams.
+
+7. Improve duplicate detection for teams. Currently, "NUSHacks", "NUS Hacks", and "NUS  Hacks" are treated as different hackathons. 
+   - Implementing a more robust duplicate detection mechanism would help maintain data integrity and prevent confusion.
+
+8. Provide users with an OR search option. The current `find` command uses an AND search by default (to find an exact search in the context of finding hackathon teammates). 
+   - An OR search option would allow users to retrieve results even if he or she only matches some of the search criteria.
+
+9. Provide short forms alternatives for commonly used commands. 
+   - This would enhance user convenience by allowing quicker command entry.
+
+10. Allow duplicate team names for different hackathons. 
+   - This would reflect real-world scenarios where teams may reuse names across different events.
