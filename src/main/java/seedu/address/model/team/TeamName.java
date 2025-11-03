@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class TeamName {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Team names should only contain alphanumeric characters and spaces, and it should not be blank";
+            "Team names should only contain alphanumeric characters and spaces.";
 
     public static final String VALIDATION_REGEX = "[\\p{Alnum}][\\p{Alnum} ]*";
 

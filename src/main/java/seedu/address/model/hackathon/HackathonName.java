@@ -10,7 +10,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class HackathonName {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Hackathon names should only contain alphanumeric characters and spaces, and it should not be blank";
+            "Hackathon names should only contain alphanumeric characters and spaces.";
 
     /*
      * The first character of the hackathon name must not be a whitespace,
