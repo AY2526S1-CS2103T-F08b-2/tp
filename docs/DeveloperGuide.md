@@ -639,5 +639,5 @@ Team size: 5
 9. Provide short forms alternatives for commonly used commands. 
    - This would enhance user convenience by allowing quicker command entry.
 
-10. Allow duplicate team names for different hackathons. 
+10. Allow duplicate team names for different hackathons.
    - This would reflect real-world scenarios where teams may reuse names across different events.
