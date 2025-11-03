@@ -11,6 +11,7 @@ title: Developer Guide
 
 * Based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org/).
 * UML diagrams generated using [PlantUML](https://github.com/plantuml)
+* All members of the team were assisted by GitHub Copilot in generating code snippets and debugging errors.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -615,11 +616,10 @@ Team size: 5
 1. Allow users to view both individual list and team list side by side in the UI. 
    - This would enable users easily reference person indexes or team names when editing individual or team details.  
 
-2. Allow different persons to have the same name. 
-   - This would reflect real-world scenarios where multiple individuals may share the same name.
-
-3. Allow user to add or remove multiple persons to/from a team in one command. 
-   - This would streamline the process of managing team memberships, especially for larger teams.
+2. Allow different persons to have the same name and duplicate team names for different hackathons.
+   - This would reflect real-world scenarios where multiple individuals may share the same name, and teams may reuse names across different events.
+3. Allow duplicate team names for different hackathons.
+    - This would reflect real-world scenarios where teams may reuse names across different events.
 
 4. Add confirmation before executing the `clear` command. 
    - This would prevent accidental data loss by ensuring that users explicitly confirm their intention to clear all data.
@@ -639,5 +639,5 @@ Team size: 5
 9. Provide short forms alternatives for commonly used commands. 
    - This would enhance user convenience by allowing quicker command entry.
 
-10. Allow duplicate team names for different hackathons. 
-    - This would reflect real-world scenarios where teams may reuse names across different events.
+10. Allow user to add or remove multiple persons to/from a team in one command.
+    - This would streamline the process of managing team memberships, especially for larger teams.
