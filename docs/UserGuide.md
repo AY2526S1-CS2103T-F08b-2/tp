@@ -103,12 +103,6 @@ Shows a list of all persons in Mate.
 
 Format: `list`
 
-### Listing all teams : `listTeam`
-
-Shows a list of all teams in Mate.
-
-Format: `listTeam`
-
 ### Clearing all entries : `clear`
 
 Clears all entries from Mate.
@@ -142,6 +136,22 @@ Examples:
 * `add n/Alice e/alice@example.com t/alice_tg g/alice123 sk/docker h/TechChallenge`
 * `add n/Betsy Crowe e/betsycrowe@example.com t/Betsygram g/Betsy03 sk/c#:Intermediate sk/java:Advanced h/NUSHack h/iNTUition`
 
+### Locating persons : `find`
+
+Finds persons who match **all** the given keywords.
+
+Format: `find k/KEYWORD [k/MORE_KEYWORDS]…​`
+
+* Searches across name, email, Telegram, GitHub, skills, and hackathons.
+* Returns persons matching **all** keywords (AND search).
+* Partial matching is supported (e.g. `NUS` matches `NUSHack` and `NUS TechJam`).
+* See [Field Constraints](#field-constraints) for input requirements.
+
+Examples:
+* `find k/John` returns persons with name `john` or `John Doe`, or email `john@example.com`, or Telegram `john123`
+* `find k/java k/python` returns persons that have both `java` AND `python` as skills.
+* `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
+
 ### Deleting a person : `delete`
 
 Deletes the specified person from Mate.
@@ -154,68 +164,6 @@ Format: `delete p/INDEX`
 Examples:
 * `list` followed by `delete p/2` deletes the 2nd person in the displayed list.
 * `find k/Betsy` followed by `delete p/1` deletes the 1st person in the results of the `find` command.
-
-### Creating a team : `createTeam`
-
-Creates a new team in Mate with the specified team members.
-
-Format: `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​`
-
-* A team can be created with zero or more members.
-* Team members cannot be in multiple teams for the same hackathon.
-* The hackathon is automatically moved from interested to participating hackathons for all members.
-* See [Field Constraints](#field-constraints) for input requirements.
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Make sure to use the `list` command first to see the current index numbers of persons before creating a team.
-</div>
-
-Examples:
-* `createTeam tn/Alpha Squad h/AI Challenge p/2 p/4 p/5` creates a team called "Alpha Squad" for the "AI Challenge" hackathon with the 2nd, 4th, and 5th persons as members.
-
-### Deleting a team : `deleteTeam`
-
-Deletes a team from Mate and removes all members from that team.
-
-Format: `deleteTeam tn/TEAM_NAME`
-
-* All team members are automatically removed from the team.
-* The team's hackathon is removed from all members' participating hackathons (but NOT added back to interested hackathons).
-* See [Field Constraints](#field-constraints) for input requirements.
-
-<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-Use the `listTeam` command first to see the team names before deleting one.
-</div>
-
-Examples:
-* `deleteTeam tn/Alpha Squad` deletes the team named "Alpha Squad".
-
-### Adding a person to a team : `addToTeam`
-
-Adds an existing person to an existing team in Mate.
-
-Format: `addToTeam p/INDEX tn/TEAM_NAME`
-
-* The team must already exist.
-* A person can be in multiple teams for different hackathons, but not multiple teams for the same hackathon.
-* The team's hackathon is automatically moved from interested to participating hackathons for the person.
-* See [Field Constraints](#field-constraints) for input requirements.
-
-Examples:
-* `addToTeam p/1 tn/Alpha Squad` adds the 1st person to the "Alpha Squad" team.
-
-### Removing a person from a team : `removeFromTeam`
-
-Removes an existing person from an existing team in Mate.
-
-Format: `removeFromTeam p/INDEX tn/TEAM_NAME`
-
-* The team must already exist and the person must be a member.
-* The team's hackathon is automatically moved from participating to interested hackathons for the person.
-* See [Field Constraints](#field-constraints) for input requirements.
-
-Examples:
-* `removeFromTeam p/1 tn/Alpha Squad` removes the 1st person in the displayed list from the "Alpha Squad" team.
 
 ### Editing a person : `edit`
 
@@ -288,21 +236,79 @@ Examples:
 * `removeHackathon p/2 h/TechChallenge` removes TechChallenge from person 2's interested list.
 * `removeHackathon p/4 h/NUSHack h/iNTUition` removes both hackathons from person 4.
 
-### Locating persons : `find`
+### Team commands (moved to the end)
 
-Finds persons who match **all** the given keywords.
+The following team-related commands are grouped at the end of this section to keep person-focused commands together.
 
-Format: `find k/KEYWORD [k/MORE_KEYWORDS]…​`
+### Listing all teams : `listTeam`
 
-* Searches across name, email, Telegram, GitHub, skills, and hackathons.
-* Returns persons matching **all** keywords (AND search).
-* Partial matching is supported (e.g. `NUS` matches `NUSHack` and `NUS TechJam`).
+Shows a list of all teams in Mate.
+
+Format: `listTeam`
+
+### Creating a team : `createTeam`
+
+Creates a new team in Mate with the specified team members.
+
+Format: `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​`
+
+* A team can be created with zero or more members.
+* Team members cannot be in multiple teams for the same hackathon.
+* The hackathon is automatically moved from interested to participating hackathons for all members.
+* See [Field Constraints](#field-constraints) for input requirements.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Make sure to use the `list` command first to see the current index numbers of persons before creating a team.
+</div>
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If you accidentally provide the same person index multiple times (for example `p/1 p/1 p/1`), Mate will de-duplicate the indices when creating the team — the team will contain that single person only. To avoid surprises, ensure you pass each member's index once.</div>
+
+Examples:
+* `createTeam tn/Alpha Squad h/AI Challenge p/2 p/4 p/5` creates a team called "Alpha Squad" for the "AI Challenge" hackathon with the 2nd, 4th, and 5th persons as members.
+
+### Deleting a team : `deleteTeam`
+
+Deletes a team from Mate and removes all members from that team.
+
+Format: `deleteTeam tn/TEAM_NAME`
+
+* All team members are automatically removed from the team.
+* The team's hackathon is removed from all members' participating hackathons (but NOT added back to interested hackathons).
+* See [Field Constraints](#field-constraints) for input requirements.
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+Use the `listTeam` command first to see the team names before deleting one.
+</div>
+
+Examples:
+* `deleteTeam tn/Alpha Squad` deletes the team named "Alpha Squad".
+
+### Adding a person to a team : `addToTeam`
+
+Adds an existing person to an existing team in Mate.
+
+Format: `addToTeam p/INDEX tn/TEAM_NAME`
+
+* The team must already exist.
+* A person can be in multiple teams for different hackathons, but not multiple teams for the same hackathon.
+* The team's hackathon is automatically moved from interested to participating hackathons for the person.
 * See [Field Constraints](#field-constraints) for input requirements.
 
 Examples:
-* `find k/John` returns persons with name `john` or `John Doe`, or email `john@example.com`, or Telegram `john123`
-* `find k/java k/python` returns persons that have both `java` AND `python` as skills.
-* `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
+* `addToTeam p/1 tn/Alpha Squad` adds the 1st person to the "Alpha Squad" team.
+
+### Removing a person from a team : `removeFromTeam`
+
+Removes an existing person from an existing team in Mate.
+
+Format: `removeFromTeam p/INDEX tn/TEAM_NAME`
+
+* The team must already exist and the person must be a member.
+* The team's hackathon is automatically moved from participating to interested hackathons for the person.
+* See [Field Constraints](#field-constraints) for input requirements.
+
+Examples:
+* `removeFromTeam p/1 tn/Alpha Squad` removes the 1st person in the displayed list from the "Alpha Squad" team.
 
 ### Saving the data
 
@@ -339,19 +345,18 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Help**                    | `help`                                                                                                                                                                                |
 | **List**                    | `list`                                                                                                                                                                                |
-| **List Team**               | `listTeam`                                                                                                                                                                            |
 | **Clear**                   | `clear`                                                                                                                                                                               |
 | **Exit**                    | `exit`                                                                                                                                                                                |
 | **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [sk/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g. `add n/John Doe e/johnd@example.com t/JohnTG g/JohnGH sk/Python:Advanced h/NUSHack` |
+| **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g. `find k/Java`                                                                                                                           |
 | **Delete Person**           | `delete p/INDEX`<br> e.g. `delete p/3`                                                                                                                                                |
 | **Edit Person**             | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`<br> e.g. `edit p/2 n/James Lee`                                                                                   |
-| **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g. `find k/Java`                                                                                                                           |
+| **Remove Skill**            | `removeSkill p/INDEX sk/SKILL [sk/SKILL]...`<br> e.g. `removeSkill p/1 sk/Java`                                                                                                       |
+| **Add Skill**               | `addSkill p/INDEX sk/SKILL[:LEVEL] [sk/SKILL[:LEVEL]]...`<br> e.g. `addSkill p/1 sk/java:Advanced`                                                                                    |
+| **Add Hackathon**           | `addHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g. `addHackathon p/1 h/NUSHack`                                                                                   |
+| **Remove Hackathon**        | `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g. `removeHackathon p/1 h/NUSHack`                                                                             |
+| **List Team**               | `listTeam`                                                                                                                                                                            |
 | **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g. `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                              |
 | **Delete Team**             | `deleteTeam tn/TEAM_NAME`<br> e.g. `deleteTeam tn/Development Team`                                                                                                                   |
 | **Add Person to Team**      | `addToTeam p/INDEX tn/TEAM_NAME` <br> e.g. `addToTeam p/3 tn/Development Team`                                                                                                        |
 | **Remove Person from Team** | `removeFromTeam p/INDEX tn/TEAM_NAME` <br> e.g. `removeFromTeam p/3 tn/Development Team`                                                                                              |
-| **Add Skill**               | `addSkill p/INDEX sk/SKILL[:LEVEL] [sk/SKILL[:LEVEL]]...`<br> e.g. `addSkill p/1 sk/java:Advanced`                                                                                    |
-| **Remove Skill**            | `removeSkill p/INDEX sk/SKILL [sk/SKILL]...`<br> e.g. `removeSkill p/1 sk/Java`                                                                                                       |
-| **Add Hackathon**           | `addHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g. `addHackathon p/1 h/NUSHack`                                                                                   |
-| **Remove Hackathon**        | `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g. `removeHackathon p/1 h/NUSHack`                                                                             |
-
