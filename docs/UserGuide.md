@@ -24,7 +24,6 @@ Mate is designed for hackathon participants across the technical spectrum — fr
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
-<div style="page-break-after: always;"></div>
 
 5. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
@@ -160,7 +159,6 @@ Examples:
 * `find k/java k/python` returns persons that have both `java` AND `python` as skills.
 * `find k/AI Hackathon 2024` returns persons interested in or participating in hackathons containing `AI Hackathon 2024`
 
-<div style="page-break-after: always;"></div>
 
 ### Deleting a person : `delete`
 
@@ -259,6 +257,8 @@ Shows a list of all teams in Mate.
 ![listedTeams](images/listteam.png)
 
 Format: `listTeam`
+
+<div style="page-break-after: always;"></div>
 
 ### Creating a team : `createTeam`
 
