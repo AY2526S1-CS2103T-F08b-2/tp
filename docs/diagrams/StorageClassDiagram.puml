@@ -21,7 +21,6 @@ Class JsonSerializableAddressBook
 Class JsonAdaptedPerson
 Class JsonAdaptedTeam
 Class JsonAdaptedSkill
-Class JsonAdaptedTag
 }
 
 }
@@ -42,7 +41,6 @@ JsonAddressBookStorage ..> JsonSerializableAddressBook
 JsonSerializableAddressBook --> "*" JsonAdaptedPerson
 JsonSerializableAddressBook --> "*" JsonAdaptedTeam
 JsonAdaptedTeam --> "*" JsonAdaptedPerson
-JsonAdaptedPerson --> "*" JsonAdaptedTag
 JsonAdaptedPerson --> "*" JsonAdaptedSkill
 
 @enduml

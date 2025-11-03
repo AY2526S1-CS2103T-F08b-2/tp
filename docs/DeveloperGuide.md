@@ -10,6 +10,8 @@ title: Developer Guide
 ## **Acknowledgements**
 
 * {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+* Based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org/).
+* UML diagrams generated using [PlantUML](https://github.com/plantuml)
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -127,7 +129,7 @@ The `Model` component,
 * stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Skill` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Skill` object per unique skill, instead of each `Person` needing their own `Skill` objects.<br>
 
 <img src="images/BetterModelClassDiagram.png" width="450" />
 
@@ -195,20 +197,20 @@ createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]...
 
 Given below is an example usage scenario:
 
-Step 1. The user has a list of persons displayed and wants to create a team for "Hackathon 2024" with persons at indices 1 and 3.
+1. The user has a list of persons displayed and wants to create a team for "Hackathon 2024" with persons at indices 1 and 3.
 
-Step 2. The user executes `createTeam tn/Development Team h/Hackathon 2024 p/1 p/3`.
+2. The user executes `createTeam tn/Development Team h/Hackathon 2024 p/1 p/3`.
 
-Step 3. The command is parsed and `CreateTeamCommand` is executed with the following validations:
+3. The command is parsed and `CreateTeamCommand` is executed with the following validations:
 * Check that indices 1 and 3 are within bounds of the filtered person list
 * Check if a team with the name "Development Team" already exists
 * Retrieve the persons at these indices
 * Ensure neither person is already in a team for "Hackathon 2024"
 * Create a `Team` object with name "Development Team", hackathon "Hackathon 2024", and the two selected persons
 
-Step 4. The team is added to the model's team list.
+4. The team is added to the model's team list.
 
-Step 5. A success message is displayed showing the created team details.
+5. A success message is displayed showing the created team details.
 
 **Error Handling:**
 
@@ -247,12 +249,12 @@ The `CreateTeamCommand` handles several error cases:
 
 The List Teams feature allows users to view all teams created in Mate. This feature is implemented through the `ListTeamsCommand` class.
 
-Step 1. The user enters a `listTeams` command.
-Step 2. `AddressBookParser` recognizes the `listTeams` command word and creates a `ListTeamsCommand` object.
-Step 3. When executed, `ListTeamsCommand` performs the following:
+1. The user enters a `listTeams` command.
+2. `AddressBookParser` recognizes the `listTeams` command word and creates a `ListTeamsCommand` object.
+3. When executed, `ListTeamsCommand` performs the following:
 * Retrieves the list of all teams from the model.
 * Updates the filtered team list in the model to show all teams.
-Step 4. A `CommandResult` is returned with a message indicating that all teams are being listed.
+4. A `CommandResult` is returned with a message indicating that all teams are being listed.
 
 The following sequence diagram illustrates the interactions within the system when a user executes a list teams command:
 
@@ -381,13 +383,6 @@ The following activity diagram summarizes what happens when a user executes a ne
   itself.
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
-
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -619,3 +614,9 @@ Team size: 5
 1. Allow users to view both individual list and team list side by side in the UI. This would enable users easily reference person indexes or team names when editing individual or team details.
 2. Allow different persons to have the same name. This would reflect real-world scenarios where multiple individuals may share the same name.
 3. Allow user to add or remove multiple persons to/from a team in one command. This would streamline the process of managing team memberships, especially for larger teams.
+4. Add confirmation before executing the `clear` command. This would prevent accidental data loss by ensuring that users explicitly confirm their intention to clear all data.
+5. Show list of commands when `help` command is executed, instead of only providing the link to the user guide. This would provide users with a quick reference to available commands and their usage, enhancing user experience.
+6. Allow users to find by level of skill instead of just skill name. This would enable users to search for individuals based on proficiency levels, facilitating the formation of balanced teams.
+7. Improve duplicate detection for teams. Currently, "NUSHacks", "NUS Hacks", and "NUS  Hacks" are treated as different hackathons. Implementing a more robust duplicate detection mechanism would help maintain data integrity and prevent confusion.
+8. Provide users with an OR search option. The current `find` command uses an AND search by default (to find an exact search in the context of finding hackathon teammates). An OR search option would allow users to retrieve results even if he or she only matches some of the search criteria.
+9. Provide short forms alternatives for commonly used commands. This would enhance user convenience by allowing quicker command entry.
