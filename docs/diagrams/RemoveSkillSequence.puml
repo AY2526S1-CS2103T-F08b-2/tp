@@ -6,19 +6,18 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
 participant ":AddressBookParser" as AddressBookParser LOGIC_COLOR
 participant ":RemoveSkillCommandParser" as RemoveSkillCommandParser LOGIC_COLOR
-participant "r:RemoveSkillCommand" as RemoveSkillCommand LOGIC_COLOR
-participant "result:CommandResult" as CommandResult LOGIC_COLOR
+participant ":RemoveSkillCommand" as RemoveSkillCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
 participant "m:Model" as Model MODEL_COLOR
-participant "personToEdit:Person" as Person MODEL_COLOR
 end box
 
-[-> LogicManager : execute("removeSkill 1 Java")
+[-> LogicManager : execute("removeSkill p/1 sk/Java")
 activate LogicManager
 
-LogicManager -> AddressBookParser : parseCommand("removeSkill 1 Java")
+LogicManager -> AddressBookParser : parseCommand(...)
 activate AddressBookParser
 
 create RemoveSkillCommandParser
@@ -28,7 +27,7 @@ activate RemoveSkillCommandParser
 RemoveSkillCommandParser --> AddressBookParser
 deactivate RemoveSkillCommandParser
 
-AddressBookParser -> RemoveSkillCommandParser : parse("1 Java")
+AddressBookParser -> RemoveSkillCommandParser : parse(...)
 activate RemoveSkillCommandParser
 
 create RemoveSkillCommand
@@ -38,34 +37,23 @@ activate RemoveSkillCommand
 RemoveSkillCommand --> RemoveSkillCommandParser :
 deactivate RemoveSkillCommand
 
-RemoveSkillCommandParser --> AddressBookParser : r
+RemoveSkillCommandParser --> AddressBookParser :
 deactivate RemoveSkillCommandParser
 'Hidden arrow to position the destroy marker below the end of the activation bar.
 RemoveSkillCommandParser -[hidden]-> AddressBookParser
 destroy RemoveSkillCommandParser
 
-AddressBookParser --> LogicManager : r
+AddressBookParser --> LogicManager :
 deactivate AddressBookParser
 
-LogicManager -> RemoveSkillCommand : execute(m)
+LogicManager -> RemoveSkillCommand : execute(...)
 activate RemoveSkillCommand
 
-RemoveSkillCommand -> Model : getFilteredPersonList()
+RemoveSkillCommand -> Model : update person in model
 activate Model
 
-Model --> RemoveSkillCommand : lastShownList
-deactivate Model
+Model --> RemoveSkillCommand :
 
-RemoveSkillCommand -> Person : removeSkill(skillToRemove)
-activate Person
-
-Person --> RemoveSkillCommand : editedPerson
-deactivate Person
-
-RemoveSkillCommand -> Model : setPerson(personToEdit, editedPerson)
-activate Model
-
-Model --> RemoveSkillCommand
 deactivate Model
 
 create CommandResult
@@ -75,7 +63,7 @@ activate CommandResult
 CommandResult --> RemoveSkillCommand
 deactivate CommandResult
 
-RemoveSkillCommand --> LogicManager : result
+RemoveSkillCommand --> LogicManager : r
 deactivate RemoveSkillCommand
 
 [<--LogicManager

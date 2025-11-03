@@ -201,7 +201,7 @@ Step 2. The user executes `createTeam tn/Development Team h/Hackathon 2024 p/1 p
 
 Step 3. The command is parsed and `CreateTeamCommand` is executed with the following validations:
 * Check that indices 1 and 3 are within bounds of the filtered person list
-* Check if a team with the name "Development Team" for "Hackathon 2024" already exists
+* Check if a team with the name "Development Team" already exists
 * Retrieve the persons at these indices
 * Ensure neither person is already in a team for "Hackathon 2024"
 * Create a `Team` object with name "Development Team", hackathon "Hackathon 2024", and the two selected persons
@@ -216,7 +216,7 @@ The `CreateTeamCommand` handles several error cases:
 
 * **Missing parameters** — If required prefixes (team name, hackathon name, or at least one person index) are missing, the parser throws a `ParseException` with usage instructions
 * **Invalid person index** — If any provided index is out of bounds, a `CommandException` is thrown 
-* **Duplicate team** — If a team with the same name and hackathon already exists, a `CommandException` is thrown 
+* **Duplicate team** — If a team with the same name already exists, a `CommandException` is thrown 
 * **Person already in team** — If any selected person is already part of a team for the specified hackathon, a `CommandException` is thrown 
 
 #### Design considerations:
@@ -233,11 +233,11 @@ The `CreateTeamCommand` handles several error cases:
 
 **Aspect: Team uniqueness:**
 
-* **Alternative 1 (current choice):** Teams are unique by team name and hackathon name combination.
+* **Alternative 1:** Teams are unique by team name and hackathon name combination.
     * Pros: Allows multiple teams with the same name across different hackathons. Reflects real-world usage where team names might be reused.
     * Cons: More complex uniqueness check.
 
-* **Alternative 2:** Teams are unique by team name only.
+* **Alternative 2 (current choice):** Teams are unique by team name only.
     * Pros: Simpler implementation and uniqueness check.
     * Cons: Prevents reusing team names across different hackathons, which is restrictive.
 
@@ -271,7 +271,7 @@ The Remove Skill feature allows users to remove a specific skill from a person's
 
 **Command Format:**
 ```
-removeSkill INDEX SKILL_NAME
+removeSkill p/INDEX sk/SKILL [sk/SKILL]...
 ```
 
 **How the Remove Skill feature works:**
@@ -464,7 +464,7 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 1.  User requests to list teams
 2.  Mate shows a list of teams
 3.  User requests to remove a specific person from a specific team
-4.  Mate removes the person from the team and indicates that the person is interested in joining a team for the hackathon
+4.  Mate removes the person from the team
 
     Use case ends.
 
@@ -578,14 +578,14 @@ testers are expected to do more *exploratory* testing.
 
 2. Creating a team with duplicate name
 
-   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members using the command `createTeam tn/Alpha Team h/Hackathon 2024 p/3 p/4`.
 
    2. Test case: `createTeam tn/Alpha Team h/Hackathon 2024 p/3 p/4`<br>
       Expected: No team is created. Error details shown in the status message indicating that the team already exists. Status bar remains the same.
 
 3. Creating a team for a hackathon with person already participating in hackathon
 
-   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members, using the command `createTeam tn/Alpha Team h/Hackathon 2024 p/1 p/2` (if not already created).
 
    2. Test case: `createTeam tn/Gamma Team h/Hackathon 2024 p/2 p/3`<br>
       Expected: No team is created. Error details shown in the status message indicating that person at index 2 is already participating in "Hackathon 2024". Status bar remains the same.
@@ -594,7 +594,7 @@ testers are expected to do more *exploratory* testing.
 
 1. Removing a person from a team
 
-   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members.
+   1. Prerequisites: Create a team named "Alpha Team" for "Hackathon 2024" with persons at index 1 and 2 as members using the command `createTeam tn/Alpha Team h/Hackathon 2024 p/1 p/2` (if not already created).
 
    2. Test case: `removeFromTeam tn/Alpha Team p/1`<br>
       Expected: Person at index 1 is removed from team "Alpha Team". Details of the updated team shown in the status message. Timestamp in the status bar is updated.
