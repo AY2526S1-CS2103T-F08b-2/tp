@@ -56,12 +56,12 @@ Mate is designed for hackathon participants across the technical spectrum — fr
   e.g. `n/NAME [h/HACKATHON]` can be used as `n/John Doe h/NUSHacks` or as `n/John Doe`.
 
 * Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[h/HACKATHON]…​` can be used as ` ` (i.e. 0 times), `h/NUSHacks`, `h/NUSHacks h/NTUHacks` etc.
+  e.g. `[h/HACKATHON]…​` can be used as `​` (i.e. 0 times), `h/NUSHacks`, `h/NUSHacks h/NTUHacks` etc.
 
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME t/TELEGRAM`, `t/TELEGRAM  n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `listTeam`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 
 * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
@@ -70,21 +70,21 @@ Mate is designed for hackathon participants across the technical spectrum — fr
 
 </div>
 
-## Field constraints
+### Field constraints
 
-This table summarizes the input restrictions for each field in Mate:
+This table summarises the input restrictions for each field in Mate. All fields are case-insensitive: 
 
 | Field         | Prefix | Constraints                                                                                                                                                                                                                                    | Valid Examples                                         | Invalid Examples                               |
 |---------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------|------------------------------------------------|
-| **Name**      | `n/`   | • Only alphabetical characters, spaces and `/`<br/>• Cannot be blank                                                                                                                                                                           | `John Doe`<br>`Vaikesh s/o Manimaran`                  | `@John`<br>` Bob123`<br>`Charlie_Wu`           |
+| **Name**      | `n/`   | • Only alphabetical characters, spaces and `/`                                                                                                                                                                                                 | `John Doe`<br>`Vaikesh s/o Manimaran`                  | `@John`<br>` Bob123`<br>`Charlie_Wu`           |
 | **Email**     | `e/`   | • Format: `local-part@domain`<br>• Local part: alphanumeric and `+_.-` only<br>• Local part and domain cannot start/end with special characters<br>• Domain: alphanumeric with hyphens allowed<br>• Domain must end with at least 2 characters | `john@example.com`<br>`user+tag@uni.edu.sg`            | `@john@ex.com`<br>`user@.com`<br>`user@domain` |
 | **Telegram**  | `t/`   | • 5–32 characters long<br>• Only letters, numbers, and underscores<br>• Cannot start with `@`<br>• Cannot start or end with underscore<br>• Cannot have consecutive underscores                                                                | `john_doe`<br>`alice123`                               | `_john`<br>`john_`<br>`jo__hn`<br>`@john`      |
 | **GitHub**    | `g/`   | • 1–39 characters long<br>• Only letters, numbers, and hyphens<br>• Cannot start or end with hyphen<br>• Cannot have consecutive hyphens<br>• No underscores, spaces, or symbols                                                               | `john-doe`<br>`alice123`                               | `-john`<br>`john-`<br>`jo--hn`<br>`john_doe`   |
-| **Skill**     | `sk/`  | • Lowercase alphanumeric characters<br>• May include `+`, `#`, `.`, `-`, or `_` symbols<br>• Cannot start with `#`<br>• At least 1 character long<br>• Optional level: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)            | `java`<br>`c++`<br>`.net`<br>`c#`<br>`python:Advanced` | <br>`#sharp`<br>`java:`                        |
-| **Hackathon** | `h/`   | • Only alphanumeric characters and spaces<br>• Cannot be blank<br>• Cannot start with whitespace                                                                                                                                               | `NUSHacks`<br>`AI Challenge 2024`                      | `NUS_Hacks`<br>` Hackathon`<br>`@Event`        |
-| **Team Name** | `tn/`  | • Only alphanumeric characters and spaces<br>• Cannot be blank<br>• Cannot start with whitespace<br>• Must be unique                                                                                                                           | `Development Team`<br>`Alpha Squad`                    | `Team_A`<br>` Beta`<br>`@TeamName`             |
+| **Skill**     | `sk/`  | • Only alphanumeric characters<br>• May include `+`, `#`, `.`, `-`, or `_` symbols<br>• Cannot start with `#`<br>• At least 1 character long<br>• Optional level: `Beginner`, `Intermediate`, or `Advanced` (case-insensitive)                 | `java`<br>`c++`<br>`.net`<br>`c#`<br>`python:Advanced` | <br>`#sharp`<br>`java:`                        |
+| **Hackathon** | `h/`   | • Only alphanumeric characters and spaces                                                                                                                                                                                                      | `NUSHacks`<br>`AI Challenge 2024`                      | `NUS_Hacks`<br>` Hackathon`<br>`@Event`        |
+| **Team Name** | `tn/`  | • Only alphanumeric characters and spaces<br>• Must be unique                                                                                                                                                                                  | `Development Team`<br>`Alpha Squad`                    | `Team_A`<br>` Beta`<br>`@TeamName`             |
 | **Index**     | `p/`   | • Must be a positive integer<br>• Must be valid in the current displayed list<br>                                                                                                                                                              | `1`<br>`5`<br>`100`                                    | `0`<br>`-1`<br>`1.5`<br>`abc`                  |
-| **Keyword**   | `k/`   | • Can contain any characters including spaces<br>• Supports partial matching<br>• Searches across all person fields                                                                                                                            | `John`<br>`c++`<br>`AI Hackathon 2024`                 | _(No restrictions)_                            |
+| **Keyword**   | `k/`   | • Can contain any characters including spaces                                                                                                                                                                                                  | `John`<br>`c++`<br>`AI Hackathon 2024`                 | _(No restrictions)_                            |
 
 ### Viewing help : `help`
 
@@ -329,7 +329,7 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 ## Known issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -344,13 +344,13 @@ Furthermore, certain edits can cause Mate to behave in unexpected ways (e.g., if
 | **Exit**                    | `exit`                                                                                                                                                                                 |
 | **Add Person**              | `add n/NAME e/EMAIL t/TELEGRAM_NAME g/GITHUB_NAME [sk/SKILL[:LEVEL]]…​ [h/HACKATHON]…​` <br> e.g., `add n/John Doe e/johnd@example.com t/JohnTG g/JohnGH sk/Python:Beginner h/NUSHack` |
 | **Delete Person**           | `delete p/INDEX`<br> e.g., `delete p/3`                                                                                                                                                |
-| **Edit Person**             | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`<br> e.g., `edit p/2 n/James Lee`                                                                                  |
+| **Edit Person**             | `edit p/INDEX [n/NAME] [e/EMAIL] [t/TELEGRAM_NAME] [g/GITHUB_NAME]`<br> e.g., `edit p/2 n/James Lee`                                                                                   |
 | **Find**                    | `find k/KEYWORD [k/MORE_KEYWORDS]…​`<br> e.g., `find k/James k/Python`, `find k/AI Hackathon 2024`                                                                                     |
 | **Create Team**             | `createTeam tn/TEAM_NAME h/HACKATHON_NAME p/INDEX [p/INDEX]…​` <br> e.g., `createTeam tn/Development Team h/Tech Innovation 2024 p/1 p/3`                                              |
 | **Delete Team**             | `deleteTeam tn/TEAM_NAME`<br> e.g., `deleteTeam tn/Tech Innovation`                                                                                                                    |
 | **Add Person to Team**      | `addToTeam tn/TEAM_NAME p/INDEX` <br> e.g., `addToTeam tn/Development Team p/3`                                                                                                        |
 | **Remove Person from Team** | `removeFromTeam tn/TEAM_NAME p/INDEX` <br> e.g., `removeFromTeam tn/Tech Innovators p/2`                                                                                               |
-| **Add Skill**               | `addSkill p/INDEX sk/SKILL[:LEVEL] [sk/SKILL[:LEVEL]]...`<br> e.g., `addSkill p/1 sk/java:Advanced`, `addSkill p/2 sk/python sk/docker:Intermediate`                                  |
+| **Add Skill**               | `addSkill p/INDEX sk/SKILL[:LEVEL] [sk/SKILL[:LEVEL]]...`<br> e.g., `addSkill p/1 sk/java:Advanced`, `addSkill p/2 sk/python sk/docker:Intermediate`                                   |
 | **Remove Skill**            | `removeSkill p/INDEX sk/SKILL [sk/SKILL]...`<br> e.g., `removeSkill p/2 sk/Java sk/Python`                                                                                             |
 | **Add Hackathon**           | `addHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g., `addHackathon p/1 h/NUSHack`, `addHackathon p/3 h/NUSHack h/iNTUition`                                         |
 | **Remove Hackathon**        | `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`<br> e.g., `removeHackathon p/2 h/TechChallenge`, `removeHackathon p/4 h/NUSHack h/iNTUition`                          |
