@@ -148,7 +148,7 @@ public class RemoveHackathonCommandTest {
         RemoveHackathonCommand command = new RemoveHackathonCommand(indexOfPerson, hackathonsToDelete);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_HACKATHON_IN_PARTICIPATING,
-                "NUSHack");
+                personWithParticipating.getName(), "NUSHack");
 
         assertCommandFailure(command, model, expectedMessage);
     }
@@ -166,18 +166,6 @@ public class RemoveHackathonCommandTest {
         RemoveHackathonCommand command = new RemoveHackathonCommand(outOfBoundIndex, hackathonsToDelete);
 
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
-    }
-
-    /**
-     * Tests removal with no hackathons provided.
-     */
-    @Test
-    public void execute_noHackathonsProvided_throwsCommandException() {
-        Set<HackathonName> emptyHackathons = new HashSet<>();
-
-        RemoveHackathonCommand command = new RemoveHackathonCommand(INDEX_FIRST_PERSON, emptyHackathons);
-
-        assertCommandFailure(command, model, RemoveHackathonCommand.MESSAGE_NO_HACKATHONS_PROVIDED);
     }
 
     /**
@@ -368,7 +356,7 @@ public class RemoveHackathonCommandTest {
         RemoveHackathonCommand command = new RemoveHackathonCommand(indexOfPerson, hackathonsToDelete);
 
         String expectedMessage = String.format(RemoveHackathonCommand.MESSAGE_HACKATHON_IN_PARTICIPATING,
-                "NUSHack");
+                personWithMixedHackathons.getName(), "NUSHack");
 
         assertCommandFailure(command, model, expectedMessage);
     }

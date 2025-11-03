@@ -29,9 +29,8 @@ public class RemoveHackathonCommand extends Command {
 
     public static final String MESSAGE_DELETE_HACKATHON_SUCCESS = "Removed hackathon(s) from %1$s";
     public static final String MESSAGE_HACKATHON_NOT_FOUND = "Hackathon(s) not found interested list for %1$s";
-    public static final String MESSAGE_HACKATHON_IN_PARTICIPATING = "Cannot remove hackathon '%1$s' "
-           + "because you are currently participating in it. Use removePersonFromTeam or deleteTeam first.";
-    public static final String MESSAGE_NO_HACKATHONS_PROVIDED = "At least one hackathon must be specified for removal.";
+    public static final String MESSAGE_HACKATHON_IN_PARTICIPATING = "Cannot remove hackathon '%2$s' "
+           + "because Person %1$s is currently participating in it.\nUse removeFromTeam or deleteTeam first.";
 
     private static final Logger logger = LogsCenter.getLogger(RemoveHackathonCommand.class);
 
@@ -61,10 +60,6 @@ public class RemoveHackathonCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        if (hackathonsToDelete.isEmpty()) {
-            throw new CommandException(MESSAGE_NO_HACKATHONS_PROVIDED);
-        }
-
         Person personToEdit = lastShownList.get(targetIndex.getZeroBased());
         Person editedPerson = personToEdit;
 
@@ -73,7 +68,7 @@ public class RemoveHackathonCommand extends Command {
             if (personToEdit.getParticipatingHackathons().contains(hackathon)) {
                 logger.warning("Attempted to delete participating hackathon: " + hackathon.value);
                 throw new CommandException(String.format(MESSAGE_HACKATHON_IN_PARTICIPATING,
-                        hackathon.value));
+                        personToEdit.getName(), hackathon.value));
             }
         }
 

@@ -37,8 +37,39 @@ public class AddCommandParser implements Parser<AddCommand> {
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_EMAIL,
                          PREFIX_TELEGRAM, PREFIX_GITHUB, PREFIX_SKILL, PREFIX_HACKATHON);
 
-        if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_EMAIL)
-                || !argMultimap.getPreamble().isEmpty()) {
+        // Check for missing required fields and build specific error message
+        // A field is considered missing if the prefix is absent OR if the value is empty/blank
+        boolean hasName = argMultimap.getValue(PREFIX_NAME).isPresent()
+                && !argMultimap.getValue(PREFIX_NAME).get().trim().isEmpty();
+        boolean hasEmail = argMultimap.getValue(PREFIX_EMAIL).isPresent()
+                && !argMultimap.getValue(PREFIX_EMAIL).get().trim().isEmpty();
+        boolean hasTelegram = argMultimap.getValue(PREFIX_TELEGRAM).isPresent()
+                && !argMultimap.getValue(PREFIX_TELEGRAM).get().trim().isEmpty();
+        boolean hasGithub = argMultimap.getValue(PREFIX_GITHUB).isPresent()
+                && !argMultimap.getValue(PREFIX_GITHUB).get().trim().isEmpty();
+
+        if (!hasName && !hasEmail && !hasTelegram && !hasGithub) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
+        }
+        StringBuilder missingFields = new StringBuilder();
+        if (!hasName) {
+            missingFields.append("Name (n/), ");
+        }
+        if (!hasEmail) {
+            missingFields.append("Email (e/), ");
+        }
+        if (!hasTelegram) {
+            missingFields.append("Telegram (t/), ");
+        }
+        if (!hasGithub) {
+            missingFields.append("GitHub (g/), ");
+        }
+        if (missingFields.length() > 0) {
+            // Remove trailing comma and space
+            missingFields.setLength(missingFields.length() - 2);
+            throw new ParseException("Missing required field(s): " + missingFields.toString());
+        }
+        if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 

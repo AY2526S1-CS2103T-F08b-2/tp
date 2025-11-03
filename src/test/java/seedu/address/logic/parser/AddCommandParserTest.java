@@ -125,13 +125,13 @@ public class AddCommandParserTest {
 
         // missing name prefix
         assertParseFailure(parser, VALID_NAME_BOB + EMAIL_DESC_BOB,
-                expectedMessage);
+                "Missing required field(s): Name (n/), Telegram (t/), GitHub (g/)");
 
         // missing email prefix
         assertParseFailure(parser, NAME_DESC_BOB + VALID_EMAIL_BOB,
-                expectedMessage);
+                "Missing required field(s): Email (e/), Telegram (t/), GitHub (g/)");
 
-        // all prefixes missing
+        // all prefixes missing - show full command usage
         assertParseFailure(parser, VALID_NAME_BOB + VALID_EMAIL_BOB,
                 expectedMessage);
     }

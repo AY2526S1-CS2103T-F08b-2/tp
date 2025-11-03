@@ -136,7 +136,8 @@ public class AddHackathonCommandTest {
 
         AddHackathonCommand addHackathonCommand = new AddHackathonCommand(indexOfPerson, hackathonsToAdd);
 
-        String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ALREADY_PARTICIPATING, "NUSHack");
+        String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ALREADY_PARTICIPATING,
+                personWithParticipatingHackathon.getName(), "NUSHack");
 
         assertCommandFailure(addHackathonCommand, model, expectedMessage);
     }
@@ -159,7 +160,8 @@ public class AddHackathonCommandTest {
 
         AddHackathonCommand addHackathonCommand = new AddHackathonCommand(indexOfPerson, hackathonsToAdd);
 
-        String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ALREADY_PARTICIPATING, "nushack");
+        String expectedMessage = String.format(AddHackathonCommand.MESSAGE_ALREADY_PARTICIPATING,
+                personWithParticipatingHackathon.getName(), "nushack");
 
         assertCommandFailure(addHackathonCommand, model, expectedMessage);
     }
