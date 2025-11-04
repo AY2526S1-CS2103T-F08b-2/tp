@@ -241,8 +241,8 @@ Format: `removeHackathon p/INDEX h/HACKATHON_NAME [h/HACKATHON_NAME]...`
 * See [Field Constraints](#field-constraints) for input requirements.
 
 Examples:
-* `removeHackathon p/2 h/TechChallenge` removes TechChallenge from person 2's interested list.
-* `removeHackathon p/4 h/NUSHack h/iNTUition` removes both hackathons from person 4.
+* `removeHackathon p/2 h/TechChallenge` removes TechChallenge from 2nd person's interested list.
+* `removeHackathon p/4 h/NUSHack h/iNTUition` removes both hackathons from 4th person's interested list.
 
 <div style="page-break-after: always;"></div>
 
