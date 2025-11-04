@@ -402,7 +402,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Target user profile**:
 
-* tech-savvy undergraduate computer science students who actively participate in university hackathons
+* designed for hackathon participants across the technical spectrum — from developers,designers, and data scientists to product managers, domain experts, and non-technical contributors(e.g. UX, marketing, business)
 * comfortable with GitHub and command-line tools
 * prefer typing over graphical interfaces
 
